@@ -19,10 +19,27 @@ namespace TaskHouseApi.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+
+            modelBuilder.Entity("TaskHouseApi.Model.Location", b =>
             modelBuilder.Entity("TaskHouseApi.Model.Message", b =>
+
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("City");
+
+                    b.Property<string>("Country");
+
+                    b.Property<string>("PrimaryLine");
+
+                    b.Property<string>("SecondaryLine");
+
+                    b.Property<string>("ZipCode");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Locations");
 
                     b.Property<DateTime>("SendAt");
 
@@ -86,12 +103,19 @@ namespace TaskHouseApi.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Educations");
+
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.User", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<string>("Password");
 

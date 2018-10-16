@@ -7,8 +7,11 @@ namespace TaskHouseApi.DatabaseContext
     public class PostgresContext : DbContext
     {
         public DbSet<User> Users { set; get; }
+
+        public DbSet<Location> Locations { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Education> Educations { set; get; }
+
         
         public PostgresContext()
         {
