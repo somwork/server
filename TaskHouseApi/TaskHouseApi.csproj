@@ -8,6 +8,7 @@
     <Folder Include="wwwroot\" />
     <Folder Include="Model\" />
     <Folder Include="DatabaseContext\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
