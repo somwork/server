@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TaskHouseApi.DatabaseContext;
+using TaskHouseApi.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskHouseApi.Controllers
 {
@@ -10,11 +13,21 @@ namespace TaskHouseApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            User user = new User{
+                Username = "Niclas",
+                Password = "root"
+            };
+
+           
+            PostgresContext context = new PostgresContext();
+            context.Users.Add(user);
+
+             return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
