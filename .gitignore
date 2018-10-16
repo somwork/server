@@ -1,5 +1,6 @@
 TaskHouseApi/obj
 TaskHouse/bin
+.vscode
 
 # Prerequisites
 *.d
