@@ -5,12 +5,12 @@ namespace TaskHouseApi.Model
 
     public class User
     {
-        private string Username { get; set; }
-        private string Password { get; set; }
-        private int ID { get; set; }
-        private string email { get; set; }
-        private string firstName { get; set; }
-        private string lastName { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public int ID { get; set; }
+        public string email { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
 
         public User()
         {
