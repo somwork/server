@@ -12,8 +12,12 @@ namespace TaskHouseApi.Model
         public string PrimaryLine { get; set; }
         public string SecondaryLine { get; set; }
 
-       
+        public Location()
+        {
+
+        } 
+
 
         }
     }
-}
+
