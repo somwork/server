@@ -8,6 +8,7 @@ namespace TaskHouseApi.DatabaseContext
     {
         public DbSet<User> Users { set; get; }
         public DbSet<Worker> Workers { get; set; }
+        public DbSet<Task> Tasks { get; set; }
 
         public PostgresContext()
         {
