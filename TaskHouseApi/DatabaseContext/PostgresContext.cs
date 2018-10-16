@@ -8,7 +8,8 @@ namespace TaskHouseApi.DatabaseContext
     {
         public DbSet<User> Users { set; get; }
         public DbSet<Message> Messages { get; set; }
-
+        public DbSet<Education> Educations { set; get; }
+        
         public PostgresContext()
         {
 
