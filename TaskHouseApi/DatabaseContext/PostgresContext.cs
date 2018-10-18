@@ -14,15 +14,13 @@ namespace TaskHouseApi.DatabaseContext
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Budget> Budgets { get; set; }
 
-        public PostgresContext()
-        {
+        public PostgresContext(DbContextOptions options)
+            : base(options) { }
 
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=root;Username=root;Password=root;");
-            base.OnConfiguring(optionsBuilder);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=root;Username=root;Password=root;");
+        //    base.OnConfiguring(optionsBuilder);
+        //}
     }
 }

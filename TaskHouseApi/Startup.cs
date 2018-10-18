@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using TaskHouseApi.DatabaseContext;
+using TaskHouseApi.Repositories;
+
 namespace TaskHouseApi
 {
     public class Startup
@@ -26,8 +28,10 @@ namespace TaskHouseApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           // services.AddEntityFrameworkNpgsql().AddDbContext<PostgresContext>(options => options.UseNpgsql("Server=localhost;Port=5432;Database=root;Username=root;Password=root;"));
-
+            services.AddDbContext<PostgresContext>(options => options.UseNpgsql(
+                "Server=localhost;Port=5432;Database=root;Username=root;Password=root;"));
+            // services.AddEntityFrameworkNpgsql().AddDbContext<PostgresContext>(options => options.UseNpgsql("Server=localhost;Port=5432;Database=root;Username=root;Password=root;"));
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

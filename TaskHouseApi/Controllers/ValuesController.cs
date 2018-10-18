@@ -18,15 +18,6 @@ namespace TaskHouseApi.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            User user = new User{
-                Username = "Niclas",
-                Password = "root"
-            };
-
-           
-            PostgresContext context = new PostgresContext();
-            context.Users.Add(user);
-
              return new string[] { "value1", "value2" };
         }
 
