@@ -25,7 +25,7 @@ namespace TaskHouseApi.Repositories
             if (userCache == null)
             {
                 userCache = new ConcurrentDictionary<int, User>(
-                    db.Users.ToDictionary(c => c.ID));
+                    db.Users.ToDictionary(c => c.Id));
             }
         }
 
@@ -43,7 +43,7 @@ namespace TaskHouseApi.Repositories
             }
 
             // if the customer is new, add it to cache, else call UpdateCache method
-            return userCache.AddOrUpdate(u.ID, u, UpdateCache);
+            return userCache.AddOrUpdate(u.Id, u, UpdateCache);
         }
 
         public async Task<IEnumerable<User>> RetrieveAllAsync()
@@ -58,17 +58,17 @@ namespace TaskHouseApi.Repositories
                 .Single(user => user.Username == loginModel.Username && user.Password == loginModel.Password);
         }
 
-        public async Task<User> RetrieveAsync(int ID)
+        public async Task<User> RetrieveAsync(int Id)
         {
             return await System.Threading.Tasks.Task.Run(() =>
             {
                 User u;
-                userCache.TryGetValue(ID, out u);
+                userCache.TryGetValue(Id, out u);
                 return u;
             });
         }
 
-        public async Task<User> UpdateAsync(int ID, User u)
+        public async Task<User> UpdateAsync(int Id, User u)
         {
             return await System.Threading.Tasks.Task.Run(() =>
             {
@@ -80,15 +80,15 @@ namespace TaskHouseApi.Repositories
                     return null;
                 }
 
-                return System.Threading.Tasks.Task.Run(() => UpdateCache(ID, u));
+                return System.Threading.Tasks.Task.Run(() => UpdateCache(Id, u));
             });
         }
 
-        public async Task<bool> DeleteAsync(int ID)
+        public async Task<bool> DeleteAsync(int Id)
         {
             return await System.Threading.Tasks.Task.Run(() =>
             {
-                User u = db.Users.Find(ID);
+                User u = db.Users.Find(Id);
                 db.Users.Remove(u);
                 int affected = db.SaveChanges();
 
@@ -96,16 +96,16 @@ namespace TaskHouseApi.Repositories
                 {
                     return null;
                 }
-                return System.Threading.Tasks.Task.Run(() => userCache.TryRemove(ID, out u));
+                return System.Threading.Tasks.Task.Run(() => userCache.TryRemove(Id, out u));
             });
         }
 
-        private User UpdateCache(int ID, User u)
+        private User UpdateCache(int Id, User u)
         {
             User old;
-            if (userCache.TryGetValue(ID, out old))
+            if (userCache.TryGetValue(Id, out old))
             {
-                if (userCache.TryUpdate(ID, u, old))
+                if (userCache.TryUpdate(Id, u, old))
                 {
                     return u;
                 }

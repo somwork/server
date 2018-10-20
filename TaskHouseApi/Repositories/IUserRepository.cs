@@ -12,12 +12,12 @@ namespace TaskHouseApi.Repositories
 
         Task<IEnumerable<User>> RetrieveAllAsync();
 
-        Task<User> RetrieveAsync(int ID);
+        Task<User> RetrieveAsync(int Id);
 
         Task<User> RetrieveSpecificAsync(LoginModel loginModel);
 
-        Task<User> UpdateAsync(int ID, User u);
+        Task<User> UpdateAsync(int Id, User u);
 
-        Task<bool> DeleteAsync(int ID);
+        Task<bool> DeleteAsync(int Id);
     }
 }

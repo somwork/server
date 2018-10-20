@@ -40,9 +40,9 @@ namespace TaskHouseApi.Controllers
 
         // GET: api/users/[id] 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int ID)
+        public async Task<IActionResult> GetUser(int Id)
         {
-            User u = await repo.RetrieveAsync(ID);
+            User u = await repo.RetrieveAsync(Id);
             if (u == null)
             {
                 return NotFound(); // 404 Resource not found 
@@ -60,39 +60,39 @@ namespace TaskHouseApi.Controllers
             }
             User added = await repo.CreateAsync(u);
             return CreatedAtRoute("GetUser", // use named route
-            new { ID = added.ID }, u); // 201 Created 
+            new { Id = added.Id }, u); // 201 Created 
         }
 
         // PUT: api/users/[id] 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int ID, [FromBody] User u)
+        public async Task<IActionResult> Update(int Id, [FromBody] User u)
         {
-            if (u == null || u.ID != ID)
+            if (u == null || u.Id != Id)
             {
                 return BadRequest(); // 400 Bad request 
             }
 
-            var existing = await repo.RetrieveAsync(ID);
+            var existing = await repo.RetrieveAsync(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found 
             }
 
-            await repo.UpdateAsync(ID, u);
+            await repo.UpdateAsync(Id, u);
             return new NoContentResult(); // 204 No content 
         }
 
         // DELETE: api/user/[id] 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int ID)
+        public async Task<IActionResult> Delete(int Id)
         {
-            var existing = await repo.RetrieveAsync(ID);
+            var existing = await repo.RetrieveAsync(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found 
             }
 
-            bool deleted = await repo.DeleteAsync(ID);
+            bool deleted = await repo.DeleteAsync(Id);
 
             if (deleted)
             {

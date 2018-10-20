@@ -10,8 +10,8 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181020135808_AddSeedData")]
-    partial class AddSeedData
+    [Migration("20181020164931_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace TaskHouseApi.Migrations
 
             modelBuilder.Entity("TaskHouseApi.Model.Budget", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Currency");
@@ -32,14 +32,14 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<decimal>("To");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Budgets");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Education", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("End");
@@ -48,14 +48,14 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Title");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Location", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("City");
@@ -68,28 +68,28 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("ZipCode");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Message", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("SendAt");
 
                     b.Property<string>("Text");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Task", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Deadline");
@@ -100,14 +100,14 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Urgency");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.User", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email");
@@ -120,13 +120,9 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Username");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new { ID = 1, Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen", Password = "root", Username = "root" }
-                    );
                 });
 #pragma warning restore 612, 618
         }
