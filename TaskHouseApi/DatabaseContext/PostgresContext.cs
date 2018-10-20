@@ -17,10 +17,11 @@ namespace TaskHouseApi.DatabaseContext
         public PostgresContext(DbContextOptions options)
             : base(options) { }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=root;Username=root;Password=root;");
-        //    base.OnConfiguring(optionsBuilder);
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().HasData(new User { ID = 1, Username = "root", Password = "root", Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen" });
+        }
     }
 }
