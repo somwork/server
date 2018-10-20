@@ -52,6 +52,12 @@ namespace TaskHouseApi.Repositories
                 () => userCache.Values);
         }
 
+        public async Task<User> RetrieveSpecificAsync(LoginModel loginModel)
+        {
+            return (await RetrieveAllAsync())
+                .Single(user => user.Username == loginModel.Username && user.Password == loginModel.Password);
+        }
+
         public async Task<User> RetrieveAsync(int ID)
         {
             return await System.Threading.Tasks.Task.Run(() =>

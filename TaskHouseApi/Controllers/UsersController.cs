@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using TaskHouseApi.Repositories;
 namespace TaskHouseApi.Controllers
 {
     // base address: api/customers 
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {

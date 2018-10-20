@@ -14,6 +14,8 @@ namespace TaskHouseApi.Repositories
 
         Task<User> RetrieveAsync(int ID);
 
+        Task<User> RetrieveSpecificAsync(LoginModel loginModel);
+
         Task<User> UpdateAsync(int ID, User u);
 
         Task<bool> DeleteAsync(int ID);
