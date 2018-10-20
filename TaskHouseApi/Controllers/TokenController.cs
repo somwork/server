@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
-using TaskHouseApi.Security;
 
 namespace TaskHouseApi.Controllers
 {
