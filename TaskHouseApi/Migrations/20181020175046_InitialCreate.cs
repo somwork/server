@@ -95,7 +95,8 @@ namespace TaskHouseApi.Migrations
                     Password = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    Salt = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

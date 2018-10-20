@@ -10,8 +10,8 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181020164951_AddSeedData")]
-    partial class AddSeedData
+    [Migration("20181020175046_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -117,6 +117,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("LastName");
 
                     b.Property<string>("Password");
+
+                    b.Property<string>("Salt");
 
                     b.Property<string>("Username");
 

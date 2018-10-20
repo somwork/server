@@ -24,4 +24,5 @@ namespace TaskHouseApi.DatabaseContext
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Username = "root", Password = "root", Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen" });
         }
     }
+
 }
