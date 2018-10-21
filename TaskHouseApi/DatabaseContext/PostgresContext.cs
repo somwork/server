@@ -17,12 +17,12 @@ namespace TaskHouseApi.DatabaseContext
         public PostgresContext(DbContextOptions options)
             : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>().HasData(new User { Id = 1, Username = "root", Password = "root", Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen" });
-        }
+            modelBuilder.Entity<User>().HasData(new User { Id = 1, Username = "root", Password = "mxurWhuDuXFA6EMY11qsixSbftITzPbpOtBU+Kbdr6Q=", Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen", Salt = "HplteyrRxcNz6bOoiZi4Qw==" });
+        }*/
     }
 
 }

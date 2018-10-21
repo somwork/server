@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskHouseApi.Logic;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
 
@@ -50,17 +51,33 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(u); // 200 OK 
         }
 
-        // POST: api/users 
+        // POST: api/users
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] User u)
+        public async Task<ActionResult<string>> CreateUser([FromBody]User user)
         {
-            if (u == null)
+            if (user == null)
             {
-                return BadRequest(); // 400 Bad request 
+                return BadRequest(new { error = "CreateUser: user is null" }); // 400 Bad request 
             }
-            User added = await repo.CreateAsync(u);
-            return CreatedAtRoute("GetUser", // use named route
-            new { Id = added.Id }, u); // 201 Created 
+
+            User existingUser = (await repo.RetrieveAllAsync()).SingleOrDefault(u => u.Username == user.Username);
+
+            if (existingUser != null) {
+                return BadRequest(new { error = "Username in use" });
+            }
+
+            var hashResult = SecurityHandler.GenerateNewPassword(user);
+
+            user.Salt = hashResult.saltText;
+            user.Password = hashResult.saltechashedPassword;
+
+            User added = await repo.CreateAsync(user);
+            
+            return Ok();
+
+            //return CreatedAtRoute("GetUser", // use named route
+            //new { Id = added.Id }, user); // 201 Created
         }
 
         // PUT: api/users/[id] 

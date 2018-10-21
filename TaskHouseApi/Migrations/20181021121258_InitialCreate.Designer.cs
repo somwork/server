@@ -10,8 +10,8 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181020175113_AddSeedData")]
-    partial class AddSeedData
+    [Migration("20181021121258_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,10 +125,6 @@ namespace TaskHouseApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new { Id = 1, Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen", Password = "root", Username = "root" }
-                    );
                 });
 #pragma warning restore 612, 618
         }

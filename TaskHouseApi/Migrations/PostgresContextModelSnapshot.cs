@@ -123,10 +123,6 @@ namespace TaskHouseApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new { Id = 1, Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen", Password = "root", Username = "root" }
-                    );
                 });
 #pragma warning restore 612, 618
         }
