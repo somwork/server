@@ -13,6 +13,7 @@ namespace TaskHouseApi.DatabaseContext
         public DbSet<Education> Educations { set; get; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Budget> Budgets { get; set; }
+        public DbSet<Skill> Skills { get; set; }
 
         public PostgresContext()
         {
