@@ -14,6 +14,8 @@ namespace TaskHouseApi.DatabaseContext
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Budget> Budgets { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
         public PostgresContext()
         {
 
