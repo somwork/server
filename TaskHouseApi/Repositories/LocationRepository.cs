@@ -25,7 +25,8 @@ namespace TaskHouseApi.Repositories
             if(locationCache == null)
             {
                 locationCache = new ConcurrentDictionary<int, Location>(
-                    db.Locations.ToDictionary(c => c.Id));
+                    db.Locations.ToDictionary(c => c.Id)
+             	);
             }
         }
 
