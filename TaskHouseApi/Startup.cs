@@ -51,6 +51,8 @@ namespace TaskHouseApi
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
