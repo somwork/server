@@ -43,7 +43,6 @@ namespace TaskHouseApi.Controllers
         }
 
         // POST: api/locations
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]Location location)
         {
