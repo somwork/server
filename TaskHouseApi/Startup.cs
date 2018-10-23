@@ -49,7 +49,7 @@ namespace TaskHouseApi
                   };
                 });
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IWorkerRepository, WorkerRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

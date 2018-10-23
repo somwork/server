@@ -20,9 +20,9 @@ namespace TaskHouseApi.Controllers
     public class TokenController : Controller
     {
         private IConfiguration config;
-        private IUserRepository repo;
+        private IWorkerRepository repo;
 
-        public TokenController(IConfiguration config, IUserRepository repo)
+        public TokenController(IConfiguration config, IWorkerRepository repo)
         {
             this.config = config;
             this.repo = repo;
