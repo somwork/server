@@ -77,7 +77,8 @@ namespace TaskHouseApi.Repositories
         public async Task<IEnumerable<Location>> RetrieveAll()
         {
             return await System.Threading.Tasks.Task.Run<IEnumerable<Location>>(
-                () => locationCache.Values); 
+                () => locationCache.Values
+			); 
         }
 
         public async Task<Location> Update(int Id, Location l)
