@@ -15,6 +15,7 @@ namespace TaskHouseApi.DatabaseContext
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<Worker> Workers { get; set; }
 
         public PostgresContext(DbContextOptions options)
             : base(options) { }

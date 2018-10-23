@@ -9,7 +9,7 @@ using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IWorkerRepository
     {
         //cache the users in a thread-safe dictionary to improve performance
         private static ConcurrentDictionary<int, User> userCache;

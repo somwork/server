@@ -6,7 +6,7 @@ using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public interface IUserRepository
+    public interface IWorkerRepository
     {
         Task<User> CreateAsync(User u);
 

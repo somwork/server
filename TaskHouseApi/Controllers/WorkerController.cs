@@ -13,12 +13,12 @@ namespace TaskHouseApi.Controllers
     // base address: api/customers 
     [Authorize]
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class WorkerController : Controller
     {
         private IUserRepository repo;
 
         // constructor injects registered repository 
-        public UsersController(IUserRepository repo)
+        public WorkerController(IUserRepository repo)
         {
             this.repo = repo;
         }
