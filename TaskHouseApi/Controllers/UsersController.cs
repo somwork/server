@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TaskHouseApi.Logic;
+using TaskHouseApi.Security;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
 
@@ -26,22 +26,20 @@ namespace TaskHouseApi.Controllers
         // GET: api/users 
         // GET: api/users/?username=[username] 
         [HttpGet]
-        public async Task<IEnumerable<User>> GetCustomers(string username)
+        public async Task<IEnumerable<User>> Get(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
                 return await repo.RetrieveAllAsync();
             }
-            else
-            {
-                return (await repo.RetrieveAllAsync())
+            
+            return (await repo.RetrieveAllAsync())
                 .Where(user => user.Username == username);
-            }
         }
 
         // GET: api/users/[id] 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int Id)
+        public async Task<IActionResult> Get(int Id)
         {
             User u = await repo.RetrieveAsync(Id);
             if (u == null)
@@ -54,7 +52,7 @@ namespace TaskHouseApi.Controllers
         // POST: api/users
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<string>> CreateUser([FromBody]User user)
+        public async Task<ActionResult<string>> Create([FromBody]User user)
         {
             if (user == null)
             {
@@ -99,7 +97,7 @@ namespace TaskHouseApi.Controllers
             return new NoContentResult(); // 204 No content 
         }
 
-        // DELETE: api/user/[id] 
+        // DELETE: api/users/[id] 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
@@ -111,14 +109,12 @@ namespace TaskHouseApi.Controllers
 
             bool deleted = await repo.DeleteAsync(Id);
 
-            if (deleted)
+            if (!deleted)
             {
-                return new NoContentResult(); // 204 No content 
+                return BadRequest(); 
             }
-            else
-            {
-                return BadRequest();
-            }
+
+            return new NoContentResult(); // 204 No content
         }
     }
 }

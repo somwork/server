@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using TaskHouseApi.Model;
 
-namespace TaskHouseApi.Logic
+namespace TaskHouseApi.Security
 {
 
     public class SecurityHandler

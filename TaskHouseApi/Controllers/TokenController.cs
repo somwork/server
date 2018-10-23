@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using TaskHouseApi.Logic;
+using TaskHouseApi.Security;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
 
@@ -29,14 +29,14 @@ namespace TaskHouseApi.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<string>> CreateToken([FromBody]LoginModel login)
+        public async Task<ActionResult<string>> Create([FromBody]LoginModel login)
         {
             ActionResult response = Unauthorized();
             User user = await Authenticate(login);
 
             if (user == null)
             {
-                return NotFound(new { error = "CreateTask: user is null" }); // 404 Resource not found 
+                return response;
             }
 
             string tokenString = BuildToken(user);
@@ -53,12 +53,16 @@ namespace TaskHouseApi.Controllers
                 return null;
             }
 
-            if (SecurityHandler.GenerateSaltedHashedPassword(loginModel.Password, potentialUser.Salt).Equals(potentialUser.Password))
-            {
-                return potentialUser;
-            }
+            bool isAuthenticated = SecurityHandler
+                .GenerateSaltedHashedPassword(loginModel.Password, potentialUser.Salt)
+                .Equals(potentialUser.Password);
 
-            return null;
+            if (!isAuthenticated)
+            {
+                return null;
+            }
+            
+            return potentialUser;
         }
 
         private string BuildToken(User user)
@@ -66,10 +70,12 @@ namespace TaskHouseApi.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(config["Jwt:Issuer"],
-              config["Jwt:Issuer"],
-              expires: DateTime.Now.AddMinutes(30),
-              signingCredentials: creds);
+            var token = new JwtSecurityToken(
+                config["Jwt:Issuer"],
+                config["Jwt:Issuer"],
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
