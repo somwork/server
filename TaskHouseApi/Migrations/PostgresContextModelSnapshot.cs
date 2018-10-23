@@ -37,7 +37,7 @@ namespace TaskHouseApi.Migrations
 
             modelBuilder.Entity("TaskHouseApi.Model.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
