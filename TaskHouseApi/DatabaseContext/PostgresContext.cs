@@ -13,17 +13,18 @@ namespace TaskHouseApi.DatabaseContext
         public DbSet<Education> Educations { set; get; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Budget> Budgets { get; set; }
-        public DbSet<Skill> Skills { get; set; }
 
-        public PostgresContext(DbContextOptions options)
-            : base(options) { }
+        public DbSet<Category> Categories { get; set; }
 
-        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public PostgresContext()
         {
-            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>().HasData(new User { Id = 1, Username = "root", Password = "mxurWhuDuXFA6EMY11qsixSbftITzPbpOtBU+Kbdr6Q=", Email = "root@root.com", FirstName = "Bob", LastName = "Bobsen", Salt = "HplteyrRxcNz6bOoiZi4Qw==" });
-        }*/
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=root;Username=root;Password=root;");
+            base.OnConfiguring(optionsBuilder);
+        }
     }
-
 }
