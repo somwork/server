@@ -9,7 +9,7 @@ using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public class UserRepository : IWorkerRepository
+    public class WorkerRepository : IWorkerRepository
     {
         //cache the users in a thread-safe dictionary to improve performance
         private static ConcurrentDictionary<int, User> userCache;
@@ -17,7 +17,7 @@ namespace TaskHouseApi.Repositories
         //reference to database context
         private PostgresContext db;
 
-        public UserRepository(PostgresContext db)
+        public WorkerRepository(PostgresContext db)
         {
             this.db = db;
 

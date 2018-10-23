@@ -15,10 +15,10 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class WorkerController : Controller
     {
-        private IUserRepository repo;
+        private IWorkerRepository repo;
 
         // constructor injects registered repository 
-        public WorkerController(IUserRepository repo)
+        public WorkerController(IWorkerRepository repo)
         {
             this.repo = repo;
         }
