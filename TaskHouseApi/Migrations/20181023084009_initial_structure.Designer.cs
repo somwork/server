@@ -10,8 +10,8 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181016155138_Initial_structure")]
-    partial class Initial_structure
+    [Migration("20181023084009_initial_structure")]
+    partial class initial_structure
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,9 +37,23 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Budgets");
                 });
 
-            modelBuilder.Entity("TaskHouseApi.Model.Education", b =>
+            modelBuilder.Entity("TaskHouseApi.Model.Category", b =>
                 {
                     b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Education", b =>
+                {
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("End");
@@ -48,7 +62,7 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Title");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Educations");
                 });
@@ -85,6 +99,18 @@ namespace TaskHouseApi.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Skill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Task", b =>
