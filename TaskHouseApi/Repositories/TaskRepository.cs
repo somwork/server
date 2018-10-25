@@ -12,14 +12,17 @@ namespace TaskHouseApi.Repositories
 { 
     public class TaskRepository : ITaskRepository { 
 
+        //cache the tasks in a thread-safe dictionary to improve performanc
         private static ConcurrentDictionary<int, TaskHouseApi.Model.Task> taskCache;
 
+        //reference to database context
         private PostgresContext db;
 
 
         public TaskRepository(PostgresContext db) { 
             this.db = db;
 
+            //populates taskCache
             if (taskCache == null)
             { 
                 taskCache = new ConcurrentDictionary<int, TaskHouseApi.Model.Task>(
@@ -28,14 +31,18 @@ namespace TaskHouseApi.Repositories
         }
 
         public async Task<TaskHouseApi.Model.Task> Create(TaskHouseApi.Model.Task t) { 
+           
+            //add task to database using ef core
             await db.Tasks.AddAsync(t); 
 
             int affected = await db.SaveChangesAsync(); 
-
+            
+            //task not created
             if(affected != 1) { 
                 return null;
             }
 
+            //if the task is new, add it to the cache, else call updatecache method
             return taskCache.AddOrUpdate(t.Id, t, UpdateCache);
         }
 
