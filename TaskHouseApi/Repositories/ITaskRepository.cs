@@ -18,8 +18,5 @@ namespace TaskHouseApi.Repositories
 
         Task<bool> Delete(int id);
 
-
-
-
     }
 }
