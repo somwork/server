@@ -8,6 +8,7 @@ namespace TaskHouseApi.DatabaseContext
     {
         public DbSet<User> Users { set; get; }
 
+        public DbSet<Employer> Employers { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Education> Educations { set; get; }
