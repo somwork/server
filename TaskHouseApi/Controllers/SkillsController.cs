@@ -22,14 +22,14 @@ namespace TaskHouseApi.Controllers
             this.repo = repo;
         }
 
-        // GET: api/locations/
+        // GET: api/skills/
         [HttpGet]
         public async Task<IEnumerable<Skill>> Get()
         {
             return await repo.RetrieveAll();
         }
 
-        // GET: api/locations/[id]
+        // GET: api/skills/[id]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int Id)
         {
@@ -42,7 +42,7 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(s); // 200 ok
         }
 
-        // POST: api/locations
+        // POST: api/skills
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]Skill skill)
         {
@@ -57,7 +57,7 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(added); 
         }
 
-        // PUT: api/locations/[id]
+        // PUT: api/skills/[id]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int Id, [FromBody] Skill s)
         {
@@ -77,7 +77,7 @@ namespace TaskHouseApi.Controllers
             return new NoContentResult(); // 204 No content
         }
 
-        // DELETE: api/locations/[id]
+        // DELETE: api/skills/[id]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
