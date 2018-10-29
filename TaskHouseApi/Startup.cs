@@ -50,6 +50,9 @@ namespace TaskHouseApi
                 });
 
             services.AddScoped<IWorkerRepository, WorkerRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
