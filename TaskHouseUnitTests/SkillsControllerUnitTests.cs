@@ -21,26 +21,84 @@ namespace TaskHouseUnitTests
             controller = new SkillsController(repo);
         }
 
+        ///Test Get all
         [Fact]
         public async void  SkillsController_ReturnsAllElementsInRepo() 
         { 
+            //Arrange and act
             IEnumerable<Skill> result = await controller.Get();
+
+            //Asserts
             Assert.Equal(3, result.Count());
 
         }
 
+        ///Test Get with valid Id as parameter
         [Fact]
-        public async void SkillsController_ReturnsObjectReponse_WhenGivenValidId() 
+        public async void SkillsController_Get_ReturnsObjectReponse_WhenGivenValidId() 
         { 
+            //arrange
             int skillId = 2;
 
+            //Act
             var result = await controller.Get(skillId) as ObjectResult;
             
-
+            //Assert
             AssemblyLoadEventArgs.Equals(200, result.StatusCode);
 
+        }
 
-            // What to do ift. at teste returneringer a requests/actionsresults? 
+        ///Test Get with invalid Id as parameter
+        [Fact]
+        public  async void SkillsController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        { 
+            //arrange
+            int skillId = 5000;
+
+            //Act
+            var result = await controller.Get(skillId) as NotFoundResult;
+            
+            //Assert
+            AssemblyLoadEventArgs.Equals(404, result.StatusCode);
+
+        }
+
+        /// Test Post with valid Skill 
+        [Fact]
+        public async void SkillsController_Create_ReturnsObjectResult_WhenGivenValidSkill()
+        { 
+            //Arrange
+            Skill skill = new Skill();
+            skill.Title = "TestSkill";
+
+            //Act
+            var result = await controller.Create(skill) as ObjectResult;
+
+            //Assert
+            AssemblyLoadEventArgs.Equals(200, result.StatusCode);
+
+        }
+
+        ///Test post with null Skill object
+        [Fact]
+         public async void SkillsController_Create_ReturnsBadRequest_WhenGivenNullSkill()
+        { 
+            //Arrange
+            Skill skill = null;
+
+            //Act
+            var result = await controller.Create(skill) as ObjectResult;
+
+            //Assert
+            AssemblyLoadEventArgs.Equals(400, result.StatusCode);
+
+        }
+
+        ///Test put with valid Id and Skill object
+        [Fact]
+        public async void SkillsController_Update_ReturnsNoContentResult_WhenParametersAreValid()
+        { 
+            //TODO
         }
     }
 }
