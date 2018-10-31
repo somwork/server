@@ -38,40 +38,17 @@ namespace TaskHouseUnitTests
 
         public async Task<Skill> Create(Skill s)
         {
-
-            //add skill to database using ef core
-            //await db.Skills.AddAsync(s);
-
-            //int affected = await db.SaveChangesAsync();
-
-            //skill not created
-            //if (affected != 1)
-            //{
-            //    return null;
-            //}
-
-            //if the skill is new, add it to the cache, else call updatecache method
             skillCache.Add(s);
             return s;
-            //return skillCache.AddOrUpdate(s.Id, s, UpdateCache);
         }
 
         public async Task<IEnumerable<Skill>> RetrieveAll()
         {
-            //return await System.Threading.Tasks.Task.Run<IEnumerable<Skill>>(
-            //    () => skillCache.Values);
             return skillCache;
         }
 
         public async Task<Skill> Retrieve(int id)
         {
-            //return await System.Threading.Tasks.Task.Run(() =>
-            //{
-            //    Skill skill;
-            //    skillCache.TryGetValue(id, out skill);
-            //    return skill;
-            // });
-
             return skillCache.Where(s => s.Id == id).SingleOrDefault();
         }
 
@@ -83,41 +60,19 @@ namespace TaskHouseUnitTests
 
             skillCache[index] = s;
             return s;
-           // return await System.Threading.Tasks.Task.Run(() =>
-            //{
-            //    db.Skills.Update(s);
-            //    int affected = db.SaveChanges();
 
-            //    if (affected != 1)
-            //    {
-            //        return null;
-            //    }
-
-            //    return System.Threading.Tasks.Task.Run(() => UpdateCache(Id, s));
-           // });
         }
 
         public async Task<bool> Delete(int Id)
         {
             Skill skill = skillCache.Where(s => s.Id == Id).SingleOrDefault();
 
-            if(skill == null) return false;
+            if (skill == null) return false;
 
             skillCache.Remove(skill);
 
             return true;
-            //return await System.Threading.Tasks.Task.Run(() =>
-            //{
-            //    Skill s = db.Skills.Find(Id);
-            //    db.Skills.Remove(s);
-            //    int affected = db.SaveChanges();
 
-            //    if (affected != 1)
-            //    {
-            //        return null;
-            //    }
-            //    return System.Threading.Tasks.Task.Run(() => skillCache.TryRemove(Id, out s));
-           // });
         }
 
     }
