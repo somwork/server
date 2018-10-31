@@ -75,7 +75,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Create(skill);
 
             //Assert
-            var okResult = Assert.IsType<ObjectResult>(result);
+            var assertResult = Assert.IsType<ObjectResult>(result);
 
         }
 
@@ -90,7 +90,8 @@ namespace TaskHouseUnitTests
             var result = await controller.Create(skill);
 
             //Assert
-            var okResult = Assert.IsType<BadRequestObjectResult>(result);
+            var assertResult = Assert.IsType<BadRequestObjectResult>(result);
+            //Major inconsistencies in whether is return BadRequestResult or BadRequestObjectResult
 
         }
 
@@ -109,7 +110,107 @@ namespace TaskHouseUnitTests
             var result = await controller.Update(id, skill);
 
             //Assert
-            var okResult = Assert.IsType<NoContentResult>(result);
+            var assertResult = Assert.IsType<NoContentResult>(result);
         }
+
+        ///Test put with invalid Id and valid Skill object
+        [Fact]
+        public async void SkillsController_Update_ReturnsBadRequestResult_WhenIdIsInvalid()
+        { 
+            //Arrange
+            Skill skill = new Skill(){
+                Id = 1, 
+                Title = "Skill1"
+            };
+            int id = 50;
+
+            //Act
+            var result = await controller.Update(id, skill);
+
+            //Assert
+            var assertResult = Assert.IsType<BadRequestResult>(result); 
+            //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
+        }
+
+        ///Test put with valid Id and null Skill object
+        [Fact]
+        public async void SkillsController_Update_ReturnsBadRequestResult_WhenSkillIsNull()
+        { 
+            //Arrange
+            Skill skill = null;
+            int id = 1;
+
+            //Act
+            var result = await controller.Update(id, skill);
+
+            //Assert
+            var assertResult = Assert.IsType<BadRequestResult>(result); 
+            //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
+        }
+
+        ///Test put with invalid Id and null Skill object
+        [Fact]
+        public async void SkillsController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndSkillIsNull()
+        { 
+            //Arrange
+            Skill skill = null;
+            int id = 2600;
+
+            //Act
+            var result = await controller.Update(id, skill);
+
+            //Assert
+            var assertResult = Assert.IsType<BadRequestResult>(result); 
+            //Inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
+        }
+
+        ///Test put with valid Id and Skill object, on not existing skill
+        [Fact]
+        public async void SkillsController_Update_ReturnsNotFoundResult_WhenParametersAreValidButSkillDoesNotExist()
+        { 
+            //Arrange
+            Skill skill = new Skill(){
+                Id = 10, 
+                Title = "Skill1"
+            };
+            int id = 10;
+
+            //Act
+            var result = await controller.Update(id, skill);
+
+            //Assert
+            var assertResult = Assert.IsType<NotFoundResult>(result);
+        }
+
+
+        ///Test Delete with valid Id
+        [Fact] 
+        public async void SkillsController_Delete_ReturnsNoContentResult_WhenIdIsValid()
+        { 
+            //Arrange
+            int id = 1; 
+
+            //Act
+            var result = await controller.Delete(id);
+
+            //Assert
+            var asserrResult = Assert.IsType<NoContentResult>(result);
+        }
+
+        ///Test Delete with invalid Id
+        [Fact] 
+        public async void SkillsController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
+        { 
+            //Arrange
+            int id = 2500; 
+
+            //Act
+            var result = await controller.Delete(id);
+
+            //Assert
+            var asserrResult = Assert.IsType<NotFoundResult>(result);
+        }
+        
+
     }
 }
