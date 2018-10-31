@@ -41,10 +41,10 @@ namespace TaskHouseUnitTests
             int skillId = 2;
 
             //Act
-            var result = await controller.Get(skillId) as ObjectResult;
-            
+            var result = await controller.Get(skillId);
+
             //Assert
-            Assert.Equal(200, result.StatusCode);
+            var okResult = Assert.IsType<ObjectResult>(result);
 
         }
 
@@ -72,10 +72,10 @@ namespace TaskHouseUnitTests
             skill.Title = "TestSkill";
 
             //Act
-            var result = await controller.Create(skill) as ObjectResult;
+            var result = await controller.Create(skill);
 
             //Assert
-            Assert.Equal(200, result.StatusCode);
+            var okResult = Assert.IsType<ObjectResult>(result);
 
         }
 
@@ -87,10 +87,10 @@ namespace TaskHouseUnitTests
             Skill skill = null;
 
             //Act
-            var result = await controller.Create(skill) as BadRequestResult;
+            var result = await controller.Create(skill);
 
             //Assert
-            Assert.Equal(400, result.StatusCode);
+            var okResult = Assert.IsType<BadRequestObjectResult>(result);
 
         }
 
@@ -99,14 +99,17 @@ namespace TaskHouseUnitTests
         public async void SkillsController_Update_ReturnsNoContentResult_WhenParametersAreValid()
         { 
             //Arrange
-            Skill skill = new Skill();
+            Skill skill = new Skill(){
+                Id = 1, 
+                Title = "Skill1"
+            };
             int id = 1;
 
             //Act
-            var result = await controller.Update(id, skill) as NoContentResult;
+            var result = await controller.Update(id, skill);
 
             //Assert
-            Assert.Equal(204, result.StatusCode);
+            var okResult = Assert.IsType<NoContentResult>(result);
         }
     }
 }
