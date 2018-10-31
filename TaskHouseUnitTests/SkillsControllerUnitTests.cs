@@ -44,7 +44,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Get(skillId) as ObjectResult;
             
             //Assert
-            AssemblyLoadEventArgs.Equals(200, result.StatusCode);
+            Assert.Equal(200, result.StatusCode);
 
         }
 
@@ -59,7 +59,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Get(skillId) as NotFoundResult;
             
             //Assert
-            AssemblyLoadEventArgs.Equals(404, result.StatusCode);
+            Assert.Equal(404, result.StatusCode);
 
         }
 
@@ -75,7 +75,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Create(skill) as ObjectResult;
 
             //Assert
-            AssemblyLoadEventArgs.Equals(200, result.StatusCode);
+            Assert.Equal(200, result.StatusCode);
 
         }
 
@@ -87,10 +87,10 @@ namespace TaskHouseUnitTests
             Skill skill = null;
 
             //Act
-            var result = await controller.Create(skill) as ObjectResult;
+            var result = await controller.Create(skill) as BadRequestResult;
 
             //Assert
-            AssemblyLoadEventArgs.Equals(400, result.StatusCode);
+            Assert.Equal(400, result.StatusCode);
 
         }
 
@@ -98,7 +98,15 @@ namespace TaskHouseUnitTests
         [Fact]
         public async void SkillsController_Update_ReturnsNoContentResult_WhenParametersAreValid()
         { 
-            //TODO
+            //Arrange
+            Skill skill = new Skill();
+            int id = 1;
+
+            //Act
+            var result = await controller.Update(id, skill) as NoContentResult;
+
+            //Assert
+            Assert.Equal(204, result.StatusCode);
         }
     }
 }
