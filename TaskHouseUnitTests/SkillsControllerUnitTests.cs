@@ -42,9 +42,12 @@ namespace TaskHouseUnitTests
 
             //Act
             var result = await controller.Get(skillId);
+            var resultAsObject = await controller.Get(skillId) as ObjectResult;
+            var resultObject = resultAsObject.Value as Skill;
 
             //Assert
-            var okResult = Assert.IsType<ObjectResult>(result);
+            var assertResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(skillId, resultObject.Id);
 
         }
 
@@ -102,15 +105,18 @@ namespace TaskHouseUnitTests
             //Arrange
             Skill skill = new Skill(){
                 Id = 1, 
-                Title = "Skill1"
+                Title = "UpdatedSkill"
             };
             int id = 1;
 
             //Act
             var result = await controller.Update(id, skill);
+            var updatedResultObject = await controller.Get(id) as ObjectResult;
+            var updatedSkill = updatedResultObject.Value as Skill;
 
             //Assert
             var assertResult = Assert.IsType<NoContentResult>(result);
+            Assert.Equal(updatedSkill.Title, "UpdatedSkill");
         }
 
         ///Test put with invalid Id and valid Skill object
@@ -183,7 +189,7 @@ namespace TaskHouseUnitTests
         }
 
 
-        ///Test Delete with valid Id
+        ///Test Delete returns NoContentResult with valid Id
         [Fact] 
         public async void SkillsController_Delete_ReturnsNoContentResult_WhenIdIsValid()
         { 
@@ -194,7 +200,24 @@ namespace TaskHouseUnitTests
             var result = await controller.Delete(id);
 
             //Assert
-            var asserrResult = Assert.IsType<NoContentResult>(result);
+            var assertResult = Assert.IsType<NoContentResult>(result);
+        }
+
+         ///Test if delete actually deletes with valid Id
+        [Fact] 
+        public async void SkillsController_Delete_ActuallyDeletes_WhenIdIsValid()
+        { 
+            //Arrange
+            int id = 1; 
+
+            //Act
+            var result = await controller.Delete(id);
+            var getDeletedSkillResult = await controller.Get(id);
+
+            //Assert
+            var assertResult = Assert.IsType<NoContentResult>(result);
+            var assertDeleteResult = Assert.IsType<NotFoundResult>(getDeletedSkillResult);
+            
         }
 
         ///Test Delete with invalid Id
@@ -210,7 +233,6 @@ namespace TaskHouseUnitTests
             //Assert
             var asserrResult = Assert.IsType<NotFoundResult>(result);
         }
-        
 
     }
 }
