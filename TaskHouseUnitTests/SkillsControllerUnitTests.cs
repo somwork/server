@@ -68,7 +68,7 @@ namespace TaskHouseUnitTests
 
         /// Test Post with valid Skill 
         [Fact]
-        public async void SkillsController_Create_ReturnsObjectResult_WhenGivenValidSkill()
+        public async void SkillsController_Create_ReturnsObjectResultContainingCreatedSkill_WhenGivenValidSkill()
         { 
             //Arrange
             Skill skill = new Skill();
@@ -76,9 +76,12 @@ namespace TaskHouseUnitTests
 
             //Act
             var result = await controller.Create(skill);
+            var createdResultObject = result as ObjectResult;
+            var createdSkill = createdResultObject.Value as Skill;
 
             //Assert
             var assertResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(createdSkill.Title, skill.Title);
 
         }
 
@@ -116,7 +119,7 @@ namespace TaskHouseUnitTests
 
             //Assert
             var assertResult = Assert.IsType<NoContentResult>(result);
-            Assert.Equal(updatedSkill.Title, "UpdatedSkill");
+            Assert.Equal(updatedSkill.Title, skill.Title);
         }
 
         ///Test put with invalid Id and valid Skill object
