@@ -12,13 +12,13 @@ namespace TaskHouseUnitTests
 { 
     public class TasksControllerUnitTests
     { 
-        ITasksController controller;
+        TasksController controller;
         ITaskRepository repo;
 
         public TasksControllerUnitTests() 
         { 
             repo = new FakeTaskRepository();
-            controller = new TasksControllerUnitTests(repo);
+            controller = new TasksController(repo);
         }
 
          ///Test Get all
@@ -29,7 +29,7 @@ namespace TaskHouseUnitTests
             IEnumerable<TaskHouseApi.Model.Task> result = await controller.Get();
 
             //Asserts
-            Assert.Equal(3, result.Count());
+            Assert.Equal(4, result.Count());
 
         }
 
@@ -66,9 +66,9 @@ namespace TaskHouseUnitTests
 
         }
 
-        /// Test Post with valid Skill 
+        /// Test Post with valid Task 
         [Fact]
-        public async void TasksController_Create_ReturnsObjectResult_WhenGivenValidSkill()
+        public async void TasksController_Create_ReturnsObjectResultContainingCreatedTask_WhenGivenValidSkill()
         { 
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
@@ -76,24 +76,24 @@ namespace TaskHouseUnitTests
 
             //Act
             var result = await controller.Create(task);
-            var returnedResultObject = await controller.Get(id) as ObjectResult;
-            var returnedTask = updatedResultObject.Value as TaskHouseApi.Model.Task;
+            var createdResultObject = result as ObjectResult;
+            var createdTask = createdResultObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
             var assertResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(task.Description, returnedTask.Description);
+            Assert.Equal(task.Description, createdTask.Description);
 
         }
 
-        ///Test post with null Skill object
+        ///Test post with null Task object
         [Fact]
          public async void TasksController_Create_ReturnsBadRequest_WhenGivenNullSkill()
         { 
             //Arrange
-            Skill skill = null;
+            TaskHouseApi.Model.Task task = null;
 
             //Act
-            var result = await controller.Create(skill);
+            var result = await controller.Create(task);
 
             //Assert
             var assertResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -101,91 +101,91 @@ namespace TaskHouseUnitTests
 
         }
 
-        ///Test put with valid Id and Skill object
+        ///Test put with valid Id and Task object
         [Fact]
-        public async void TasksController_Update_ReturnsNoContentResult_WhenParametersAreValid()
+        public async void TasksController_Update_ReturnsNoContentResultAndCreatedbject_WhenParametersAreValid()
         { 
             //Arrange
-            Skill skill = new Skill(){
+            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
                 Id = 1, 
-                Title = "UpdatedSkill"
+                Description = "UpdatedTask"
             };
             int id = 1;
 
             //Act
-            var result = await controller.Update(id, skill);
+            var result = await controller.Update(id, task);
             var updatedResultObject = await controller.Get(id) as ObjectResult;
-            var updatedSkill = updatedResultObject.Value as Skill;
+            var updatedTask = updatedResultObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
             var assertResult = Assert.IsType<NoContentResult>(result);
-            Assert.Equal(updatedSkill.Title, "UpdatedSkill");
+            Assert.Equal(updatedTask.Description, task.Description);
         }
 
-        ///Test put with invalid Id and valid Skill object
+        ///Test put with invalid Id and valid Task object
         [Fact]
         public async void TasksController_Update_ReturnsBadRequestResult_WhenIdIsInvalid()
         { 
             //Arrange
-            Skill skill = new Skill(){
+            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
                 Id = 1, 
-                Title = "Skill1"
+                Description = "Task1"
             };
             int id = 50;
 
             //Act
-            var result = await controller.Update(id, skill);
+            var result = await controller.Update(id, task);
 
             //Assert
             var assertResult = Assert.IsType<BadRequestResult>(result); 
             //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
 
-        ///Test put with valid Id and null Skill object
+        ///Test put with valid Id and null Task object
         [Fact]
         public async void TasksController_Update_ReturnsBadRequestResult_WhenSkillIsNull()
         { 
             //Arrange
-            Skill skill = null;
+            TaskHouseApi.Model.Task task = null;
             int id = 1;
 
             //Act
-            var result = await controller.Update(id, skill);
+            var result = await controller.Update(id, task);
 
             //Assert
             var assertResult = Assert.IsType<BadRequestResult>(result); 
             //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
 
-        ///Test put with invalid Id and null Skill object
+        ///Test put with invalid Id and null Task object
         [Fact]
         public async void TasksController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndSkillIsNull()
         { 
             //Arrange
-            Skill skill = null;
+            TaskHouseApi.Model.Task task = null;
             int id = 2600;
 
             //Act
-            var result = await controller.Update(id, skill);
+            var result = await controller.Update(id, task);
 
             //Assert
             var assertResult = Assert.IsType<BadRequestResult>(result); 
             //Inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
 
-        ///Test put with valid Id and Skill object, on not existing skill
+        ///Test put with valid Id and Task object, on not existing Task
         [Fact]
         public async void TasksController_Update_ReturnsNotFoundResult_WhenParametersAreValidButSkillDoesNotExist()
         { 
             //Arrange
-            Skill skill = new Skill(){
+            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
                 Id = 10, 
-                Title = "Skill1"
+                Description = "Task1"
             };
             int id = 10;
 
             //Act
-            var result = await controller.Update(id, skill);
+            var result = await controller.Update(id, task);
 
             //Assert
             var assertResult = Assert.IsType<NotFoundResult>(result);
@@ -215,11 +215,11 @@ namespace TaskHouseUnitTests
 
             //Act
             var result = await controller.Delete(id);
-            var getDeletedSkillResult = await controller.Get(id);
+            var getDeletedTaskResult = await controller.Get(id);
 
             //Assert
             var assertResult = Assert.IsType<NoContentResult>(result);
-            var assertDeleteResult = Assert.IsType<NotFoundResult>(getDeletedSkillResult);
+            var assertDeleteResult = Assert.IsType<NotFoundResult>(getDeletedTaskResult);
             
         }
 
@@ -234,7 +234,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Delete(id);
 
             //Assert
-            var asserrResult = Assert.IsType<NotFoundResult>(result);
+            var assertResult = Assert.IsType<NotFoundResult>(result);
         }
 
     }
