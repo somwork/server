@@ -35,7 +35,7 @@ namespace TaskHouseUnitTests
 
         ///Test Get with valid Id as parameter
         [Fact]
-        public async void SkillsController_Get_ReturnsObjectReponse_WhenGivenValidId() 
+        public async void SkillsController_Get_ReturnsObjectReponseWithCorrectSkill_WhenGivenValidId() 
         { 
             //arrange
             int skillId = 2;
@@ -82,6 +82,7 @@ namespace TaskHouseUnitTests
             //Assert
             var assertResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(createdSkill.Title, skill.Title);
+            Assert.Equal(createdSkill.Id, skill.Id);
 
         }
 
@@ -234,7 +235,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Delete(id);
 
             //Assert
-            var asserrResult = Assert.IsType<NotFoundResult>(result);
+            var assertResult = Assert.IsType<NotFoundResult>(result);
         }
 
     }
