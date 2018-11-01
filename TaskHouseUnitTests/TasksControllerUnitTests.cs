@@ -23,7 +23,7 @@ namespace TaskHouseUnitTests
 
          ///Test Get all
         [Fact]
-        public async void  TasksController_ReturnsAllElementsInRepo() 
+        public async void  TasksController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters() 
         { 
             //Arrange and act
             IEnumerable<TaskHouseApi.Model.Task> result = await controller.Get();
@@ -35,7 +35,7 @@ namespace TaskHouseUnitTests
 
         ///Test Get with valid Id as parameter
         [Fact]
-        public async void TasksController_Get_ReturnsObjectReponse_WhenGivenValidId() 
+        public async void TasksController_Get_ReturnsObjectReponseWithCorrectTask_WhenGivenValidId() 
         { 
             //arrange
             int taskId = 2;
