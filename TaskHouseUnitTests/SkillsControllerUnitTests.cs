@@ -23,7 +23,7 @@ namespace TaskHouseUnitTests
 
         ///Test Get all
         [Fact]
-        public async void  SkillsController_ReturnsAllElementsInRepo() 
+        public async void  SkillsController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters() 
         { 
             //Arrange and act
             IEnumerable<Skill> result = await controller.Get();
