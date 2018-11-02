@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TaskHouseApi.Security;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
+using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
 {
@@ -16,11 +16,13 @@ namespace TaskHouseApi.Controllers
     public class UsersController : Controller
     {
         private IUserRepository repo;
+        private IPasswordService passwordService;
 
         // constructor injects registered repository 
-        public UsersController(IUserRepository repo)
+        public UsersController(IUserRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
+            this.passwordService = passwordService;
         }
 
         // GET: api/users 
@@ -65,7 +67,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "Username in use" });
             }
 
-            var hashResult = SecurityHandler.GenerateNewPassword(user);
+            var hashResult = passwordService.GenerateNewPassword(user);
 
             user.Salt = hashResult.saltText;
             user.Password = hashResult.saltechashedPassword;

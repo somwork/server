@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace TaskHouseApi.Model
 {
@@ -13,9 +14,6 @@ namespace TaskHouseApi.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Salt { get; set; }
-
-        public User()
-        {
-        }
+        public List<RefreshToken> RefreshTokens { get; set; }
     }
 }

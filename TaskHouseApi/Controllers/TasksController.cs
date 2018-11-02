@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TaskHouseApi.Security;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
 

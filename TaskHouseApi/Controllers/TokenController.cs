@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using TaskHouseApi.Security;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
+using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
 {
@@ -21,11 +22,15 @@ namespace TaskHouseApi.Controllers
     {
         private IConfiguration config;
         private IUserRepository repo;
+        private IPasswordService passwordService;
+        private ITokenService tokenService;
 
-        public TokenController(IConfiguration config, IUserRepository repo)
+        public TokenController(IConfiguration config, IUserRepository repo, IPasswordService passwordService, ITokenService tokenService)
         {
             this.config = config;
             this.repo = repo;
+            this.passwordService = passwordService;
+            this.tokenService = tokenService;
         }
         
         [HttpPost]
@@ -39,7 +44,12 @@ namespace TaskHouseApi.Controllers
                 return response;
             }
 
-            string tokenString = BuildToken(user);
+            var usersClaims = new [] 
+            {               
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+
+            string tokenString = tokenService.GenerateAccessToken(usersClaims);
             return response = Ok(new { token = tokenString });
         }
 
@@ -53,7 +63,7 @@ namespace TaskHouseApi.Controllers
                 return null;
             }
 
-            bool isAuthenticated = SecurityHandler
+            bool isAuthenticated = passwordService
                 .GenerateSaltedHashedPassword(loginModel.Password, potentialUser.Salt)
                 .Equals(potentialUser.Password);
 
@@ -65,7 +75,7 @@ namespace TaskHouseApi.Controllers
             return potentialUser;
         }
 
-        private string BuildToken(User user)
+        /*private string BuildToken(User user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -78,6 +88,6 @@ namespace TaskHouseApi.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        }*/
     }
 }

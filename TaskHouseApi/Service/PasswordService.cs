@@ -1,15 +1,13 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 using TaskHouseApi.Model;
 
-namespace TaskHouseApi.Security
+namespace TaskHouseApi.Service
 {
-
-    public class SecurityHandler
+    public class PasswordService : IPasswordService
     {
-        public static (string saltText, string saltechashedPassword) GenerateNewPassword(User user) 
+        public (string saltText, string saltechashedPassword) GenerateNewPassword(User user) 
         {
             // generate a random salt 
             var rng = RandomNumberGenerator.Create();
@@ -20,7 +18,7 @@ namespace TaskHouseApi.Security
             return (saltText, GenerateSaltedHashedPassword(user.Password, saltText));
         }
 
-        public static string GenerateSaltedHashedPassword(string password, string saltText) 
+        public string GenerateSaltedHashedPassword(string password, string saltText) 
         {
             // generate the salted and hashed password 
             var sha = SHA256.Create();
