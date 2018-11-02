@@ -46,7 +46,7 @@ namespace TaskHouseUnitTests
             var resultObject = resultAsObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
-            var assertResult = Assert.IsType<ObjectResult>(result);
+            Assert.IsType<ObjectResult>(result);
             Assert.Equal(taskId, resultObject.Id);
 
         }
@@ -80,7 +80,7 @@ namespace TaskHouseUnitTests
             var createdTask = createdResultObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
-            var assertResult = Assert.IsType<ObjectResult>(result);
+            Assert.IsType<ObjectResult>(result);
             Assert.Equal(task.Description, createdTask.Description);
 
         }
@@ -96,7 +96,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Create(task);
 
             //Assert
-            var assertResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.IsType<BadRequestObjectResult>(result);
             //Major inconsistencies in whether is return BadRequestResult or BadRequestObjectResult
 
         }
@@ -118,7 +118,7 @@ namespace TaskHouseUnitTests
             var updatedTask = updatedResultObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
-            var assertResult = Assert.IsType<NoContentResult>(result);
+            Assert.IsType<NoContentResult>(result);
             Assert.Equal(updatedTask.Description, task.Description);
         }
 
@@ -137,7 +137,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Update(id, task);
 
             //Assert
-            var assertResult = Assert.IsType<BadRequestResult>(result); 
+            Assert.IsType<BadRequestResult>(result); 
             //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
 
@@ -153,7 +153,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Update(id, task);
 
             //Assert
-            var assertResult = Assert.IsType<BadRequestResult>(result); 
+            Assert.IsType<BadRequestResult>(result); 
             //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
 
@@ -169,7 +169,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Update(id, task);
 
             //Assert
-            var assertResult = Assert.IsType<BadRequestResult>(result); 
+            Assert.IsType<BadRequestResult>(result); 
             //Inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
 
@@ -188,7 +188,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Update(id, task);
 
             //Assert
-            var assertResult = Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<NotFoundResult>(result);
         }
 
 
@@ -203,7 +203,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Delete(id);
 
             //Assert
-            var assertResult = Assert.IsType<NoContentResult>(result);
+            Assert.IsType<NoContentResult>(result);
         }
 
          ///Test if delete actually deletes with valid Id
@@ -218,8 +218,8 @@ namespace TaskHouseUnitTests
             var getDeletedTaskResult = await controller.Get(id);
 
             //Assert
-            var assertResult = Assert.IsType<NoContentResult>(result);
-            var assertDeleteResult = Assert.IsType<NotFoundResult>(getDeletedTaskResult);
+            Assert.IsType<NoContentResult>(result);
+            Assert.IsType<NotFoundResult>(getDeletedTaskResult);
             
         }
 
@@ -234,7 +234,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Delete(id);
 
             //Assert
-            var assertResult = Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<NotFoundResult>(result);
         }
 
     }
