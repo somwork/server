@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TaskHouseApi.DatabaseContext;
 using TaskHouseApi.Model;
 
+
 namespace TaskHouseApi.Repositories
 {
     public class LocationRepository : ILocationRepository

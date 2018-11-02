@@ -11,14 +11,14 @@ using TaskHouseApi.Repositories;
 namespace TaskHouseApi.Controllers
 {
     // base address: api/customers 
-    [Authorize]
+    [AllowAnonymous]
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class WorkersController : Controller
     {
-        private IUserRepository repo;
+        private IWorkerRepository repo;
 
         // constructor injects registered repository 
-        public UsersController(IUserRepository repo)
+        public WorkersController(IWorkerRepository repo)
         {
             this.repo = repo;
         }
@@ -26,74 +26,73 @@ namespace TaskHouseApi.Controllers
         // GET: api/users 
         // GET: api/users/?username=[username] 
         [HttpGet]
-        public async Task<IEnumerable<User>> Get(string username)
+        public async Task<IEnumerable<Worker>> Get(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
-                return await repo.RetrieveAllAsync();
+                return await repo.RetrieveAll();
             }
             
-            return (await repo.RetrieveAllAsync())
-                .Where(user => user.Username == username);
+            return (await repo.RetrieveAll())
+                .Where(worker => worker.Username == username);
         }
 
         // GET: api/users/[id] 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int Id)
         {
-            User u = await repo.RetrieveAsync(Id);
-            if (u == null)
+            Worker w = await repo.Retrieve(Id);
+            if (w == null)
             {
                 return NotFound(); // 404 Resource not found 
             }
-            return new ObjectResult(u); // 200 OK 
+            return new ObjectResult(w); // 200 OK 
         }
 
         // POST: api/users
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<string>> Create([FromBody]User user)
+        public async Task<ActionResult<string>> Create([FromBody]Worker worker)
         {
-            if (user == null)
+            if (worker == null)
             {
                 return BadRequest(new { error = "CreateUser: user is null" }); // 400 Bad request 
             }
 
-            User existingUser = (await repo.RetrieveAllAsync()).SingleOrDefault(u => u.Username == user.Username);
+            Worker existingWorker = (await repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
-            if (existingUser != null) {
+            if (existingWorker != null) {
                 return BadRequest(new { error = "Username in use" });
             }
 
-            var hashResult = SecurityHandler.GenerateNewPassword(user);
+            var hashResult = SecurityHandler.GenerateNewPassword(worker);
 
-            user.Salt = hashResult.saltText;
-            user.Password = hashResult.saltechashedPassword;
+            worker.Salt = hashResult.saltText;
+            worker.Password = hashResult.saltechashedPassword;
 
-            User added = await repo.CreateAsync(user);
+            await repo.Create(worker);
             
             return Ok();
 
-            //return CreatedAtRoute("GetUser", // use named route
-            //new { Id = added.Id }, user); // 201 Created
+        
         }
 
         // PUT: api/users/[id] 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] User u)
+        public async Task<IActionResult> Update(int Id, [FromBody] Worker w)
         {
-            if (u == null || u.Id != Id)
+            if (w == null || w.Id != Id)
             {
                 return BadRequest(); // 400 Bad request 
             }
 
-            var existing = await repo.RetrieveAsync(Id);
+            var existing = await repo.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found 
             }
 
-            await repo.UpdateAsync(Id, u);
+            await repo.Update(Id, w);
             return new NoContentResult(); // 204 No content 
         }
 
@@ -101,13 +100,13 @@ namespace TaskHouseApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            var existing = await repo.RetrieveAsync(Id);
+            var existing = await repo.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found 
             }
 
-            bool deleted = await repo.DeleteAsync(Id);
+            bool deleted = await repo.Delete(Id);
 
             if (!deleted)
             {
