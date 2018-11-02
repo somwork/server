@@ -23,7 +23,7 @@ namespace TaskHouseUnitTests
 
         //Test retrieve all in repository
         [Fact]
-        public async void LocationsController_Get_ReturnAllElementsInRepo()
+        public async void LocationsController_Get_ReturnAllElementsInRepo_WhenGivenNoParameters()
         {
             //Arrange object
             IEnumerable<Location> resultset;
