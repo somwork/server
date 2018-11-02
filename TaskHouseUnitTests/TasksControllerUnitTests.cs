@@ -68,7 +68,7 @@ namespace TaskHouseUnitTests
 
         /// Test Post with valid Task 
         [Fact]
-        public async void TasksController_Create_ReturnsObjectResultContainingCreatedTask_WhenGivenValidSkill()
+        public async void TasksController_Create_ReturnsObjectResultContainingCreatedTask_WhenGivenValidTask()
         { 
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
@@ -87,7 +87,7 @@ namespace TaskHouseUnitTests
 
         ///Test post with null Task object
         [Fact]
-         public async void TasksController_Create_ReturnsBadRequest_WhenGivenNullSkill()
+         public async void TasksController_Create_ReturnsBadRequest_WhenGivenNullTask()
         { 
             //Arrange
             TaskHouseApi.Model.Task task = null;
@@ -103,7 +103,7 @@ namespace TaskHouseUnitTests
 
         ///Test put with valid Id and Task object
         [Fact]
-        public async void TasksController_Update_ReturnsNoContentResultAndCreatedbject_WhenParametersAreValid()
+        public async void TasksController_Update_ReturnsNoContentResultAndCreatedObject_WhenParametersAreValid()
         { 
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
@@ -143,7 +143,7 @@ namespace TaskHouseUnitTests
 
         ///Test put with valid Id and null Task object
         [Fact]
-        public async void TasksController_Update_ReturnsBadRequestResult_WhenSkillIsNull()
+        public async void TasksController_Update_ReturnsBadRequestResult_WhenTaskIsNull()
         { 
             //Arrange
             TaskHouseApi.Model.Task task = null;
@@ -159,7 +159,7 @@ namespace TaskHouseUnitTests
 
         ///Test put with invalid Id and null Task object
         [Fact]
-        public async void TasksController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndSkillIsNull()
+        public async void TasksController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndTaskIsNull()
         { 
             //Arrange
             TaskHouseApi.Model.Task task = null;
@@ -175,7 +175,7 @@ namespace TaskHouseUnitTests
 
         ///Test put with valid Id and Task object, on not existing Task
         [Fact]
-        public async void TasksController_Update_ReturnsNotFoundResult_WhenParametersAreValidButSkillDoesNotExist()
+        public async void TasksController_Update_ReturnsNotFoundResult_WhenParametersAreValidButTaskDoesNotExist()
         { 
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
