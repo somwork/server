@@ -23,7 +23,7 @@ namespace TaskHouseUnitTests
 
     //Test retrieve all in repository
     [Fact]
-    public async void LocationsController_ReturnAllElementsInRepo()
+    public async void LocationsController_Get_ReturnAllElementsInRepo()
     {
       //Arrange object
       IEnumerable<Location> resultset;
@@ -37,18 +37,18 @@ namespace TaskHouseUnitTests
 
     [Fact]
     //Test GET with id
-    public async void LocationsController_ReturnObject_WhenIdIsValid()
+    public async void LocationsController_Get_ReturnObject_WhenIdIsValid()
     {
       //Arrange id for location object
       int locationId = 1;
 
-      //Fact
+      //Act
       var result = await controller.Get(locationId);
       var resultAsObject = await controller.Get(locationId) as ObjectResult;
       var resultObject = resultAsObject.Value as Location;
 
       //Assert - Checks if the returned object is the same type and then checks id
-      var assertResult = Assert.IsType<ObjectResult>(result);
+      Assert.IsType<ObjectResult>(result);
       Assert.Equal(locationId, resultObject.Id);
     }
 
@@ -80,7 +80,7 @@ namespace TaskHouseUnitTests
       var resultObject = resultAsObject.Value as Location;
 
       //Assert
-      var assertResult = Assert.IsType<ObjectResult>(result);
+      Assert.IsType<ObjectResult>(result);
       Assert.Equal(location.Country,resultObject.Country);
     }
 
@@ -95,7 +95,7 @@ namespace TaskHouseUnitTests
       var result = await controller.Create(location);
 
       //Assert
-      var assertResult = Assert.IsType<BadRequestObjectResult>(result);
+      Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]
@@ -115,7 +115,7 @@ namespace TaskHouseUnitTests
       var resultObject = resultAsObject.Value as Location;
 
       //Assert
-      var assertResult = Assert.IsType<NoContentResult>(result);
+      Assert.IsType<NoContentResult>(result);
       Assert.Equal(location.Country, resultObject.Country);
     }
 
@@ -150,7 +150,7 @@ namespace TaskHouseUnitTests
       var result = await controller.Update(location.Id,location);
 
       //Assert
-      var assertResult = Assert.IsType<NotFoundResult>(result);
+      Assert.IsType<NotFoundResult>(result);
     }
 
     [Fact]
@@ -165,8 +165,8 @@ namespace TaskHouseUnitTests
       var getDeletedResult = await controller.Get(Id);
 
       //Assert
-      var assertResult = Assert.IsType<NoContentResult>(result);
-      var assertDeletedResult = Assert.IsType<NotFoundResult>(getDeletedResult);
+      Assert.IsType<NoContentResult>(result);
+      Assert.IsType<NotFoundResult>(getDeletedResult);
     }
 
     [Fact]
@@ -180,7 +180,7 @@ namespace TaskHouseUnitTests
       var result = await controller.Delete(Id);
 
       //Assert
-      var assertResult = Assert.IsType<NotFoundResult>(result);
+      Assert.IsType<NotFoundResult>(result);
 
     }
 
