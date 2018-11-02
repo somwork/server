@@ -131,7 +131,7 @@ namespace TaskHouseUnitTests
       var result = await controller.Update(Id, location);
 
       //Assert
-      var assertResult = Assert.IsType<BadRequestResult>(result);
+      Assert.IsType<BadRequestResult>(result);
 
     }
 
