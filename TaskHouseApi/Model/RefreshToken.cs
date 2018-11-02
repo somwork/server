@@ -4,5 +4,7 @@ namespace TaskHouseApi.Model
     {
         public int Id { get; set; }
         public string Token { get; set; }
+
+        public RefreshToken() { }
     }
 }

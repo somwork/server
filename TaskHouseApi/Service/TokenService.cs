@@ -51,6 +51,17 @@ namespace TaskHouseApi.Service
         // Extracts the claims from expired token
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string expiredToken)
         {
+            var t = isAccessTokenValid(expiredToken);
+            if (!t.result)
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+
+            return t.principal;
+        }
+
+        public (bool result, ClaimsPrincipal principal) isAccessTokenValid(string expiredToken)
+        {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
 
             var tokenValidationParameters = new TokenValidationParameters
@@ -59,24 +70,48 @@ namespace TaskHouseApi.Service
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = key,
-                // The token is expired at is point
-                // so don't check it's lifetime
-                ValidateLifetime = false 
+                ValidateLifetime = false
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
             var principal = tokenHandler.ValidateToken(expiredToken, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if 
+            if
             (
-                jwtSecurityToken == null 
+                jwtSecurityToken == null
                 || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)
-            ){
-                throw new SecurityTokenException("Invalid token");
+            )
+            {
+                return (false, null);
             }
 
-            return principal;
+            return (true, principal);
+        }
+
+        public bool isAccessTokenExpired(string token)
+        {
+            if (!isAccessTokenValid(token).result)
+            {
+                return false;
+            }
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateLifetime = true
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if (jwtSecurityToken != null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

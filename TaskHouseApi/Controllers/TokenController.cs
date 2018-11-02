@@ -32,7 +32,7 @@ namespace TaskHouseApi.Controllers
             this.passwordService = passwordService;
             this.tokenService = tokenService;
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<string>> Create([FromBody]LoginModel login)
         {
@@ -44,13 +44,79 @@ namespace TaskHouseApi.Controllers
                 return response;
             }
 
-            var usersClaims = new [] 
-            {               
+            var usersClaims = new[]
+            {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             string tokenString = tokenService.GenerateAccessToken(usersClaims);
-            return response = Ok(new { token = tokenString });
+            string refreshToken = tokenService.GenerateRefreshToken();
+
+            user.RefreshTokens.Add
+                (
+                    new RefreshToken { Token = refreshToken }
+                );
+
+            var result = await repo.UpdateAsync(user.Id, user);
+            if (result == null)
+            {
+                return StatusCode(500);
+            }
+
+            return new ObjectResult(new
+            {
+                token = tokenString,
+                refreshToken = refreshToken
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Refresh(string token, string refreshToken)
+        {
+            var principal = tokenService.GetPrincipalFromExpiredToken(token);
+            int Id;
+            Int32.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Id);
+
+            User user = await repo.RetrieveAsync(Id);
+
+            if (user == null || user.RefreshTokens.Count() == 0)
+            {
+                return BadRequest();
+            }
+
+            RefreshToken storedRefreshToken = null;
+            foreach (RefreshToken r in user.RefreshTokens)
+            {
+                if (r.Equals(refreshToken))
+                {
+                    storedRefreshToken = r;
+                }
+            }
+
+            if (storedRefreshToken == null)
+            {
+                return BadRequest();
+            }
+
+            var newJwtToken = tokenService.GenerateAccessToken(principal.Claims);
+            var newRefreshToken = tokenService.GenerateRefreshToken();
+
+            user.RefreshTokens.Add
+                (
+                    new RefreshToken { Token = newRefreshToken }
+                );
+
+            var result = await repo.UpdateAsync(Id, user);
+            if (result == null)
+            {
+                return StatusCode(500);
+            }
+
+            return new ObjectResult(new
+            {
+                token = newJwtToken,
+                refreshToken = newRefreshToken
+            });
         }
 
         private async Task<User> Authenticate(LoginModel loginModel)
@@ -71,7 +137,7 @@ namespace TaskHouseApi.Controllers
             {
                 return null;
             }
-            
+
             return potentialUser;
         }
 
