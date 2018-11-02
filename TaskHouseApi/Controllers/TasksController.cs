@@ -56,7 +56,7 @@ namespace TaskHouseApi.Controllers
 
             TaskHouseApi.Model.Task added = await repo.Create(task);
 
-            return Ok(); //200 ok
+            return new ObjectResult(added); //200 ok
         }
 
 

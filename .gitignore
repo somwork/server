@@ -1,6 +1,6 @@
-TaskHouseApi/obj
-TaskHouseApi/bin
-TaskHouseApi/Migrations/ContextModelSnapshot.cs
+*/obj
+*/bin
+*/Migrations/ContextModelSnapshot.cs
 .vscode
 .vs
 
