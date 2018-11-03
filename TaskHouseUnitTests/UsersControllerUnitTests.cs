@@ -7,6 +7,7 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using TaskHouseApi.Service;
 
 namespace TaskHouseUnitTests
 {
@@ -14,11 +15,12 @@ namespace TaskHouseUnitTests
     {
         UsersController controller;
         IUserRepository repo;
+        private IPasswordService passwordService;
 
         public UsersControllerUnitTests()
         {
             repo = new FakeUserRepository();
-            controller = new UsersController(repo);
+            controller = new UsersController(repo, passwordService);
         }
 
         [Fact]

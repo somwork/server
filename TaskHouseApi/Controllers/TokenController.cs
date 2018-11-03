@@ -117,7 +117,7 @@ namespace TaskHouseApi.Controllers
             var newRefreshToken = tokenService.GenerateRefreshToken();
 
             // Deletes the old refresh token from database
-            bool res = await repo.DeleteRefrechToken(user, storedRefreshToken);
+            bool res = repo.DeleteRefrechToken(user, storedRefreshToken);
             if (res == false)
             {
                 return StatusCode(500);
