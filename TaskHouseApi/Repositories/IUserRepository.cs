@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskHouseApi.Model;
+using TaskHouseApi.Model.ServiceModel;
 
 namespace TaskHouseApi.Repositories
 {
@@ -19,5 +20,7 @@ namespace TaskHouseApi.Repositories
         Task<User> UpdateAsync(int Id, User u);
 
         Task<bool> DeleteAsync(int Id);
+
+        bool DeleteRefrechToken(User user, RefreshToken refreshToken);
     }
 }

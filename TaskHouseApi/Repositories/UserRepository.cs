@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TaskHouseApi.DatabaseContext;
 using TaskHouseApi.Model;
+using TaskHouseApi.Model.ServiceModel;
 
 namespace TaskHouseApi.Repositories
 {
@@ -75,7 +76,7 @@ namespace TaskHouseApi.Repositories
                 db.Users.Update(u);
                 int affected = db.SaveChanges();
 
-                if (affected != 1)
+                if (affected < 1)
                 {
                     return null;
                 }
@@ -111,6 +112,12 @@ namespace TaskHouseApi.Repositories
                 }
             }
             return null;
+        }
+
+        public bool DeleteRefrechToken(User user, RefreshToken refreshToken)
+        {
+            db.Remove(refreshToken);
+            return true;
         }
     }
 }

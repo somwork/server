@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 
 namespace TaskHouseApi.Service
 {
@@ -25,9 +26,11 @@ namespace TaskHouseApi.Service
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                config["Jwt:Issuer"],
-                config["Jwt:Issuer"],
-                expires: DateTime.UtcNow.AddMinutes(10),
+                //config["Jwt:Issuer"],
+                //config["Jwt:Issuer"],
+                audience: "Anyone",
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(2),
                 signingCredentials: creds
             );
 
@@ -49,25 +52,15 @@ namespace TaskHouseApi.Service
         }
 
         // Extracts the claims from expired token
+        // Return null if token is not expired
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string expiredToken)
-        {
-            var t = isAccessTokenValid(expiredToken);
-            if (!t.result)
-            {
-                throw new SecurityTokenException("Invalid token");
-            }
-
-            return t.principal;
-        }
-
-        public (bool result, ClaimsPrincipal principal) isAccessTokenValid(string expiredToken)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
 
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = true,
-                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = key,
                 ValidateLifetime = false
@@ -77,41 +70,36 @@ namespace TaskHouseApi.Service
             SecurityToken securityToken;
             var principal = tokenHandler.ValidateToken(expiredToken, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if
-            (
+
+            var expireTimeInMilli = principal.Claims.Where(c => c.Type == "exp").Select(c => c.Value).SingleOrDefault();
+
+            // Checks if token is expired
+            if (CalculateExpireTime(expireTimeInMilli) > DateTime.UtcNow)
+            {
+                return null;
+            }
+
+            // Checks if token is valid
+            if (
                 jwtSecurityToken == null
                 || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)
             )
             {
-                return (false, null);
+                throw new SecurityTokenException("Invalid token");
             }
 
-            return (true, principal);
+            return principal;
         }
 
-        public bool isAccessTokenExpired(string token)
+        // Calculates datatime of expire time
+        private DateTime CalculateExpireTime(string milli) 
         {
-            if (!isAccessTokenValid(token).result)
-            {
-                return false;
-            }
+            long ticks = long.Parse(milli + "000");
 
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateLifetime = true
-            };
+            var posixTime = DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc);
+            var time = posixTime.AddMilliseconds(ticks);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-            if (jwtSecurityToken != null)
-            {
-                return false;
-            }
-
-            return true;
+            return time;
         }
     }
 }

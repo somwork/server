@@ -1,4 +1,4 @@
-namespace TaskHouseApi.Model
+namespace TaskHouseApi.Model.ServiceModel
 {
     public class RefreshToken
     {

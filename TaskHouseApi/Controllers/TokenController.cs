@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TaskHouseApi.Model;
+using TaskHouseApi.Model.ServiceModel;
 using TaskHouseApi.Repositories;
 using TaskHouseApi.Service;
 
@@ -34,7 +35,7 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Create([FromBody]LoginModel login)
+        public async Task<ActionResult> Create([FromBody]LoginModel login)
         {
             ActionResult response = Unauthorized();
             User user = await Authenticate(login);
@@ -44,8 +45,10 @@ namespace TaskHouseApi.Controllers
                 return response;
             }
 
+            // Sets the claims for the token
             var usersClaims = new[]
             {
+                // User Id
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
@@ -53,9 +56,9 @@ namespace TaskHouseApi.Controllers
             string refreshToken = tokenService.GenerateRefreshToken();
 
             user.RefreshTokens.Add
-                (
-                    new RefreshToken { Token = refreshToken }
-                );
+            (
+                new RefreshToken { Token = refreshToken }
+            );
 
             var result = await repo.UpdateAsync(user.Id, user);
             if (result == null)
@@ -65,29 +68,40 @@ namespace TaskHouseApi.Controllers
 
             return new ObjectResult(new
             {
-                token = tokenString,
+                accessToken = tokenString,
                 refreshToken = refreshToken
             });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Refresh(string token, string refreshToken)
+        [HttpPut]
+        public async Task<IActionResult> Refresh([FromBody]RefreshModel refreshModel)
         {
-            var principal = tokenService.GetPrincipalFromExpiredToken(token);
+            var principal = tokenService.GetPrincipalFromExpiredToken(refreshModel.AccessToken);
+            
+            // If null, the token isn't valid 
+            if (principal == null)
+            {
+                return BadRequest();
+            }
+
+            // Gets the user Id from Claims
             int Id;
             Int32.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Id);
 
             User user = await repo.RetrieveAsync(Id);
 
+            // Checks that the user exists and has a refresh token
             if (user == null || user.RefreshTokens.Count() == 0)
             {
                 return BadRequest();
             }
 
+            // Checks that the refresh token from the client,
+            // matches one asignt to the user
             RefreshToken storedRefreshToken = null;
             foreach (RefreshToken r in user.RefreshTokens)
             {
-                if (r.Equals(refreshToken))
+                if ((r.Token).Equals(refreshModel.RefreshToken))
                 {
                     storedRefreshToken = r;
                 }
@@ -98,9 +112,18 @@ namespace TaskHouseApi.Controllers
                 return BadRequest();
             }
 
+            // Generates a new access token and refresh token
             var newJwtToken = tokenService.GenerateAccessToken(principal.Claims);
             var newRefreshToken = tokenService.GenerateRefreshToken();
 
+            // Deletes the old refresh token from database
+            bool res = await repo.DeleteRefrechToken(user, storedRefreshToken);
+            if (res == false)
+            {
+                return StatusCode(500);
+            }
+
+            // Add the new refresh token to user
             user.RefreshTokens.Add
                 (
                     new RefreshToken { Token = newRefreshToken }
@@ -114,7 +137,7 @@ namespace TaskHouseApi.Controllers
 
             return new ObjectResult(new
             {
-                token = newJwtToken,
+                accessToken = newJwtToken,
                 refreshToken = newRefreshToken
             });
         }
@@ -140,20 +163,5 @@ namespace TaskHouseApi.Controllers
 
             return potentialUser;
         }
-
-        /*private string BuildToken(User user)
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                config["Jwt:Issuer"],
-                config["Jwt:Issuer"],
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }*/
     }
 }
