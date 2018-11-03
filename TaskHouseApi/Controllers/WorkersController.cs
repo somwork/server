@@ -10,34 +10,34 @@ using TaskHouseApi.Repositories;
 
 namespace TaskHouseApi.Controllers
 {
-    // base address: api/customers 
-    [AllowAnonymous]
+    
+    [Authorize]
     [Route("api/[controller]")]
     public class WorkersController : Controller
     {
+        //var
         private IWorkerRepository repo;
 
-        // constructor injects registered repository 
+        //constructor
         public WorkersController(IWorkerRepository repo)
         {
             this.repo = repo;
         }
 
-        // GET: api/users 
-        // GET: api/users/?username=[username] 
+        // Get/Workers/
         [HttpGet]
-        public async Task<IEnumerable<Worker>> Get(string username)
+        public async Task<IEnumerable<Worker>> Get(string Username)
         {
-            if (string.IsNullOrWhiteSpace(username))
+            if (string.IsNullOrWhiteSpace(Username))
             {
                 return await repo.RetrieveAll();
             }
             
             return (await repo.RetrieveAll())
-                .Where(worker => worker.Username == username);
+                .Where(worker => worker.Username == Username);
         }
 
-        // GET: api/users/[id] 
+        // GET: api/Workers/[id] 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int Id)
         {
@@ -46,10 +46,10 @@ namespace TaskHouseApi.Controllers
             {
                 return NotFound(); // 404 Resource not found 
             }
-            return new ObjectResult(w); // 200 OK 
+            return new ObjectResult(w); 
         }
 
-        // POST: api/users
+        // POST: api/Workers
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<string>> Create([FromBody]Worker worker)
@@ -77,7 +77,7 @@ namespace TaskHouseApi.Controllers
         
         }
 
-        // PUT: api/users/[id] 
+        // PUT: api/Workers/[id] 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int Id, [FromBody] Worker w)
         {
@@ -93,10 +93,10 @@ namespace TaskHouseApi.Controllers
             }
 
             await repo.Update(Id, w);
-            return new NoContentResult(); // 204 No content 
+            return new NoContentResult();
         }
 
-        // DELETE: api/users/[id] 
+        // DELETE: api/Workers/[id] 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
@@ -113,7 +113,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); 
             }
 
-            return new NoContentResult(); // 204 No content
+            return new NoContentResult();
         }
     }
 }
