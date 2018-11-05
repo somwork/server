@@ -14,10 +14,6 @@ namespace TaskHouseApi.Repositories
 
         Task<Worker> Retrieve(int Id);
 
-        Task<Worker> Retrieve(string username);
-
-        Task<Worker> RetrieveSpecific(LoginModel loginModel);
-
         Task<Worker> Update(int Id, Worker w);
     
 

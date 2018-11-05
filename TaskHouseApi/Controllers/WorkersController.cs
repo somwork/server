@@ -24,7 +24,7 @@ namespace TaskHouseApi.Controllers
             this.repo = repo;
         }
 
-        // GET: api/Workers/[id] 
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int Id)
         {
@@ -36,7 +36,15 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(w); 
         }
 
-        // POST: api/Workers
+         
+        [HttpGet]
+        public async Task<IEnumerable<Worker>> GetAll()
+        {
+            IEnumerable<Worker> wl = await repo.RetrieveAll();
+            return wl; 
+        }
+
+        
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<string>> Create([FromBody]Worker worker)
@@ -64,7 +72,7 @@ namespace TaskHouseApi.Controllers
         
         }
 
-        // PUT: api/Workers/[id]
+        
         [HttpPut("{id}")]
         public async Task<ActionResult<Worker>> Update(int Id, [FromBody] Worker w)
         {
@@ -74,6 +82,7 @@ namespace TaskHouseApi.Controllers
             }
 
             var existing = await repo.Retrieve(Id);
+
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found 
@@ -83,7 +92,7 @@ namespace TaskHouseApi.Controllers
       
         }
 
-        // DELETE: api/Workers/[id] 
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {

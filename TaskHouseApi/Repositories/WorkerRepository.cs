@@ -23,7 +23,7 @@ namespace TaskHouseApi.Repositories
 
         public async System.Threading.Tasks.Task Create(Worker w)
         {
-            //add user to database using EF core
+          
             EntityEntry<Worker> added = await db.Workers.AddAsync(w);
 
             int affected = await db.SaveChangesAsync();
@@ -32,12 +32,12 @@ namespace TaskHouseApi.Repositories
 
         public async Task<IEnumerable<Worker>> RetrieveAll()
         {
-            var WorkerArray = await System.Threading.Tasks.Task.Run<IEnumerable<Worker>>(
-                () => db.Workers.ToArray());
-            return WorkerArray;
+            var WorkerList = await System.Threading.Tasks.Task.Run<IEnumerable<Worker>>(
+                () => db.Workers.ToList<Worker>());
+            return WorkerList;
         }
 
-        public async Task<Worker> RetrieveSpecific(LoginModel loginModel)
+        public async Task<Worker> RetrieveLoginModel(LoginModel loginModel)
         {
             return (await RetrieveAll())
                 .Single(user => user.Username == loginModel.Username && user.Password == loginModel.Password);
@@ -47,12 +47,6 @@ namespace TaskHouseApi.Repositories
         {
             return await System.Threading.Tasks.Task.Run(()=>db.Workers.Find(Id));
             }
-
-        public async Task<Worker> Retrieve(string username)
-        {
-            return await System.Threading.Tasks.Task.Run(()=>db.Workers.Find(username));
-        }
-
         
 
         public async Task<Worker> Update(int Id, Worker u)

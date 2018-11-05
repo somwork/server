@@ -52,37 +52,26 @@ namespace TaskHouseUnitTests
         
        public async System.Threading.Tasks.Task Create(Worker w)
        {
-        await System.Threading.Tasks.Task.Run(()=>db.Add(w));
+            await System.Threading.Tasks.Task.Run(()=>db.Add(w));
 
        }
         
        public async Task<IEnumerable<Worker>> RetrieveAll()
-      {
-           return db;
-      }
+        {
+            return db;
+        }
         
        public async Task<Worker> Retrieve(int Id)
        {
-          return  db.Find(w => w.Id==Id);
+            return  db.Find(w => w.Id==Id);
        }
-
-        public async Task<Worker> Retrieve(string username)
-        {
-            return  db.Find(w => w.Username==username);
-        }
-        
-       public async Task<Worker> RetrieveSpecific(LoginModel loginModel)
-       {
-        Worker result =  db.Find(w => w.Username==loginModel.Username);
-       return result; 
-       }
-        
+    
        public async Task<Worker> Update(int Id, Worker w)
        {
            var temp = db.Find(i => i.Id == Id);
            db.Remove(temp);
            db.Add(w);
-            return db.Find(j => j.Id==Id);
+           return db.Find(j => j.Id==Id);
        }
         
        public async Task<bool> Delete(int Id)

@@ -10,7 +10,7 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181102131807_worker")]
+    [Migration("20181105154509_worker")]
     partial class worker
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,10 +131,13 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
+            modelBuilder.Entity("TaskHouseApi.Model.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<string>("Email");
 
@@ -150,7 +153,19 @@ namespace TaskHouseApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Workers");
+                    b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("Worker");
+
+                    b.HasDiscriminator().HasValue("Worker");
                 });
 #pragma warning restore 612, 618
         }
