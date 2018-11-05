@@ -2,7 +2,7 @@
 
 namespace TaskHouseApi.Migrations
 {
-    public partial class Employer : Migration
+    public partial class employer : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

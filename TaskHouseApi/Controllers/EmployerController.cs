@@ -56,12 +56,12 @@ namespace TaskHouseApi.Controllers
         {
             if (employer == null)
             {
-                return BadRequest(new { error = "CreateUser: user is null" }); // 400 Bad request 
+                return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request 
             }
 
-            Employer existingUser = (await repo.RetrieveAll()).SingleOrDefault(u => u.Username == employer.Username);
+            Employer existingEmployer = (await repo.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
 
-            if (existingUser != null) {
+            if (existingEmployer != null) {
                 return BadRequest(new { error = "Username in use" });
             }
 
@@ -74,8 +74,7 @@ namespace TaskHouseApi.Controllers
             
             return Ok();
 
-            //return CreatedAtRoute("GetUser", // use named route
-            //new { Id = added.Id }, user); // 201 Created
+            
         }
 
         // PUT: api/employer/[id] 

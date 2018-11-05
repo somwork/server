@@ -10,8 +10,8 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181029191859_Employer")]
-    partial class Employer
+    [Migration("20181105172156_employer")]
+    partial class employer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
