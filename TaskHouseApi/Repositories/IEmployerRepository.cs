@@ -14,8 +14,6 @@ namespace TaskHouseApi.Repositories
 
         Task<Employer> Retrieve(int Id);
 
-        Task<Employer> RetrieveSpecific(LoginModel loginModel);
-
         Task<Employer> Update(int Id, Employer e);
 
         Task<bool> Delete(int Id);

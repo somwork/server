@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 using TaskHouseApi.DatabaseContext;
 using TaskHouseApi.Model;
 
-public class EmployerRepository : TaskHouseApi.Repositories.IEmployerRepository
 
+namespace TaskHouseApi.Repositories
 {
+    public class EmployerRepository : IEmployerRepository
+
+    {
 
         public EmployerRepository()
         {
@@ -34,8 +37,8 @@ public class EmployerRepository : TaskHouseApi.Repositories.IEmployerRepository
             }
         }
 
-  
-    public async Task<Employer> Create(Employer e)
+
+        public async Task<Employer> Create(Employer e)
         {
             //add Employer to database using EF core
             EntityEntry<Employer> added = await db.Employers.AddAsync(e);
@@ -58,11 +61,6 @@ public class EmployerRepository : TaskHouseApi.Repositories.IEmployerRepository
                 () => EmployerCache.Values);
         }
 
-        public async Task<Employer> RetrieveSpecific(LoginModel loginModel)
-        {
-            return (await RetrieveAll())
-                .Single(Employer => Employer.Username == loginModel.Username && Employer.Password == loginModel.Password);
-        }
 
         public async Task<Employer> Retrieve(int Id)
         {
@@ -119,4 +117,5 @@ public class EmployerRepository : TaskHouseApi.Repositories.IEmployerRepository
             return null;
         }
 
+    }
 }

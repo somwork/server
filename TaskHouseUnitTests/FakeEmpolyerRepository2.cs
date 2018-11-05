@@ -6,18 +6,19 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace TaskHouseUnitTests
 {
-    public class FakeEmpolyerRepository : TaskHouseApi.Repositories.IEmployerRepository
+    public class FakeEmppolyerRepository : IEmployerRepository
     {
-        private static List<Empolyer> empolyerCache;
+        private static List<Employer> empolyerCache;
 
-        public FakeUserRepository()
+        public FakeEmppolyerRepository()
         {
-            empolyerCache = new List<Empolyer>()
+            empolyerCache = new List<Employer>()
             {
-                new Empolyer()
+                new Employer()
                 {
                     Id = 1,
                     Username = "1234",
@@ -27,7 +28,7 @@ namespace TaskHouseUnitTests
                     LastName = "Bobsen1",
                     Salt = "upYKQSsrlub5JAID61/6pA=="
                 },
-                new Empolyer()
+                new Employer()
                 {
                     Id = 2,
                     Username = "root",
@@ -35,10 +36,9 @@ namespace TaskHouseUnitTests
                     Email = "test@test.com",
                     FirstName = "Bob2",
                     LastName = "Bobsen2",
-                    Salt = "Ci1Zm+9HbvPCvVpBLcSFug==",
-
+                    Salt = "Ci1Zm+9HbvPCvVpBLcSFug=="
                 },
-                new Empolyer()
+                new Employer()
                 {
                     Id = 3,
                     Username = "hej",
@@ -51,60 +51,43 @@ namespace TaskHouseUnitTests
             };
         }
 
-        public async Task<Empolyer> CreateAsync(Empolyer e)
-        {
 
+        public async Task<Employer> Create(Employer e)
+        {
             empolyerCache.Add(e);
             return e;
-
         }
 
-        public async Task<IEnumerable<Empolyer>> RetrieveAllAsync()
+
+        public async Task<bool> Delete(int Id)
         {
-            return empolyerCache;
+            Employer employer = empolyerCache.Where(s => s.Id == Id).SingleOrDefault();
 
-        }
-
-        public async Task<Empolyer> RetrieveSpecificAsync(LoginModel loginModel)
-        {
-            return empolyerCache
-                .Single(
-                    user => user.Username == loginModel.Username
-                    && user.Password == loginModel.Password
-                );
-            //return (await RetrieveAllAsync())
-            //    .Single(user => user.Username == loginModel.Username && user.Password == loginModel.Password);
-        }
-
-        public async Task<User> RetrieveAsync(int Id)
-        {
-            return userCache.Where(u => u.Id == Id).SingleOrDefault();
-
-    
-        }
-
-        public async Task<Employer> UpdateAsync(int Id, Employer e)
-        {
-            Employer old = empolyerCache.Where(user => user.Id == Id).SingleOrDefault();
-            int index = empolyerCache.IndexOf(old);
-
-            empolyerCache[index] = e;
-            return e;
-
-        }
-
-        public async Task<bool> DeleteAsync(int Id)
-        {
-            User empolyer = empolyerCache.Where(u => u.Id == Id).SingleOrDefault();
-
-            if (empolyer == null) return false;
+            if (employer == null) return false;
 
             empolyerCache.Remove(employer);
 
             return true;
+        }
 
+        public async Task<Employer> Retrieve(int id)
+        {
+            return empolyerCache.Where(s => s.Id == id).SingleOrDefault();
+        }
 
+        public async Task<IEnumerable<Employer>> RetrieveAll()
+        {
+            return empolyerCache;
+        }
 
+      
+        public async Task<Employer> Update(int Id, Employer e)
+        {
+            Employer old = empolyerCache.Where(skill => skill.Id == Id).SingleOrDefault();
+            int index = empolyerCache.IndexOf(old);
+
+            empolyerCache[index] = e;
+            return e;
         }
     }
 }
