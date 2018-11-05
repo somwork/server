@@ -47,6 +47,12 @@ namespace TaskHouseApi.Repositories
         {
             return await System.Threading.Tasks.Task.Run(()=>db.Workers.Find(Id));
             }
+
+        public async Task<Worker> Retrieve(string username)
+        {
+            return await System.Threading.Tasks.Task.Run(()=>db.Workers.Find(username));
+        }
+
         
 
         public async Task<Worker> Update(int Id, Worker u)

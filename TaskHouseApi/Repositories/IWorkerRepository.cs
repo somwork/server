@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +14,12 @@ namespace TaskHouseApi.Repositories
 
         Task<Worker> Retrieve(int Id);
 
+        Task<Worker> Retrieve(string username);
+
         Task<Worker> RetrieveSpecific(LoginModel loginModel);
 
         Task<Worker> Update(int Id, Worker w);
+    
 
         Task<bool> Delete(int Id);
     }

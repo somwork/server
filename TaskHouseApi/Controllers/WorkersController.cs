@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,19 +22,6 @@ namespace TaskHouseApi.Controllers
         public WorkersController(IWorkerRepository repo)
         {
             this.repo = repo;
-        }
-
-        // Get/Workers/
-        [HttpGet]
-        public async Task<IEnumerable<Worker>> Get(string Username)
-        {
-            if (string.IsNullOrWhiteSpace(Username))
-            {
-                return await repo.RetrieveAll();
-            }
-            
-            return (await repo.RetrieveAll())
-                .Where(worker => worker.Username == Username);
         }
 
         // GET: api/Workers/[id] 
@@ -62,7 +49,7 @@ namespace TaskHouseApi.Controllers
             Worker existingWorker = (await repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
             if (existingWorker != null) {
-                return BadRequest(new { error = "Username in use" });
+                return BadRequest(new { error = "Username in use" }); // 400 Bad request 
             }
 
             var hashResult = SecurityHandler.GenerateNewPassword(worker);
@@ -72,14 +59,14 @@ namespace TaskHouseApi.Controllers
 
             await repo.Create(worker);
             
-            return Ok();
+            return Ok() ; // 200 ok
 
         
         }
 
-        // PUT: api/Workers/[id] 
+        // PUT: api/Workers/[id]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] Worker w)
+        public async Task<ActionResult<Worker>> Update(int Id, [FromBody] Worker w)
         {
             if (w == null || w.Id != Id)
             {
@@ -92,8 +79,8 @@ namespace TaskHouseApi.Controllers
                 return NotFound(); // 404 Resource not found 
             }
 
-            await repo.Update(Id, w);
-            return new NoContentResult();
+            return   await repo.Update(Id, w);
+      
         }
 
         // DELETE: api/Workers/[id] 
@@ -103,17 +90,17 @@ namespace TaskHouseApi.Controllers
             var existing = await repo.Retrieve(Id);
             if (existing == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return BadRequest();  // 400 Bad request 
             }
 
             bool deleted = await repo.Delete(Id);
 
-            if (!deleted)
+            if (deleted=false)
             {
-                return BadRequest(); 
+                return BadRequest();  // 400 Bad request 
             }
 
-            return new NoContentResult();
+            return new NotFoundResult();
         }
     }
 }
