@@ -39,7 +39,8 @@ namespace TaskHouseApi.Controllers
                 .Where(user => user.Username == username);
         }
 
-        // GET: api/users/[id] 
+        // GET: api/users/[id]
+        [Authorize(Roles = "User")] 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int Id)
         {

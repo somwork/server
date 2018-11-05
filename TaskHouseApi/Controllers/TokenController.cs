@@ -49,7 +49,8 @@ namespace TaskHouseApi.Controllers
             var usersClaims = new[]
             {
                 // User Id
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, "User")
             };
 
             string tokenString = tokenService.GenerateAccessToken(usersClaims);

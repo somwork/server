@@ -10,7 +10,7 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181103140336_refrechToken")]
+    [Migration("20181105165715_refrechToken")]
     partial class refrechToken
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
