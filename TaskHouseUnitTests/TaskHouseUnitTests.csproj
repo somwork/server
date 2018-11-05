@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup> 
-    <ProjectReference Include=
-      "../TaskHouseApi/TaskHouseApi.csproj" /> 
+    <ProjectReference Include="../TaskHouseApi/TaskHouseApi.csproj" /> 
   </ItemGroup> 
 
 </Project>
