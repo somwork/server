@@ -107,18 +107,7 @@ namespace TaskHouseUnitTests
             userCache[index] = u;
             return u;
 
-            //return await System.Threading.Tasks.Task.Run(() =>
-            //{
-                //db.Users.Update(u);
-                //int affected = db.SaveChanges();
-
-                //if (affected != 1)
-                //{
-                //    return null;
-                //}
-
-            //    return System.Threading.Tasks.Task.Run(() => UpdateCache(Id, u));
-            //});
+           
         }
 
         public async Task<bool> DeleteAsync(int Id)
@@ -131,21 +120,7 @@ namespace TaskHouseUnitTests
 
             return true;
 
-            //return await System.Threading.Tasks.Task.Run(() =>
-            //{
-              //  User user = userCache.Where(u => u.Id == Id);
-                //userCache.Remove(user);
-                //User u;
-                //User u = db.Users.Find(Id);
-                //db.Users.Remove(u);
-                //int affected = db.SaveChanges();
-
-                //if (affected != 1)
-                //{
-                //    return null;
-                //}
-                //return System.Threading.Tasks.Task.Run(() => userCache.TryRemove(Id, out u));
-            //});
+         
         }
     }
 }
