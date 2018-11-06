@@ -46,7 +46,7 @@ namespace TaskHouseApi.Controllers
         // POST: api/employers
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]Employer employer)
+        public async Task<ActionResult<string>> Create([FromBody]Employer employer)
         {
             if (employer == null)
             {
@@ -73,9 +73,9 @@ namespace TaskHouseApi.Controllers
 
         // PUT: api/employer/[id] 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] Employer e)
+        public async Task<IActionResult> Update(int Id, [FromBody] Employer u)
         {
-            if (e == null || e.Id != Id)
+            if (u == null || u.Id != Id)
             {
                 return BadRequest(); // 400 Bad request 
             }
@@ -86,7 +86,7 @@ namespace TaskHouseApi.Controllers
                 return NotFound(); // 404 Resource not found 
             }
 
-            await repo.Update(Id, e);
+            await repo.Update(Id, u);
             return new NoContentResult(); // 204 No content 
         }
 
