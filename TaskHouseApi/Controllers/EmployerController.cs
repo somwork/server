@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,19 +23,6 @@ namespace TaskHouseApi.Controllers
             this.repo = repo;
         }
 
-        // GET: api/empolyer
-        // GET: api/empolyer/?username=[username] 
-        [HttpGet]
-        public async Task<IEnumerable<Employer>> Get(string username)
-        {
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return await repo.RetrieveAll();
-            }
-            
-            return (await repo.RetrieveAll())
-                .Where(Employer => Employer.Username == username);
-        }
 
         // GET: api/users/[id] 
         [HttpGet("{id}")]
@@ -47,6 +34,13 @@ namespace TaskHouseApi.Controllers
                 return NotFound(); // 404 Resource not found 
             }
             return new ObjectResult(u); // 200 OK 
+        }
+
+        // GET: api/empolyer/
+        [HttpGet]
+        public async Task<IEnumerable<Employer>> Get()
+        {
+            return await repo.RetrieveAll();
         }
 
         // POST: api/employers
