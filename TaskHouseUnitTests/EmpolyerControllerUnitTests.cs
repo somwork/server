@@ -70,7 +70,7 @@ namespace TaskHouseUnitTests
 
         ///Test post with null empolyer object
         [Fact]
-         public async void EmpolyerController_Create_ReturnsBadRequest_WhenGivenNullempolyer()
+         public async void EmpolyerController_Create_ReturnsBadRequest_WhenGivenNullEmpolyer()
         { 
             //Arrange
             Employer employer = null;
@@ -79,7 +79,7 @@ namespace TaskHouseUnitTests
             var result = await controller.Create(employer);
 
             //Assert
-            var assertResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.IsType<BadRequestObjectResult>(result);
             //Major inconsistencies in whether is return BadRequestResult or BadRequestObjectResult
 
         }

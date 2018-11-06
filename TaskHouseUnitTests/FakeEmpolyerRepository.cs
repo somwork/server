@@ -27,6 +27,7 @@ namespace TaskHouseUnitTests
                     FirstName = "Bob1",
                     LastName = "Bobsen1",
                     Salt = "upYKQSsrlub5JAID61/6pA=="
+                    
                 },
                 new Employer()
                 {
