@@ -68,9 +68,9 @@ namespace TaskHouseUnitTests
 
         
 
-        ///Test post with null Skill object
+        ///Test post with null empolyer object
         [Fact]
-         public async void SkillsController_Create_ReturnsBadRequest_WhenGivenNullSkill()
+         public async void EmpolyerController_Create_ReturnsBadRequest_WhenGivenNullempolyer()
         { 
             //Arrange
             Employer employer = null;
@@ -86,9 +86,9 @@ namespace TaskHouseUnitTests
 
       
         
-        ///Test put with invalid Id and null Skill object
+        ///Test put with invalid Id and null empolyer object
         [Fact]
-        public async void SkillsController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndSkillIsNull()
+        public async void EmpolyerController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndEmpolyerIsNull()
         { 
             //Arrange
             Employer employer = null;
@@ -120,7 +120,7 @@ namespace TaskHouseUnitTests
 
          ///Test if delete actually deletes with valid Id
         [Fact] 
-        public async void SkillsController_Delete_ActuallyDeletes_WhenIdIsValid()
+        public async void EmpolyersController_Delete_ActuallyDeletes_WhenIdIsValid()
         { 
             //Arrange
             int id = 1; 
@@ -137,7 +137,7 @@ namespace TaskHouseUnitTests
 
         ///Test Delete with invalid Id
         [Fact] 
-        public async void SkillsController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
+        public async void EmpolyerController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
         { 
             //Arrange
             int id = 2500; 

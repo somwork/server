@@ -83,7 +83,7 @@ namespace TaskHouseUnitTests
       
         public async Task<Employer> Update(int Id, Employer e)
         {
-            Employer old = empolyerCache.Where(skill => skill.Id == Id).SingleOrDefault();
+            Employer old = empolyerCache.Where(employer => employer.Id == Id).SingleOrDefault();
             int index = empolyerCache.IndexOf(old);
 
             empolyerCache[index] = e;
