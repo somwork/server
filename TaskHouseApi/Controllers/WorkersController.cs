@@ -1,30 +1,26 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TaskHouseApi.Security;
-using TaskHouseApi.Model;
-using TaskHouseApi.Repositories;
-
 namespace TaskHouseApi.Controllers
 {
-    
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using TaskHouseApi.Model;
+    using TaskHouseApi.Repositories;
+    using TaskHouseApi.Security;
+
     [Authorize]
     [Route("api/[controller]")]
     public class WorkersController : Controller
     {
-        //var
         private IWorkerRepository repo;
 
-        //constructor
         public WorkersController(IWorkerRepository repo)
         {
             this.repo = repo;
         }
 
-        
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int Id)
         {
@@ -36,7 +32,6 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(w); 
         }
 
-         
         [HttpGet]
         public async Task<IEnumerable<Worker>> GetAll()
         {
@@ -44,7 +39,6 @@ namespace TaskHouseApi.Controllers
             return wl; 
         }
 
-        
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<string>> Create([FromBody]Worker worker)
@@ -64,15 +58,12 @@ namespace TaskHouseApi.Controllers
 
             worker.Salt = hashResult.saltText;
             worker.Password = hashResult.saltechashedPassword;
-
+        
             await repo.Create(worker);
             
             return Ok() ; // 200 ok
-
-        
         }
 
-        
         [HttpPut("{id}")]
         public async Task<ActionResult<Worker>> Update(int Id, [FromBody] Worker w)
         {
@@ -87,11 +78,8 @@ namespace TaskHouseApi.Controllers
             {
                 return NotFound(); // 404 Resource not found 
             }
-
             return   await repo.Update(Id, w);
-      
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)

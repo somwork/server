@@ -16,7 +16,6 @@ namespace TaskHouseApi.Repositories
 
         Task<Worker> Update(int Id, Worker w);
     
-
         Task<bool> Delete(int Id);
     }
 }

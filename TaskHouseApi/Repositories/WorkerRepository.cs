@@ -12,7 +12,7 @@ namespace TaskHouseApi.Repositories
 {
     public class WorkerRepository : IWorkerRepository
     {
-        //reference to database context
+       
         private PostgresContext db;
 
         
@@ -46,15 +46,15 @@ namespace TaskHouseApi.Repositories
         public async Task<Worker> Retrieve(int Id)
         {
             return await System.Threading.Tasks.Task.Run(()=>db.Workers.Find(Id));
-            }
+        }
         
 
         public async Task<Worker> Update(int Id, Worker u)
         {
            await System.Threading.Tasks.Task.Run(()=>{
-            Worker target = db.Workers.Find(Id);
-            db.Entry(target).CurrentValues.SetValues(u);
-            int affected = db.SaveChanges();
+           Worker target = db.Workers.Find(Id);
+           db.Entry(target).CurrentValues.SetValues(u);
+           int affected = db.SaveChanges();
 
                 if (affected != 1)
                 {
