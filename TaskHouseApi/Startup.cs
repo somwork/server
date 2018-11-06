@@ -23,6 +23,7 @@ namespace TaskHouseApi
 {
     public class Startup
     {
+        public static bool DEV_MODE_ON {get; private set;} = true ;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,6 +34,21 @@ namespace TaskHouseApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (DEV_MODE_ON)
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("AllowAll", builder =>
+                    {
+                        builder
+                            .AllowAnyOrigin() 
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+                });
+            }
+
             services.AddDbContext<PostgresContext>(options => options.UseLazyLoadingProxies()
                 .UseNpgsql(
                     "Server=localhost;Port=5432;Database=root;Username=root;Password=root;")
@@ -86,6 +102,11 @@ namespace TaskHouseApi
             else
             {
                 app.UseHsts();
+            }
+
+            if (DEV_MODE_ON)
+            {
+                app.UseCors("AllowAll");
             }
 
             app.UseAuthentication();

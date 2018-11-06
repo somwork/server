@@ -22,7 +22,7 @@ namespace TaskHouseApi.Controllers
         public UsersController(IUserRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
-            this.passwordService = passwordService;
+            this.passwordService = passwordService; 
         }
 
         // GET: api/users 
