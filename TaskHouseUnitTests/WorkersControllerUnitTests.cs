@@ -144,7 +144,6 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            int id = 5;
             controller.Create(worker);
             var result = await controller.Delete(worker.Id);
 

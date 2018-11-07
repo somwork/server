@@ -82,7 +82,7 @@ namespace TaskHouseUnitTests
             db.Remove(temp);
             temp =  db.Find(w => w.Id==Id);
 
-            if(temp == null)
+            if(temp != null)
             {
                 return false;
             }

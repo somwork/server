@@ -95,7 +95,7 @@ namespace TaskHouseApi.Controllers
 
             if (deleted==false)
             {
-                return BadRequest();  // 400 Bad request
+                return BadRequest(); 
             }
 
             return new  NoContentResult();
