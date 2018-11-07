@@ -43,7 +43,7 @@ namespace TaskHouseApi.Repositories
             //add Employer to database using EF core
             EntityEntry<Employer> added = await db.Employers.AddAsync(e);
 
-            int affected = await db.SaveChangesAsync();
+            int affected = await db.SaveChanges();
 
             //Employer not created
             if (affected != 1)
