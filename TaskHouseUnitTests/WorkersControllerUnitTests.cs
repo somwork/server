@@ -58,8 +58,6 @@ namespace TaskHouseUnitTests
         [Fact]
         public async void WorkerController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters()
         {
-            repo = new FakeWorkerRepository();
-
             IEnumerable<Worker> result = await controller.Get();
 
             Assert.Equal(3, result.Count());
