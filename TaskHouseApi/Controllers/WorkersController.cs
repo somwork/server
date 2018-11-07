@@ -33,7 +33,7 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Worker>> GetAll()
+        public async Task<IEnumerable<Worker>> Get()
         {
             IEnumerable<Worker> wl = await repo.RetrieveAll();
             return wl; 
@@ -45,13 +45,13 @@ namespace TaskHouseApi.Controllers
         {
             if (worker == null)
             {
-                return BadRequest(new { error = "CreateUser: user is null" }); // 400 Bad request 
+                return BadRequest(new { error = "CreateUser: worker is null" }); // 400 Bad request 
             }
 
             Worker existingWorker = (await repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
             if (existingWorker != null) {
-                return BadRequest(new { error = "Username in use" }); // 400 Bad request 
+                return BadRequest(new { error = "Username in worker" }); // 400 Bad request 
             }
 
             var hashResult = SecurityHandler.GenerateNewPassword(worker);
@@ -78,7 +78,8 @@ namespace TaskHouseApi.Controllers
             {
                 return NotFound(); // 404 Resource not found 
             }
-            return   await repo.Update(Id, w);
+            await repo.Update(Id, w);
+            return NoContentResult();
         }
 
         [HttpDelete("{id}")]
@@ -87,7 +88,7 @@ namespace TaskHouseApi.Controllers
             var existing = await repo.Retrieve(Id);
             if (existing == null)
             {
-                return BadRequest();  // 400 Bad request 
+                return NotFound(); // 404 Resource not found 
             }
 
             bool deleted = await repo.Delete(Id);
@@ -97,7 +98,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest();  // 400 Bad request 
             }
 
-            return new NotFoundResult();
+            return Ok() ; // 200 ok
         }
     }
 }

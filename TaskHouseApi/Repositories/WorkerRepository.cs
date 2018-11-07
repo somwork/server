@@ -77,7 +77,7 @@ namespace TaskHouseApi.Repositories
                 {
                     return false;
                 }
-              return true;
+                return true;
             });
         }
 

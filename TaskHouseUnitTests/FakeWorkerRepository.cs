@@ -84,12 +84,12 @@ namespace TaskHouseUnitTests
 
            if(temp != null)
             {
-                result = false;
-                return result;
+            
+                return false; 
             }
 
-            result = true;
-            return result;
+           
+           return true; 
        }
 
     }

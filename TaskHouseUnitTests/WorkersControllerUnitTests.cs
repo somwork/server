@@ -22,10 +22,9 @@ namespace TaskHouseUnitTests
             repo = new FakeWorkerRepository();
             controller = new WorkersController(repo);
         }
-
        
         [Fact]
-        public async void Get_Worker_with_Id_UnitTest() 
+        public async void Get_Worker_with_Id() 
         { 
            
            Worker TestWorker =  new Worker() 
@@ -48,19 +47,18 @@ namespace TaskHouseUnitTests
         }
   
         [Fact]
-        public async void Get_Worker_All_UnitTest() 
+        public async void Get_Worker_All() 
         {
             repo = new FakeWorkerRepository();
             
-            IEnumerable<Worker> result = await controller.GetAll();
+            IEnumerable<Worker> result = await controller.Get();
 
             Assert.Equal(3, result.Count());
 
         }
-
       
         [Fact]
-        public async void Create_Worker_UnitTest() 
+        public async void Create_Worker() 
         { 
             
            Worker TestWorker =  new Worker() 
@@ -73,9 +71,7 @@ namespace TaskHouseUnitTests
                 LastName = "Bobsen6", 
                 Salt = "upYKQSsrlub5JAID61/6pA=="
            };
-
-
-             
+            
             await controller.Create(TestWorker);
             var result = await controller.Get(TestWorker.Id);
             var resultObjectResult = await controller.Get(TestWorker.Id) as ObjectResult;
@@ -86,13 +82,9 @@ namespace TaskHouseUnitTests
             Assert.Equal(TestWorker.Id, resultObject.Id);
 
         }
-
-
-
-   
         
         [Fact]
-        public async void Delete_Worker_UnitTest() 
+        public async void Delete_Worker()
         { 
         
             Worker TestWorker =  new Worker() 
@@ -109,16 +101,12 @@ namespace TaskHouseUnitTests
             await controller.Delete(TestWorker.Id) ;
             var result = await controller.Get(TestWorker.Id);
           
-
-           
             Assert.IsType<NotFoundResult>(result);
             Assert.IsType<NotFoundResult>(result);
-
         }
-
         
         [Fact]
-        public async void update_Worker_UnitTest() 
+        public async void update_Worker() 
         {
             
             Worker Pre_TestWorker =  new Worker() 
