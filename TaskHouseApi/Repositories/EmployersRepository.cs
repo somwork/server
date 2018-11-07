@@ -22,9 +22,6 @@ namespace TaskHouseApi.Repositories
         {
         }
 
-
-      
-
         public EmployersRepository(PostgresContext db)
         {
             this.db = db;

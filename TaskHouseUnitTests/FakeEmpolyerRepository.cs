@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace TaskHouseUnitTests
 {
-    public class FakeEmppolyerRepository : IEmployersRepository
+    public class FakeEmpolyerRepository : IEmployersRepository
     {
         private static List<Employer> empolyerCache;
 
-        public FakeEmppolyerRepository()
+        public FakeEmpolyerRepository()
         {
             empolyerCache = new List<Employer>()
             {
