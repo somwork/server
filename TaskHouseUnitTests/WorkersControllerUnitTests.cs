@@ -127,7 +127,6 @@ namespace TaskHouseUnitTests
             var result = await controller.Get(TestWorker.Id);
 
             Assert.IsType<NotFoundResult>(result);
-            Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact] 
