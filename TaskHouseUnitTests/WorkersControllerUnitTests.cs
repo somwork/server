@@ -134,7 +134,6 @@ namespace TaskHouseUnitTests
         public async void WorkerController_Delete_ReturnsNoContentResult_WhenIdIsValid()
         {
             int Id = 1;
-            controller.Create(worker);
             var result = await controller.Delete(Id);
 
             Assert.IsType<NoContentResult>(result); 
