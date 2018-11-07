@@ -79,7 +79,7 @@ namespace TaskHouseApi.Controllers
                 return NotFound(); // 404 Resource not found 
             }
             await repo.Update(Id, w);
-            return NoContentResult();
+            return new NoContentResult();
         }
 
         [HttpDelete("{id}")]
