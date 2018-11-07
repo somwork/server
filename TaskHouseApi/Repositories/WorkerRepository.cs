@@ -20,13 +20,15 @@ namespace TaskHouseApi.Repositories
             this.db=db;
         }
 
-
-        public async System.Threading.Tasks.Task<Worker> Create(Worker w)
+        public async Task<Worker> Create(Worker w)
         {
-
-            EntityEntry<Worker> added = await db.Workers.AddAsync(w);
-
+            db.Workers.AddAsync(w);
             int affected = await db.SaveChangesAsync();
+
+             if (affected != 1)
+                {
+                    return null;
+                }
 
             return w;
         }
