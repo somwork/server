@@ -41,7 +41,7 @@ namespace TaskHouseApi.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<string>> Create([FromBody]Worker worker)
+        public async Task<IActionResult> Create([FromBody]Worker worker)
         {
             if (worker == null)
             {
@@ -65,7 +65,7 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Worker>> Update(int Id, [FromBody] Worker w)
+        public async Task<IActionResult> Update(int Id, [FromBody] Worker w)
         {
             if (w == null || w.Id != Id)
             {

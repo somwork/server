@@ -22,7 +22,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void Get_Worker_with_Id()
+        public async void  WorkerController_Get_ReturnsObjectReponseWithCorrectEmpolyer_WhenGivenValidId()
         {
             Worker TestWorker =  new Worker()
             {
@@ -43,8 +43,20 @@ namespace TaskHouseUnitTests
             Assert.Equal(TestWorker.Id, resultObject.Id);
         }
 
+        public  async void WorkerController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        { 
+            int WorkerId = 5000;
+
+            //Act
+            var result = await controller.Get(WorkerId) as NotFoundResult;
+            
+            //Assert
+            Assert.Equal(404, result.StatusCode);
+
+        }
+
         [Fact]
-        public async void Get_Worker_All()
+        public async void WorkerController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters()
         {
             repo = new FakeWorkerRepository();
 
@@ -54,7 +66,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void Create_Worker()
+        public async void WorkerController_Create_ReturnsObjectResult_withValid()
         {
             Worker TestWorker =  new Worker()
             {
@@ -75,9 +87,32 @@ namespace TaskHouseUnitTests
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(TestWorker.Id, resultObject.Id);
         }
+        
+        [Fact]
+         public async void WorekrController_Create_ReturnsBadRequest_WhenGivenNullWorker()
+        { 
+            Worker worker = null;
+
+            var result = await controller.Create(worker);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+          
+
+        }
 
         [Fact]
-        public async void Delete_Worker()
+        public async void WorkerController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndWorkerIsNull()
+        { 
+            Worker worker = null;
+            int id = 2600;
+
+            var result = await controller.Update(id, worker);
+
+            Assert.IsType<BadRequestResult>(result); 
+        }
+
+        [Fact]
+        public async void  WorkerController_Delete_ActuallyDeletes_WhenIdIsValid()
         {
             Worker TestWorker =  new Worker()
             {
@@ -97,8 +132,19 @@ namespace TaskHouseUnitTests
             Assert.IsType<NotFoundResult>(result);
         }
 
+        [Fact] 
+        public async void WorkerController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
+        { 
+            int id = 2500; 
+
+            var result = await controller.Delete(id);
+
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+
         [Fact]
-        public async void update_Worker()
+        public async void WorkerController_Update_ReturnsActionResult_withValidId()
         {
             Worker Pre_TestWorker =  new Worker()
             {
@@ -123,14 +169,9 @@ namespace TaskHouseUnitTests
             };
 
             await controller.Create(Pre_TestWorker);
-
             var Result = await controller.Update(Pre_TestWorker.Id, Post_TestWorker);
 
-            var ResultObjectResult = await controller.Get(Post_TestWorker.Id) as ObjectResult;
-            var ResultObject = ResultObjectResult.Value as TaskHouseApi.Model.Worker;
-
-            Assert.IsType<ActionResult<Worker>>(Result);
-            Assert.Equal(Post_TestWorker.Username, ResultObject.Username);
+            Assert.IsType<NoContentResult>(Result);
         }
     }
 }
