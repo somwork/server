@@ -194,7 +194,7 @@ namespace TaskHouseUnitTests
 
 
         [Fact]
-        public async void WorkerController_Update_ReturnsActionResult_withValidIdAndValidWorker()
+        public async void WorkerController_Update_ReturnsNoContentResult_withValidIdAndValidWorker()
         {
             Worker Pre_TestWorker =  new Worker()
             {
