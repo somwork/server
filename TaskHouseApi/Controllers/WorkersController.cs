@@ -27,16 +27,16 @@ namespace TaskHouseApi.Controllers
             Worker w = await repo.Retrieve(Id);
             if (w == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound(); // 404 Resource not found
             }
-            return new ObjectResult(w); 
+            return new ObjectResult(w);
         }
 
         [HttpGet]
         public async Task<IEnumerable<Worker>> Get()
         {
             IEnumerable<Worker> wl = await repo.RetrieveAll();
-            return wl; 
+            return wl;
         }
 
         [AllowAnonymous]
@@ -45,22 +45,22 @@ namespace TaskHouseApi.Controllers
         {
             if (worker == null)
             {
-                return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request 
+                return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
 
             Worker existingWorker = (await repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
             if (existingWorker != null) {
-                return BadRequest(new { error = "Username in worker" }); // 400 Bad request 
+                return BadRequest(new { error = "Username in worker" }); // 400 Bad request
             }
 
             var hashResult = SecurityHandler.GenerateNewPassword(worker);
 
             worker.Salt = hashResult.saltText;
             worker.Password = hashResult.saltechashedPassword;
-        
+
             await repo.Create(worker);
-            
+
             return Ok() ; // 200 ok
         }
 
@@ -69,14 +69,14 @@ namespace TaskHouseApi.Controllers
         {
             if (w == null || w.Id != Id)
             {
-                return BadRequest(); // 400 Bad request 
+                return BadRequest(); // 400 Bad request
             }
 
             var existing = await repo.Retrieve(Id);
 
             if (existing == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound(); // 404 Resource not found
             }
             await repo.Update(Id, w);
             return new NoContentResult();
@@ -88,14 +88,14 @@ namespace TaskHouseApi.Controllers
             var existing = await repo.Retrieve(Id);
             if (existing == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound(); // 404 Resource not found
             }
 
             bool deleted = await repo.Delete(Id);
 
-            if (deleted=false)
+            if (deleted==false)
             {
-                return BadRequest();  // 400 Bad request 
+                return BadRequest();  // 400 Bad request
             }
             return Ok() ; // 200 ok
         }

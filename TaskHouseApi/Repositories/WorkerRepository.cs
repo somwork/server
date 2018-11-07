@@ -22,7 +22,7 @@ namespace TaskHouseApi.Repositories
 
         public async Task<Worker> Create(Worker w)
         {
-            db.Workers.AddAsync(w);
+            await db.Workers.AddAsync(w);
             int affected = await db.SaveChangesAsync();
 
              if (affected != 1)
