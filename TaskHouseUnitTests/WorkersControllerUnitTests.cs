@@ -110,6 +110,38 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
+        public async void WorkerController_Update_ReturnsBadRequestResult_WhenIdIsInvalid()
+        { 
+            Worker worker =  new Worker()
+            {
+                Id = 5,
+                Username = "Tusername",
+                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
+                Email = "test@test.com",
+                FirstName = "Bob7",
+                LastName = "Bobsen6",
+                Salt = "upYKQSsrlub5JAID61/6pA=="
+            };
+
+            int id = 2600;
+
+            var result = await controller.Update(id, worker);
+
+            Assert.IsType<BadRequestResult>(result); 
+        }
+
+        [Fact]
+        public async void WorkerController_Update_ReturnsBadRequestResult_WhenWorkerIsNull()
+        { 
+            Worker worker = null;
+            int id = 1234;
+
+            var result = await controller.Update(id, worker);
+
+            Assert.IsType<BadRequestResult>(result); 
+        }
+
+        [Fact]
         public async void  WorkerController_Delete_ActuallyDeletes_WhenIdIsValid()
         {
             Worker TestWorker =  new Worker()
@@ -141,7 +173,7 @@ namespace TaskHouseUnitTests
 
 
         [Fact]
-        public async void WorkerController_Update_ReturnsActionResult_withValidId()
+        public async void WorkerController_Update_ReturnsActionResult_withValidIdAndValidWorker()
         {
             Worker Pre_TestWorker =  new Worker()
             {
