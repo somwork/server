@@ -64,7 +64,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void WorkerController_Create_ReturnsObjectResult_withValid()
+        public async void WorkerController_Create_ReturnsObjectResult_withWorker()
         {
             Worker TestWorker =  new Worker()
             {
