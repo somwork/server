@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,16 +13,17 @@ namespace TaskHouseApi.Repositories
     public class EmployerRepository : IEmployerRepository
 
     {
-        //cache the Employers in a thread-safe dictionary to improve performance
-        private static ConcurrentDictionary<int, Employer> EmployerCache;
-
-        //reference to database context
-        private PostgresContext db;
 
         public EmployerRepository()
         {
         }
 
+
+        //cache the Employers in a thread-safe dictionary to improve performance
+        private static ConcurrentDictionary<int, Employer> EmployerCache;
+
+        //reference to database context
+        private PostgresContext db;
 
         public EmployerRepository(PostgresContext db)
         {

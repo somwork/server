@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,7 +49,7 @@ namespace TaskHouseApi
                   };
                 });
 
-          
+           // services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
