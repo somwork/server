@@ -97,7 +97,8 @@ namespace TaskHouseApi.Controllers
             {
                 return BadRequest();  // 400 Bad request
             }
-            return Ok() ; // 200 ok
+
+            return new  NoContentResult();
         }
     }
 }

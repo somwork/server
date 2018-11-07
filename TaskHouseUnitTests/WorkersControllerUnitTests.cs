@@ -131,6 +131,27 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
+        public async void WorkerController_Delete_ReturnsNoContentResult_WhenIdIsValid()
+        { 
+            Worker worker =  new Worker()
+            {
+                Id = 5,
+                Username = "Tusername",
+                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
+                Email = "test@test.com",
+                FirstName = "Bob7",
+                LastName = "Bobsen6",
+                Salt = "upYKQSsrlub5JAID61/6pA=="
+            };
+
+            int id = 2600;
+            controller.Create(worker);
+            var result = await controller.Delete(worker.Id);
+
+            Assert.IsType<NoContentResult>(result); 
+        }
+
+        [Fact]
         public async void WorkerController_Update_ReturnsBadRequestResult_WhenWorkerIsNull()
         { 
             Worker worker = null;
