@@ -13,7 +13,7 @@ namespace TaskHouseApi.Controllers
     // base address: api/customers 
     [Authorize]
     [Route("api/[controller]")]
-    public class EmployerrsController : Controller
+    public class EmployersController : Controller
     {
         private IEmployerRepository repo;
 
