@@ -18,7 +18,7 @@ namespace TaskHouseUnitTests
         public EmpolyerControllerUnitTests()
         {
             repo = new  FakeEmppolyerRepository();
-            controller = new EmployerrsController(repo);
+            controller = new EmployersController(repo);
         }
         
         /// Test Get all

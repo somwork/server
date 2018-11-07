@@ -10,7 +10,6 @@ using TaskHouseApi.Repositories;
 
 namespace TaskHouseApi.Controllers
 {
-    // base address: api/customers 
     [Authorize]
     [Route("api/[controller]")]
     public class EmployersController : Controller
@@ -24,7 +23,7 @@ namespace TaskHouseApi.Controllers
         }
 
 
-        // GET: api/users/[id] 
+        // GET: api/empolyers/[id] 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int Id)
         {
@@ -36,7 +35,7 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(u); // 200 OK 
         }
 
-        // GET: api/empolyer/
+        // GET: api/empolyers/
         [HttpGet]
         public async Task<IEnumerable<Employer>> Get()
         {
@@ -71,7 +70,7 @@ namespace TaskHouseApi.Controllers
             
         }
 
-        // PUT: api/employer/[id] 
+        // PUT: api/employers/[id] 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int Id, [FromBody] Employer e)
         {
@@ -90,7 +89,7 @@ namespace TaskHouseApi.Controllers
             return new NoContentResult(); // 204 No content 
         }
 
-        // DELETE: api/employer/[id] 
+        // DELETE: api/employers/[id] 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
