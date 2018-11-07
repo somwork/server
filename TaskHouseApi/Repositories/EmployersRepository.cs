@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,29 +10,29 @@ using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public class EmployerRepository : IEmployerRepository
+    public class EmployersRepository : IEmployersRepository
 
-    {
-
-        public EmployerRepository()
-        {
-        }
-
-
-        //cache the Employers in a thread-safe dictionary to improve performance
-        private static ConcurrentDictionary<int, Employer> EmployerCache;
+    {  //cache the Employers in a thread-safe dictionary to improve performance
+        private static ConcurrentDictionary<int, Employer> employerCache;
 
         //reference to database context
         private PostgresContext db;
 
-        public EmployerRepository(PostgresContext db)
+        public EmployersRepository()
+        {
+        }
+
+
+      
+
+        public EmployersRepository(PostgresContext db)
         {
             this.db = db;
 
             //populates EmployerCache
-            if (EmployerCache == null)
+            if (employerCache == null)
             {
-                EmployerCache = new ConcurrentDictionary<int, Employer>(
+                employerCache = new ConcurrentDictionary<int, Employer>(
                     db.Employers.ToDictionary(c => c.Id));
             }
         }
@@ -43,7 +43,7 @@ namespace TaskHouseApi.Repositories
             //add Employer to database using EF core
             EntityEntry<Employer> added = await db.Employers.AddAsync(e);
 
-            int affected = await db.SaveChanges();
+            int affected = await db.SaveChangesAsync();
 
             //Employer not created
             if (affected != 1)
@@ -52,13 +52,13 @@ namespace TaskHouseApi.Repositories
             }
 
             // if the customer is new, add it to cache, else call UpdateCache method
-            return EmployerCache.AddOrUpdate(e.Id, e, UpdateCache);
+            return employerCache.AddOrUpdate(e.Id, e, UpdateCache);
         }
 
         public async Task<IEnumerable<Employer>> RetrieveAll()
         {
             return await System.Threading.Tasks.Task.Run<IEnumerable<Employer>>(
-                () => EmployerCache.Values);
+                () => employerCache.Values);
         }
 
 
@@ -67,7 +67,7 @@ namespace TaskHouseApi.Repositories
             return await System.Threading.Tasks.Task.Run(() =>
             {
                 Employer u;
-                EmployerCache.TryGetValue(Id, out u);
+                employerCache.TryGetValue(Id, out u);
                 return u;
             });
         }
@@ -100,21 +100,24 @@ namespace TaskHouseApi.Repositories
                 {
                     return null;
                 }
-                return System.Threading.Tasks.Task.Run(() => EmployerCache.TryRemove(Id, out u));
+                return System.Threading.Tasks.Task.Run(() => employerCache.TryRemove(Id, out u));
             });
         }
 
         private Employer UpdateCache(int Id, Employer e)
         {
             Employer old;
-            if (EmployerCache.TryGetValue(Id, out old))
+            if (!employerCache.TryGetValue(Id, out old))
             {
-                if (EmployerCache.TryUpdate(Id, e, old))
-                {
-                    return e;
-                }
+                return null;
             }
-            return null;
+
+            if (!employerCache.TryUpdate(Id, e, old))
+            {
+                return null;
+            }
+
+            return e;
         }
 
     }

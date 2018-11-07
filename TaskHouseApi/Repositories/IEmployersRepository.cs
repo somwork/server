@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +6,7 @@ using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public interface IEmployerRepository
+    public interface IEmployersRepository
     {
         Task<Employer> Create(Employer e);
 
