@@ -12,18 +12,18 @@ namespace TaskHouseApi.Repositories
 {
     public class WorkerRepository : IWorkerRepository
     {
-       
+
         private PostgresContext db;
 
-        
+
         public WorkerRepository(PostgresContext db){
             this.db=db;
         }
-        
+
 
         public async System.Threading.Tasks.Task<Worker> Create(Worker w)
         {
-          
+
             EntityEntry<Worker> added = await db.Workers.AddAsync(w);
 
             int affected = await db.SaveChangesAsync();
@@ -42,14 +42,14 @@ namespace TaskHouseApi.Repositories
         {
             return await System.Threading.Tasks.Task.Run(()=>db.Workers.Find(Id));
         }
-        
+
 
         public async Task<Worker> Update(int Id, Worker u)
         {
-           await System.Threading.Tasks.Task.Run(()=>{
-           Worker target = db.Workers.Find(Id);
-           db.Entry(target).CurrentValues.SetValues(u);
-           int affected = db.SaveChanges();
+            await System.Threading.Tasks.Task.Run(()=>{
+                Worker target = db.Workers.Find(Id);
+                db.Entry(target).CurrentValues.SetValues(u);
+                int affected = db.SaveChanges();
 
                 if (affected != 1)
                 {
