@@ -8,7 +8,7 @@ namespace TaskHouseApi.Repositories
 {
     public interface IWorkerRepository
     {
-        System.Threading.Tasks.Task Create(Worker w);
+        Task<Worker> Create(Worker w);
 
         Task<IEnumerable<Worker>> RetrieveAll();
 

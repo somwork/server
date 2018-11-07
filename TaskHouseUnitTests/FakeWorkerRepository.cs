@@ -50,10 +50,10 @@ namespace TaskHouseUnitTests
             };
         }
         
-       public async System.Threading.Tasks.Task Create(Worker w)
+       public async System.Threading.Tasks.Task<Worker> Create(Worker w)
        {
-            await System.Threading.Tasks.Task.Run(()=>db.Add(w));
-
+           db.Add(w);
+           return w;
        }
         
        public async Task<IEnumerable<Worker>> RetrieveAll()
@@ -84,7 +84,6 @@ namespace TaskHouseUnitTests
 
            if(temp != null)
             {
-            
                 return false; 
             }
 

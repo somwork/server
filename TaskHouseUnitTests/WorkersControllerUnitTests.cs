@@ -12,11 +12,9 @@ namespace TaskHouseUnitTests
 {
     public class WorkersControllerUnitTests
     {
-        //var
         WorkersController controller;
         IWorkerRepository repo;
 
-        //Constructor
       public WorkersControllerUnitTests()
         {
             repo = new FakeWorkerRepository();
@@ -25,18 +23,17 @@ namespace TaskHouseUnitTests
        
         [Fact]
         public async void Get_Worker_with_Id() 
-        { 
-           
+        {
            Worker TestWorker =  new Worker() 
-                 { 
-                    Id = 1, 
-                    Username = "1234", 
-                    Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
-                    Email = "test@test.com", 
-                    FirstName = "Bob1", 
-                    LastName = "Bobsen1", 
-                    Salt = "upYKQSsrlub5JAID61/6pA=="
-                 };
+           { 
+                Id = 1, 
+                Username = "1234", 
+                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
+                Email = "test@test.com", 
+                FirstName = "Bob1", 
+                LastName = "Bobsen1", 
+                Salt = "upYKQSsrlub5JAID61/6pA=="
+           };
 
             var result = await controller.Get(TestWorker.Id);
             var resultObjectResult = await controller.Get(TestWorker.Id) as ObjectResult;
@@ -54,13 +51,11 @@ namespace TaskHouseUnitTests
             IEnumerable<Worker> result = await controller.Get();
 
             Assert.Equal(3, result.Count());
-
         }
       
         [Fact]
         public async void Create_Worker() 
-        { 
-            
+        {     
            Worker TestWorker =  new Worker() 
            { 
                 Id = 5, 
@@ -76,17 +71,14 @@ namespace TaskHouseUnitTests
             var result = await controller.Get(TestWorker.Id);
             var resultObjectResult = await controller.Get(TestWorker.Id) as ObjectResult;
             var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
-
-          
+                      
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(TestWorker.Id, resultObject.Id);
-
         }
         
         [Fact]
         public async void Delete_Worker()
         { 
-        
             Worker TestWorker =  new Worker() 
             { 
                 Id = 5, 
@@ -108,7 +100,6 @@ namespace TaskHouseUnitTests
         [Fact]
         public async void update_Worker() 
         {
-            
             Worker Pre_TestWorker =  new Worker() 
             { 
                 Id = 5, 
@@ -140,8 +131,6 @@ namespace TaskHouseUnitTests
             
             Assert.IsType<ActionResult<Worker>>(Result);
             Assert.Equal(Post_TestWorker.Username, ResultObject.Username);
-
         }
-
     }
 }

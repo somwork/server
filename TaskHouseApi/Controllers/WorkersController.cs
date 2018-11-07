@@ -45,7 +45,7 @@ namespace TaskHouseApi.Controllers
         {
             if (worker == null)
             {
-                return BadRequest(new { error = "CreateUser: worker is null" }); // 400 Bad request 
+                return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request 
             }
 
             Worker existingWorker = (await repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
@@ -97,7 +97,6 @@ namespace TaskHouseApi.Controllers
             {
                 return BadRequest();  // 400 Bad request 
             }
-
             return Ok() ; // 200 ok
         }
     }

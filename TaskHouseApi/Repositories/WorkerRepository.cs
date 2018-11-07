@@ -21,13 +21,14 @@ namespace TaskHouseApi.Repositories
         }
         
 
-        public async System.Threading.Tasks.Task Create(Worker w)
+        public async System.Threading.Tasks.Task<Worker> Create(Worker w)
         {
           
             EntityEntry<Worker> added = await db.Workers.AddAsync(w);
 
             int affected = await db.SaveChangesAsync();
-           
+
+            return w;
         }
 
         public async Task<IEnumerable<Worker>> RetrieveAll()
@@ -35,12 +36,6 @@ namespace TaskHouseApi.Repositories
             var WorkerList = await System.Threading.Tasks.Task.Run<IEnumerable<Worker>>(
                 () => db.Workers.ToList<Worker>());
             return WorkerList;
-        }
-
-        public async Task<Worker> RetrieveLoginModel(LoginModel loginModel)
-        {
-            return (await RetrieveAll())
-                .Single(user => user.Username == loginModel.Username && user.Password == loginModel.Password);
         }
 
         public async Task<Worker> Retrieve(int Id)
