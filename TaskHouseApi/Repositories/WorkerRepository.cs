@@ -26,9 +26,9 @@ namespace TaskHouseApi.Repositories
             int affected = await db.SaveChangesAsync();
 
              if (affected != 1)
-                {
-                    return null;
-                }
+             {
+                 return null;
+             }
 
             return w;
         }
