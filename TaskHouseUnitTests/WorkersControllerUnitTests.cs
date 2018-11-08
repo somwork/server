@@ -161,20 +161,11 @@ namespace TaskHouseUnitTests
         [Fact]
         public async void WorkerController_Update_ReturnsObjectResult_withValidIdAndValidWorker()
         {
-            Worker worker1 = new Worker()
+            int Id = 1;
+            Worker worker = new Worker()
             {
-                Id = 10,
-                Username = "Tusername",
-                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
-                Email = "test@test.com",
-                FirstName = "Bob7",
-                LastName = "Bobsen6",
-                Salt = "upYKQSsrlub5JAID61/6pA=="
-            };
-            Worker worker2 = new Worker()
-            {
-                Id = 10,
-                Username = "Tusername234",
+                Id = 1,
+                Username = "Tusernamedasdasg",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                 Email = "test@test.com",
                 FirstName = "Bob7",
@@ -182,11 +173,12 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            controller.Create(worker1);
-            controller.Update(worker1.Id, worker2);
-            var resultAsObject = await controller.Get(worker2.Id) as ObjectResult;
+            var Result= await controller.Update(Id, worker);
+            var resultAsObject = await controller.Get(Id) as ObjectResult;
             var resultObject = resultAsObject.Value as Worker;
-            Assert.NotEqual(worker1.Username, resultObject.Username);
+
+            Assert.IsType<NoContentResult>(Result);
+            Assert.Equal(worker.Username, resultObject.Username);
         }
     }
 }

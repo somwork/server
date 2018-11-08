@@ -72,7 +72,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
-            var existing = await repo.Retrieve(Id);
+            Worker existing = await repo.Retrieve(Id);
 
             if (existing == null)
             {
