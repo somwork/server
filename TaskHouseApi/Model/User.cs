@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskHouseApi.Model
 {
-
     public class User
     {
         public int Id { get; set; }

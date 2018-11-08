@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskHouseApi.DatabaseContext;
@@ -9,9 +10,10 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    partial class PostgresContextModelSnapshot : ModelSnapshot
+    [Migration("20181105154509_worker")]
+    partial class worker
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,15 +122,11 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int?>("EmployerId");
-
                     b.Property<DateTime>("Start");
 
                     b.Property<string>("Urgency");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployerId");
 
                     b.ToTable("Tasks");
                 });
@@ -160,31 +158,14 @@ namespace TaskHouseApi.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
-
-            modelBuilder.Entity("TaskHouseApi.Model.Employer", b =>
-
             modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
-
                 {
                     b.HasBaseType("TaskHouseApi.Model.User");
 
 
-
-                    b.ToTable("Employer");
-
-                    b.HasDiscriminator().HasValue("Employer");
-                });
-
-            modelBuilder.Entity("TaskHouseApi.Model.Task", b =>
-                {
-                    b.HasOne("TaskHouseApi.Model.Employer")
-                        .WithMany("Tasks")
-                        .HasForeignKey("EmployerId");
-
                     b.ToTable("Worker");
 
                     b.HasDiscriminator().HasValue("Worker");
-
                 });
 #pragma warning restore 612, 618
         }
