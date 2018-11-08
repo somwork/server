@@ -10,14 +10,14 @@ using System.Linq;
 
 namespace TaskHouseUnitTests
 {
-    public class EmpolyerControllerUnitTests
+    public class EmpolyersControllerUnitTests
     {
         EmployersController controller;
         IEmployersRepository repo;
 
-        public EmpolyerControllerUnitTests()
+        public EmpolyersControllerUnitTests()
         {
-            repo = new  FakeEmpolyerRepository();
+            repo = new  FakeEmpolyersRepository();
             controller = new EmployersController(repo);
         }
         
