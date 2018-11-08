@@ -80,7 +80,7 @@ namespace TaskHouseUnitTests
 
             Worker temp = db.Find(w => w.Id == Id);
             db.Remove(temp);
-            temp =  db.Find(w => w.Id==Id);
+            temp = db.Find(w => w.Id==Id);
 
             if(temp != null)
             {
