@@ -22,7 +22,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void WorkerController_Get_ReturnsObjectReponseWithCorrectEmpolyer_WhenGivenValidId()
+        public async void WorkerController_Get_ReturnsObjectResult_WhenGivenValidId()
         {
             int Id = 1;
             var result = await controller.Get(Id);
@@ -37,12 +37,9 @@ namespace TaskHouseUnitTests
         {
             int WorkerId = 5000;
 
-            //Act
             var result = await controller.Get(WorkerId) as NotFoundResult;
 
-            //Assert
             Assert.Equal(404, result.StatusCode);
-
         }
 
         [Fact]
@@ -77,7 +74,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void WorekrController_Create_ReturnsBadRequest_WhenGivenNullWorker()
+        public async void WorkerController_Create_ReturnsBadRequest_WhenGivenNullWorker()
         {
             Worker worker = null;
 
@@ -89,7 +86,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void WorkerController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndWorkerIsNull()
+        public async void WorkerController_Update_ReturnsBadRequest_WhenIdIsInvalidAndWorkerIsNull()
         {
             Worker worker = null;
             int id = 2600;
@@ -143,19 +140,10 @@ namespace TaskHouseUnitTests
         [Fact]
         public async void WorkerController_Delete_ActuallyDeletes_WhenIdIsValid()
         {
-            Worker TestWorker = new Worker()
-            {
-                Id = 5,
-                Username = "Tusername",
-                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
-                Email = "test@test.com",
-                FirstName = "Bob7",
-                LastName = "Bobsen6",
-                Salt = "upYKQSsrlub5JAID61/6pA=="
-            };
+            var id = 1;
 
-            await controller.Delete(TestWorker.Id);
-            var result = await controller.Get(TestWorker.Id);
+            await controller.Delete(Id);
+            var result = await controller.Get(Id);
 
             Assert.IsType<NotFoundResult>(result);
         }
@@ -171,9 +159,8 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void WorkerController_Update_ReturnsNoContentResult_withValidIdAndValidWorker()
+        public async void WorkerController_Update_ReturnsObjectResult_withValidIdAndValidWorker()
         {
-           
             Worker worker1 = new Worker()
             {
                 Id = 10,
@@ -199,9 +186,7 @@ namespace TaskHouseUnitTests
             controller.Update(worker1.Id, worker2);
             var resultAsObject = await controller.Get(worker2.Id) as ObjectResult;
             var resultObject = resultAsObject.Value as Worker;
-
             Assert.NotEqual(worker1.Username, resultObject.Username);
-
         }
     }
 }

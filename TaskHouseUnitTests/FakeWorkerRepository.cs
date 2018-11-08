@@ -86,10 +86,8 @@ namespace TaskHouseUnitTests
             {
                 return false;
             }
-
             return true;
         }
 
     }
-
 }
