@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 
 namespace TaskHouseApi.Model
 {
-
     public class Location
     {
         public int Id { get; set; }
@@ -16,7 +15,6 @@ namespace TaskHouseApi.Model
         {
 
         } 
-
 
         }
     }

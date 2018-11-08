@@ -1,0 +1,21 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TaskHouseApi.Model;
+
+namespace TaskHouseApi.Repositories
+{
+    public interface IWorkerRepository
+    {
+        Task<Worker> Create(Worker w);
+
+        Task<IEnumerable<Worker>> RetrieveAll();
+
+        Task<Worker> Retrieve(int Id);
+
+        Task<Worker> Update(int Id, Worker w);
+
+        Task<bool> Delete(int Id);
+    }
+}

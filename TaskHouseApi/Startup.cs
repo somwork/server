@@ -17,15 +17,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+
 namespace TaskHouseApi
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-        }
+            this.Configuration = configuration;
 
+        }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -37,19 +39,19 @@ namespace TaskHouseApi
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                  options.TokenValidationParameters = new TokenValidationParameters
-                  {
-                      ValidateIssuer = true,
-                      ValidateAudience = true,
-                      ValidateLifetime = true,
-                      ValidateIssuerSigningKey = true,
-                      ValidIssuer = Configuration["Jwt:Issuer"],
-                      ValidAudience = Configuration["Jwt:Issuer"],
-                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                  };
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
                 });
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IWorkerRepository, TaskHouseApi.Repositories.WorkerRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
@@ -73,5 +75,9 @@ namespace TaskHouseApi
             app.UseHttpsRedirection();
             app.UseMvc();
         }
+    }
+
+    internal class WorkerRepository
+    {
     }
 }
