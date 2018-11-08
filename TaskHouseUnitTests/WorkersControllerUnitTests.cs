@@ -30,7 +30,7 @@ namespace TaskHouseUnitTests
             var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
 
             Assert.IsType<ObjectResult>(result);
-            Assert.Equal(TestWorker.Id, resultObject.Id);
+            Assert.Equal(Id, resultObject.Id);
         }
 
         public async void WorkerController_Get_ReturnsNotFound_WhenGivenInvalidId()
@@ -173,9 +173,10 @@ namespace TaskHouseUnitTests
         [Fact]
         public async void WorkerController_Update_ReturnsNoContentResult_withValidIdAndValidWorker()
         {
-            Worker Pre_TestWorker = new Worker()
+           
+            Worker worker1 = new Worker()
             {
-                Id = 5,
+                Id = 10,
                 Username = "Tusername",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                 Email = "test@test.com",
@@ -183,11 +184,10 @@ namespace TaskHouseUnitTests
                 LastName = "Bobsen6",
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
-
-            Worker Post_TestWorker = new Worker()
+            Worker worker2 = new Worker()
             {
-                Id = 5,
-                Username = "Tusername2",
+                Id = 10,
+                Username = "Tusername234",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                 Email = "test@test.com",
                 FirstName = "Bob7",
@@ -195,12 +195,12 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            await controller.Create(Pre_TestWorker);
-            await controller.Update(Pre_TestWorker.Id, Post_TestWorker);
-            var resultAsObject = await controller.Get(Post_TestWorker.Id) as ObjectResult;
+            controller.Create(worker1);
+            controller.Update(worker1.Id, worker2);
+            var resultAsObject = await controller.Get(worker2.Id) as ObjectResult;
             var resultObject = resultAsObject.Value as Worker;
 
-            Assert.Equal(Post_TestWorker, resultObject);
+            Assert.NotEqual(worker1.Username, resultObject.Username);
 
         }
     }
