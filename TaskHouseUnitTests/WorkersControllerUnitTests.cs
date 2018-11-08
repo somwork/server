@@ -25,9 +25,8 @@ namespace TaskHouseUnitTests
         public async void WorkerController_Get_ReturnsObjectReponseWithCorrectEmpolyer_WhenGivenValidId()
         {
             int Id = 1;
-
             var result = await controller.Get(Id);
-            var resultObjectResult = await controller.Get(Id) as ObjectResult;
+            var resultObjectResult = result as ObjectResult;
             var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
 
             Assert.IsType<ObjectResult>(result);
