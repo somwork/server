@@ -84,8 +84,28 @@ namespace TaskHouseUnitTests
 
         }
 
-      
-        
+        /// Test Post with valid Employer
+        [Fact]
+        public async void EmpolyeresController_Create_ReturnsObjectResultContainingCreatedEmpolyer_WhenGivenValidEmpolyer()
+        {
+            //Arrange
+            Employer employer = new Employer();
+            employer.Email = "TestEmpolyer";
+
+            //Act
+            var result = await controller.Create(employer);
+            var createdResultObject = result as ObjectResult;
+            var createdSkill = createdResultObject.Value as Skill;
+
+            //Assert
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(createdSkill.Title, employer.Email);
+            Assert.Equal(createdSkill.Id, employer.Id);
+
+        }
+
+
+
         ///Test put with invalid Id and null empolyer object
         [Fact]
         public async void EmpolyerController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndEmpolyerIsNull()
@@ -133,6 +153,28 @@ namespace TaskHouseUnitTests
             Assert.IsType<NoContentResult>(result);
             Assert.IsType<NotFoundResult>(getDeletedEmpolyerResult);
             
+        }
+
+        ///Test put with valid Id and Empolyer object
+        [Fact]
+        public async void SkillsController_Update_ReturnsNoContentResult_WhenParametersAreValid()
+        {
+            //Arrange
+            Employer employer = new Employer()
+            {
+                Id = 1,
+                Email = "Updatedemployer"
+            };
+            int id = 1;
+
+            //Act
+            var result = await controller.Update(id, employer);
+            var updatedResultObject = await controller.Get(id) as ObjectResult;
+            var updatedEmployer = updatedResultObject.Value as Employer;
+
+            //Assert
+            Assert.IsType<NoContentResult>(result);
+            Assert.Equal(updatedEmployer.Email, employer.Email);
         }
 
         ///Test Delete with invalid Id
