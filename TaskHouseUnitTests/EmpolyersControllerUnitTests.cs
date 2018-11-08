@@ -13,7 +13,7 @@ namespace TaskHouseUnitTests
     public class EmpolyersControllerUnitTests
     {
         EmployersController controller;
-        IEmployersRepository repo;
+        IEmployerRepository repo;
 
         public EmpolyersControllerUnitTests()
         {

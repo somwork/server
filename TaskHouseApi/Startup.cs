@@ -52,13 +52,13 @@ namespace TaskHouseApi
                 });
 
 
-           
+
 
             services.AddScoped<IWorkerRepository, TaskHouseApi.Repositories.WorkerRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
-            services.AddScoped<IEmployersRepository, EmployersRepository>();
+            services.AddScoped<IEmployerRepository, TaskHouseApi.Repositories.EmployerRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

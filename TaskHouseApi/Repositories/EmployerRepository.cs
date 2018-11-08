@@ -10,7 +10,7 @@ using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public class EmployersRepository : IEmployersRepository
+    public class EmployerRepository : IEmployerRepository
 
     {  //cache the Employers in a thread-safe dictionary to improve performance
         private static ConcurrentDictionary<int, Employer> employerCache;
@@ -18,11 +18,11 @@ namespace TaskHouseApi.Repositories
         //reference to database context
         private PostgresContext db;
 
-        public EmployersRepository()
+        public EmployerRepository()
         {
         }
 
-        public EmployersRepository(PostgresContext db)
+        public EmployerRepository(PostgresContext db)
         {
             this.db = db;
 

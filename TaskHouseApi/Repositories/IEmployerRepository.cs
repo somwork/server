@@ -6,7 +6,7 @@ using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public interface IEmployersRepository
+    public interface IEmployerRepository
     {
         Task<Employer> Create(Employer e);
 
@@ -18,6 +18,6 @@ namespace TaskHouseApi.Repositories
 
         Task<bool> Delete(int Id);
 
-        
+
     }
 }
