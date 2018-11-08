@@ -22,9 +22,9 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void  WorkerController_Get_ReturnsObjectReponseWithCorrectEmpolyer_WhenGivenValidId()
+        public async void WorkerController_Get_ReturnsObjectReponseWithCorrectEmpolyer_WhenGivenValidId()
         {
-            Worker TestWorker =  new Worker()
+            Worker TestWorker = new Worker()
             {
                 Id = 1,
                 Username = "1234",
@@ -43,13 +43,13 @@ namespace TaskHouseUnitTests
             Assert.Equal(TestWorker.Id, resultObject.Id);
         }
 
-        public  async void WorkerController_Get_ReturnsNotFound_WhenGivenInvalidId()
-        { 
+        public async void WorkerController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        {
             int WorkerId = 5000;
 
             //Act
             var result = await controller.Get(WorkerId) as NotFoundResult;
-            
+
             //Assert
             Assert.Equal(404, result.StatusCode);
 
@@ -64,9 +64,9 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public async void WorkerController_Create_ReturnsObjectResult_withWorker()
+        public async void WorkerController_Create_ReturnsObjectResult_withValidWorker()
         {
-            Worker TestWorker =  new Worker()
+            Worker TestWorker = new Worker()
             {
                 Id = 5,
                 Username = "Tusername",
@@ -85,37 +85,37 @@ namespace TaskHouseUnitTests
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(TestWorker.Id, resultObject.Id);
         }
-        
+
         [Fact]
-         public async void WorekrController_Create_ReturnsBadRequest_WhenGivenNullWorker()
-        { 
+        public async void WorekrController_Create_ReturnsBadRequest_WhenGivenNullWorker()
+        {
             Worker worker = null;
 
             var result = await controller.Create(worker);
 
             Assert.IsType<BadRequestObjectResult>(result);
-          
+
 
         }
 
         [Fact]
         public async void WorkerController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndWorkerIsNull()
-        { 
+        {
             Worker worker = null;
             int id = 2600;
 
             var result = await controller.Update(id, worker);
 
-            Assert.IsType<BadRequestResult>(result); 
+            Assert.IsType<BadRequestResult>(result);
         }
 
         [Fact]
         public async void WorkerController_Update_ReturnsBadRequestResult_WhenIdIsInvalid()
-        { 
-            Worker worker =  new Worker()
+        {
+            Worker TestWorker = new Worker()
             {
-                Id = 5,
-                Username = "Tusername",
+                Id = 1,
+                Username = "Tusername2",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                 Email = "test@test.com",
                 FirstName = "Bob7",
@@ -123,11 +123,11 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            int id = 2600;
+            int id = 10000000;
 
-            var result = await controller.Update(id, worker);
+            var result = await controller.Update(id, TestWorker);
 
-            Assert.IsType<BadRequestResult>(result); 
+            Assert.IsType<BadRequestResult>(result);
         }
 
         [Fact]
@@ -136,24 +136,24 @@ namespace TaskHouseUnitTests
             int Id = 1;
             var result = await controller.Delete(Id);
 
-            Assert.IsType<NoContentResult>(result); 
+            Assert.IsType<NoContentResult>(result);
         }
 
         [Fact]
         public async void WorkerController_Update_ReturnsBadRequestResult_WhenWorkerIsNull()
-        { 
+        {
             Worker worker = null;
-            int id = 1234;
+            int id = 1;
 
             var result = await controller.Update(id, worker);
 
-            Assert.IsType<BadRequestResult>(result); 
+            Assert.IsType<BadRequestResult>(result);
         }
 
         [Fact]
-        public async void  WorkerController_Delete_ActuallyDeletes_WhenIdIsValid()
+        public async void WorkerController_Delete_ActuallyDeletes_WhenIdIsValid()
         {
-            Worker TestWorker =  new Worker()
+            Worker TestWorker = new Worker()
             {
                 Id = 5,
                 Username = "Tusername",
@@ -164,27 +164,26 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            await controller.Delete(TestWorker.Id) ;
+            await controller.Delete(TestWorker.Id);
             var result = await controller.Get(TestWorker.Id);
 
             Assert.IsType<NotFoundResult>(result);
         }
 
-        [Fact] 
+        [Fact]
         public async void WorkerController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
-        { 
-            int id = 2500; 
-
+        {
+            int id = 2500;
+      
             var result = await controller.Delete(id);
 
             Assert.IsType<NotFoundResult>(result);
         }
 
-
         [Fact]
         public async void WorkerController_Update_ReturnsNoContentResult_withValidIdAndValidWorker()
         {
-            Worker Pre_TestWorker =  new Worker()
+            Worker Pre_TestWorker = new Worker()
             {
                 Id = 5,
                 Username = "Tusername",
@@ -195,7 +194,7 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            Worker Post_TestWorker =  new Worker()
+            Worker Post_TestWorker = new Worker()
             {
                 Id = 5,
                 Username = "Tusername2",
@@ -207,9 +206,12 @@ namespace TaskHouseUnitTests
             };
 
             await controller.Create(Pre_TestWorker);
-            var Result = await controller.Update(Pre_TestWorker.Id, Post_TestWorker);
+            await controller.Update(Pre_TestWorker.Id, Post_TestWorker);
+            var resultAsObject = await controller.Get(Post_TestWorker.Id) as ObjectResult;
+            var resultObject = resultAsObject.Value as Worker;
 
-            Assert.IsType<NoContentResult>(Result);
+            Assert.Equal(Post_TestWorker, resultObject);
+
         }
     }
 }

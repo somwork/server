@@ -49,10 +49,8 @@ namespace TaskHouseApi.Repositories
         public async Task<Worker> Update(int Id, Worker u)
         {
             await System.Threading.Tasks.Task.Run(()=>{
-                Worker target = db.Workers.Find(Id);
-                db.Entry(target).CurrentValues.SetValues(u);
+                db.Workers.Update(u);
                 int affected = db.SaveChanges();
-
                 if (affected != 1)
                 {
                     return null;
