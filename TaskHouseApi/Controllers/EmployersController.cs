@@ -65,7 +65,7 @@ namespace TaskHouseApi.Controllers
 
             Employer added = await repo.Create(employer);
             
-            return Ok();
+            return new ObjectResult(added);
 
             
         }
@@ -88,6 +88,7 @@ namespace TaskHouseApi.Controllers
             await repo.Update(Id, e);
             return new NoContentResult(); // 204 No content 
         }
+
 
         // DELETE: api/employers/[id] 
         [HttpDelete("{id}")]
