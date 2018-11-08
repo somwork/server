@@ -64,9 +64,8 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            await controller.Create(TestWorker);
-            var result = await controller.Get(TestWorker.Id);
-            var resultObjectResult = await controller.Get(TestWorker.Id) as ObjectResult;
+            var result = await controller.Create(TestWorker);
+            var resultObjectResult = result as ObjectResult;
             var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
 
             Assert.IsType<ObjectResult>(result);
@@ -152,7 +151,7 @@ namespace TaskHouseUnitTests
         public async void WorkerController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
         {
             int id = 2500;
-      
+
             var result = await controller.Delete(id);
 
             Assert.IsType<NotFoundResult>(result);
