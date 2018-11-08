@@ -23,10 +23,10 @@ namespace TaskHouseApi.Repositories
             await db.Workers.AddAsync(w);
             int affected = await db.SaveChangesAsync();
 
-             if (affected != 1)
-             {
-                 return null;
-             }
+            if (affected != 1)
+            {
+                return null;
+            }
             return w;
         }
 
