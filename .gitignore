@@ -3,6 +3,7 @@
 */Migrations/ContextModelSnapshot.cs
 .vscode
 .vs
+*.csproj.user
 
 # Prerequisites
 *.d
