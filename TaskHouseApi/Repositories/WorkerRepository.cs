@@ -12,7 +12,6 @@ namespace TaskHouseApi.Repositories
 {
     public class WorkerRepository : IWorkerRepository
     {
-    
         private PostgresContext db;
 
         public WorkerRepository(PostgresContext db){
