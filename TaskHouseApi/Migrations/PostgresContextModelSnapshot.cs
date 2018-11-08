@@ -120,11 +120,15 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<int?>("EmployerId");
+
                     b.Property<DateTime>("Start");
 
                     b.Property<string>("Urgency");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployerId");
 
                     b.ToTable("Tasks");
                 });
@@ -156,6 +160,16 @@ namespace TaskHouseApi.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
+            modelBuilder.Entity("TaskHouseApi.Model.Employer", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("Employer");
+
+                    b.HasDiscriminator().HasValue("Employer");
+                });
+
             modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
                 {
                     b.HasBaseType("TaskHouseApi.Model.User");
@@ -164,6 +178,13 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Worker");
 
                     b.HasDiscriminator().HasValue("Worker");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Task", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Employer")
+                        .WithMany("Tasks")
+                        .HasForeignKey("EmployerId");
                 });
 #pragma warning restore 612, 618
         }

@@ -20,14 +20,15 @@ namespace TaskHouseApi.Controllers
     public class TokenController : Controller
     {
         private IConfiguration config;
-        private IWorkerRepository repo;
+        private IEmployerRepository repo;
 
-        public TokenController(IConfiguration config, IWorkerRepository repo)
+        public TokenController(IConfiguration config, IEmployerRepository repo)
+
         {
             this.config = config;
             this.repo = repo;
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<string>> Create([FromBody]LoginModel login)
         {
@@ -61,7 +62,7 @@ namespace TaskHouseApi.Controllers
             {
                 return null;
             }
-            
+
             return potentialUser;
         }
 

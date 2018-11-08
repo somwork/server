@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,11 +51,14 @@ namespace TaskHouseApi
                     };
                 });
 
+
+
+
             services.AddScoped<IWorkerRepository, TaskHouseApi.Repositories.WorkerRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
-
+            services.AddScoped<IEmployerRepository, TaskHouseApi.Repositories.EmployerRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
