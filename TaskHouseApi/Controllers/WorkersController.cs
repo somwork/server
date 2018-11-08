@@ -59,9 +59,9 @@ namespace TaskHouseApi.Controllers
             worker.Salt = hashResult.saltText;
             worker.Password = hashResult.saltechashedPassword;
 
-            await repo.Create(worker);
+            Worker added = await repo.Create(worker);
 
-            return Ok() ; // 200 ok
+            return new ObjectResult(added);
         }
 
         [HttpPut("{id}")]
@@ -95,7 +95,7 @@ namespace TaskHouseApi.Controllers
 
             if (deleted==false)
             {
-                return BadRequest(); 
+                return BadRequest();
             }
 
             return new  NoContentResult();
