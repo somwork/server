@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using TaskHouseApi.Model;
 
@@ -7,15 +6,14 @@ namespace TaskHouseApi.Repositories
 {
     public interface ILocationRepository
     {
+        Location Create(Location l);
 
-        Task<Location> Create(Location l);
+        IEnumerable<Location> RetrieveAll();
 
-        Task<IEnumerable<Location>> RetrieveAll();
+        Location Retrieve(int Id);
 
-        Task<Location> Retrieve(int Id);
+        Location Update(Location l);
 
-        Task<Location> Update(int Id, Location l);
-
-        Task<bool> Delete(int Id);
+        bool Delete(int Id);
     }
 }

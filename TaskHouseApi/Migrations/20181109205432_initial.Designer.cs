@@ -10,8 +10,8 @@ using TaskHouseApi.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181105165715_refrechToken")]
-    partial class refrechToken
+    [Migration("20181109205432_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,11 +138,15 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<int?>("EmployerId");
+
                     b.Property<DateTime>("Start");
 
                     b.Property<string>("Urgency");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployerId");
 
                     b.ToTable("Tasks");
                 });
@@ -151,6 +155,9 @@ namespace TaskHouseApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<string>("Email");
 
@@ -167,6 +174,28 @@ namespace TaskHouseApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Employer", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("Employer");
+
+                    b.HasDiscriminator().HasValue("Employer");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("Worker");
+
+                    b.HasDiscriminator().HasValue("Worker");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.ServiceModel.RefreshToken", b =>
@@ -174,6 +203,13 @@ namespace TaskHouseApi.Migrations
                     b.HasOne("TaskHouseApi.Model.User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Task", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Employer")
+                        .WithMany("Tasks")
+                        .HasForeignKey("EmployerId");
                 });
 #pragma warning restore 612, 618
         }

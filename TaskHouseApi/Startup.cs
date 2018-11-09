@@ -19,16 +19,18 @@ using System.Text;
 using TaskHouseApi.Service;
 using Microsoft.EntityFrameworkCore.Proxies;
 
+
 namespace TaskHouseApi
 {
     public class Startup
     {
-        public static bool DEV_MODE_ON {get; private set;} = true ;
+        public static bool DEV_MODE_ON { get; private set; } = true;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-        }
+            this.Configuration = configuration;
 
+        }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -41,7 +43,7 @@ namespace TaskHouseApi
                     options.AddPolicy("AllowAll", builder =>
                     {
                         builder
-                            .AllowAnyOrigin() 
+                            .AllowAnyOrigin()
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials();
@@ -49,8 +51,8 @@ namespace TaskHouseApi
                 });
             }
 
-            services.AddDbContext<PostgresContext>(options => options.UseLazyLoadingProxies()
-                .UseNpgsql(
+            services.AddDbContext<PostgresContext>(options =>
+                options.UseNpgsql(
                     "Server=localhost;Port=5432;Database=root;Username=root;Password=root;")
                 );
 
@@ -82,12 +84,14 @@ namespace TaskHouseApi
                     };
                 });
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IWorkerRepository, WorkerRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
-            services.AddScoped<IPasswordService, PasswordService>();
-            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEmployerRepository, EmployerRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

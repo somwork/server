@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
 
@@ -15,7 +14,7 @@ namespace TaskHouseApi.Controllers
     {
         private ISkillRepository repo;
 
-        // constructor injects registered repository 
+        // constructor injects registered repository
         public SkillsController(ISkillRepository repo)
         {
             this.repo = repo;
@@ -23,19 +22,19 @@ namespace TaskHouseApi.Controllers
 
         // GET: api/skills/
         [HttpGet]
-        public async Task<IEnumerable<Skill>> Get()
+        public IActionResult Get()
         {
-            return await repo.RetrieveAll();
+            return new ObjectResult(repo.RetrieveAll());
         }
 
         // GET: api/skills/[id]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int Id)
+        public IActionResult Get(int Id)
         {
-            Skill s = await repo.Retrieve(Id);
-            if(s == null)
+            Skill s = repo.Retrieve(Id);
+            if (s == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound(); // 404 Resource not found
             }
 
             return new ObjectResult(s); // 200 ok
@@ -43,58 +42,57 @@ namespace TaskHouseApi.Controllers
 
         // POST: api/skills
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]Skill skill)
+        public IActionResult Create([FromBody]Skill skill)
         {
-            if(skill == null)
+            if (skill == null)
             {
-                // 400 Bad request 
+                // 400 Bad request
                 return BadRequest(new { error = "CreateLocation: skill is null" });
             }
 
-            Skill added = await repo.Create(skill);
+            Skill added = repo.Create(skill);
 
-            return new ObjectResult(added); 
+            return new ObjectResult(added);
         }
 
         // PUT: api/skills/[id]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] Skill s)
+        public IActionResult Update([FromBody] Skill s)
         {
-            if(s == null || s.Id != Id )
+            if (s == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Skill existing = await repo.Retrieve(Id);
+            Skill existing = repo.Retrieve(s.Id);
 
-            if( existing == null)
+            if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            await repo.Update(Id, s);
+            repo.Update(s);
             return new NoContentResult(); // 204 No content
         }
 
         // DELETE: api/skills/[id]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int Id)
+        public IActionResult Delete(int Id)
         {
-            Skill existing = await repo.Retrieve(Id);
-            if(existing == null)
+            Skill existing = repo.Retrieve(Id);
+            if (existing == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound(); // 404 Resource not found
             }
 
-            bool deleted = await repo.Delete(Id);
+            bool deleted = repo.Delete(Id);
 
-            if(!deleted)
+            if (!deleted)
             {
                 return BadRequest();
             }
 
             return new NoContentResult(); // 204 No content
         }
-
     }
 }

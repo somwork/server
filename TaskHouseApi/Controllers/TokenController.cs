@@ -9,7 +9,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using TaskHouseApi.Model;
 using TaskHouseApi.Model.ServiceModel;
 using TaskHouseApi.Repositories;
@@ -22,27 +21,31 @@ namespace TaskHouseApi.Controllers
     public class TokenController : Controller
     {
         private IConfiguration config;
-        private IUserRepository repo;
-        private IPasswordService passwordService;
         private ITokenService tokenService;
+        private IAuthService authService;
 
-        public TokenController(IConfiguration config, IUserRepository repo, IPasswordService passwordService, ITokenService tokenService)
+        public TokenController(IConfiguration config, ITokenService tokenService, IAuthService authService)
         {
             this.config = config;
-            this.repo = repo;
-            this.passwordService = passwordService;
             this.tokenService = tokenService;
+            this.authService = authService;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody]LoginModel login)
+        public ActionResult Create([FromBody]LoginModel login)
         {
-            ActionResult response = Unauthorized();
-            User user = await Authenticate(login);
-
+            // Check's if user is autherised
+            User user = authService.Authenticate(login);
             if (user == null)
             {
-                return response;
+                return Unauthorized();
+            }
+
+            // Finds the role of the user
+            string role = findRoleName(user);
+            if (role == null)
+            {
+                return StatusCode(500);
             }
 
             // Sets the claims for the token
@@ -50,7 +53,7 @@ namespace TaskHouseApi.Controllers
             {
                 // User Id
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, role)
             };
 
             string tokenString = tokenService.GenerateAccessToken(usersClaims);
@@ -61,7 +64,7 @@ namespace TaskHouseApi.Controllers
                 new RefreshToken { Token = refreshToken }
             );
 
-            var result = await repo.UpdateAsync(user.Id, user);
+            var result = authService.Update(user);
             if (result == null)
             {
                 return StatusCode(500);
@@ -75,11 +78,11 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Refresh([FromBody]RefreshModel refreshModel)
+        public IActionResult Refresh([FromBody]RefreshModel refreshModel)
         {
             var principal = tokenService.GetPrincipalFromExpiredToken(refreshModel.AccessToken);
-            
-            // If null, the token isn't valid 
+
+            // If null, the token isn't valid
             if (principal == null)
             {
                 return BadRequest();
@@ -89,7 +92,7 @@ namespace TaskHouseApi.Controllers
             int Id;
             Int32.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Id);
 
-            User user = await repo.RetrieveAsync(Id);
+            User user = authService.Retrieve(Id);
 
             // Checks that the user exists and has a refresh token
             if (user == null || user.RefreshTokens.Count() == 0)
@@ -118,7 +121,7 @@ namespace TaskHouseApi.Controllers
             var newRefreshToken = tokenService.GenerateRefreshToken();
 
             // Deletes the old refresh token from database
-            bool res = repo.DeleteRefrechToken(user, storedRefreshToken);
+            bool res = authService.DeleteRefrechToken(storedRefreshToken);
             if (res == false)
             {
                 return StatusCode(500);
@@ -126,11 +129,11 @@ namespace TaskHouseApi.Controllers
 
             // Add the new refresh token to user
             user.RefreshTokens.Add
-                (
-                    new RefreshToken { Token = newRefreshToken }
-                );
+            (
+                new RefreshToken { Token = newRefreshToken }
+            );
 
-            var result = await repo.UpdateAsync(Id, user);
+            var result = authService.Update(user);
             if (result == null)
             {
                 return StatusCode(500);
@@ -143,26 +146,19 @@ namespace TaskHouseApi.Controllers
             });
         }
 
-        private async Task<User> Authenticate(LoginModel loginModel)
+        private string findRoleName(User user)
         {
-            User potentialUser = (await repo.RetrieveAllAsync())
-                .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
-
-            if (potentialUser == null)
+            if (user is Worker)
             {
-                return null;
+                return nameof(Worker);
             }
 
-            bool isAuthenticated = passwordService
-                .GenerateSaltedHashedPassword(loginModel.Password, potentialUser.Salt)
-                .Equals(potentialUser.Password);
-
-            if (!isAuthenticated)
+            if (user is Employer)
             {
-                return null;
+                return nameof(Employer);
             }
 
-            return potentialUser;
+            return null;
         }
     }
 }

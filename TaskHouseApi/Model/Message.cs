@@ -2,7 +2,6 @@ using System;
 
 namespace TaskHouseApi.Model
 {
-
     public class Message
     {
         public int Id { get; set; }

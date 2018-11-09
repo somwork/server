@@ -1,64 +1,65 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using TaskHouseApi.DatabaseContext;
 using TaskHouseApi.Model;
+using TaskHouseApi.Repositories;
 
 namespace TaskHouseApi.Repositories
 {
-    public class TaskRepository : ITaskRepository
+    public class WorkerRepository : IWorkerRepository
     {
-        //reference to database context
         private PostgresContext db;
 
-
-        public TaskRepository(PostgresContext db)
+        public WorkerRepository(PostgresContext db)
         {
             this.db = db;
         }
-
-        public Task Create(Task t)
+        public Worker Create(Worker w)
         {
-            db.Tasks.Add(t);
+            db.Workers.Add(w);
             int affected = db.SaveChanges();
 
             if (affected != 1)
             {
                 return null;
             }
-            return t;
+            return w;
         }
 
-        public IEnumerable<Task> RetrieveAll()
+        public IEnumerable<Worker> RetrieveAll()
         {
-            return db.Tasks
-                .ToList<Task>();
+            return db.Workers
+                .Include(user => user.RefreshTokens)
+                .ToList<Worker>();
         }
 
-        public Task Retrieve(int Id)
+        public Worker Retrieve(int Id)
         {
-            return db.Tasks
-                .Where(task => task.Id == Id)
+            return db.Workers
+                .Include(user => user.RefreshTokens)
+                .Where(user => user.Id == Id)
                 .SingleOrDefault();
         }
 
-        public Task Update(Task t)
+        public Worker Update(Worker u)
         {
-            db.Tasks.Update(t);
+            db.Workers.Update(u);
             int affected = db.SaveChanges();
             if (affected <= 1)
             {
                 return null;
             }
-            return t;
+            return u;
         }
 
         public bool Delete(int Id)
         {
-            Task t = db.Tasks.Find(Id);
-            db.Tasks.Remove(t);
+            Worker u = db.Workers.Find(Id);
+            db.Workers.Remove(u);
             int affected = db.SaveChanges();
 
             if (affected != 1)

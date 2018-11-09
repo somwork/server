@@ -9,112 +9,109 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace TaskHouseUnitTests
-{ 
+{
     public class TasksControllerUnitTests
-    { 
+    {
         TasksController controller;
         ITaskRepository repo;
 
-        public TasksControllerUnitTests() 
-        { 
+        public TasksControllerUnitTests()
+        {
             repo = new FakeTaskRepository();
             controller = new TasksController(repo);
         }
 
-         ///Test Get all
+        ///Test Get all
         [Fact]
-        public async void  TasksController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters() 
-        { 
-            //Arrange and act
-            IEnumerable<TaskHouseApi.Model.Task> result = await controller.Get();
+        public void TasksController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters()
+        {
+            var result = controller.Get();
+            var resultObjectResult = result as ObjectResult;
+            var resultObject = resultObjectResult.Value as IEnumerable<Task>;
 
-            //Asserts
-            Assert.Equal(4, result.Count());
-
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(4, resultObject.Count());
         }
 
         ///Test Get with valid Id as parameter
         [Fact]
-        public async void TasksController_Get_ReturnsObjectReponseWithCorrectTask_WhenGivenValidId() 
-        { 
+        public void TasksController_Get_ReturnsObjectReponseWithCorrectTask_WhenGivenValidId()
+        {
             //arrange
             int taskId = 2;
 
             //Act
-            var result = await controller.Get(taskId);
-            var resultAsObject = await controller.Get(taskId) as ObjectResult;
+            var result = controller.Get(taskId);
+            var resultAsObject = controller.Get(taskId) as ObjectResult;
             var resultObject = resultAsObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(taskId, resultObject.Id);
-
         }
 
         ///Test Get with invalid Id as parameter
         [Fact]
-        public  async void TasksController_Get_ReturnsNotFound_WhenGivenInvalidId()
-        { 
+        public void TasksController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        {
             //arrange
             int taskId = 5000;
 
             //Act
-            var result = await controller.Get(taskId) as NotFoundResult;
-            
+            var result = controller.Get(taskId) as NotFoundResult;
+
             //Assert
             Assert.Equal(404, result.StatusCode);
-
         }
 
-        /// Test Post with valid Task 
+        /// Test Post with valid Task
         [Fact]
-        public async void TasksController_Create_ReturnsObjectResultContainingCreatedTask_WhenGivenValidTask()
-        { 
+        public void TasksController_Create_ReturnsObjectResultContainingCreatedTask_WhenGivenValidTask()
+        {
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
             task.Description = "TestTask";
 
             //Act
-            var result = await controller.Create(task);
+            var result = controller.Create(task);
             var createdResultObject = result as ObjectResult;
             var createdTask = createdResultObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(task.Description, createdTask.Description);
-
         }
 
         ///Test post with null Task object
         [Fact]
-         public async void TasksController_Create_ReturnsBadRequest_WhenGivenNullTask()
-        { 
+        public void TasksController_Create_ReturnsBadRequest_WhenGivenNullTask()
+        {
             //Arrange
             TaskHouseApi.Model.Task task = null;
 
             //Act
-            var result = await controller.Create(task);
+            var result = controller.Create(task);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
             //Major inconsistencies in whether is return BadRequestResult or BadRequestObjectResult
-
         }
 
         ///Test put with valid Id and Task object
         [Fact]
-        public async void TasksController_Update_ReturnsNoContentResultAndCreatedObject_WhenParametersAreValid()
-        { 
+        public void TasksController_Update_ReturnsNoContentResultAndCreatedObject_WhenParametersAreValid()
+        {
             //Arrange
-            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
-                Id = 1, 
+            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task()
+            {
+                Id = 1,
                 Description = "UpdatedTask"
             };
             int id = 1;
 
             //Act
-            var result = await controller.Update(id, task);
-            var updatedResultObject = await controller.Get(id) as ObjectResult;
+            var result = controller.Update(task);
+            var updatedResultObject = controller.Get(id) as ObjectResult;
             var updatedTask = updatedResultObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
@@ -122,120 +119,81 @@ namespace TaskHouseUnitTests
             Assert.Equal(updatedTask.Description, task.Description);
         }
 
-        ///Test put with invalid Id and valid Task object
-        [Fact]
-        public async void TasksController_Update_ReturnsBadRequestResult_WhenIdIsInvalid()
-        { 
-            //Arrange
-            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
-                Id = 1, 
-                Description = "Task1"
-            };
-            int id = 50;
-
-            //Act
-            var result = await controller.Update(id, task);
-
-            //Assert
-            Assert.IsType<BadRequestResult>(result); 
-            //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
-        }
-
         ///Test put with valid Id and null Task object
         [Fact]
-        public async void TasksController_Update_ReturnsBadRequestResult_WhenTaskIsNull()
-        { 
+        public void TasksController_Update_ReturnsBadRequestResult_WhenTaskIsNull()
+        {
             //Arrange
             TaskHouseApi.Model.Task task = null;
-            int id = 1;
 
             //Act
-            var result = await controller.Update(id, task);
+            var result = controller.Update(task);
 
             //Assert
-            Assert.IsType<BadRequestResult>(result); 
+            Assert.IsType<BadRequestResult>(result);
             //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
-        }
-
-        ///Test put with invalid Id and null Task object
-        [Fact]
-        public async void TasksController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndTaskIsNull()
-        { 
-            //Arrange
-            TaskHouseApi.Model.Task task = null;
-            int id = 2600;
-
-            //Act
-            var result = await controller.Update(id, task);
-
-            //Assert
-            Assert.IsType<BadRequestResult>(result); 
-            //Inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
 
         ///Test put with valid Id and Task object, on not existing Task
         [Fact]
-        public async void TasksController_Update_ReturnsNotFoundResult_WhenParametersAreValidButTaskDoesNotExist()
-        { 
+        public void TasksController_Update_ReturnsNotFoundResult_WhenParametersAreValidButTaskDoesNotExist()
+        {
             //Arrange
-            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task(){
-                Id = 10, 
+            TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task()
+            {
+                Id = 10,
                 Description = "Task1"
             };
-            int id = 10;
 
             //Act
-            var result = await controller.Update(id, task);
+            var result = controller.Update(task);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
         }
 
-
         ///Test Delete returns NoContentResult with valid Id
-        [Fact] 
-        public async void TasksController_Delete_ReturnsNoContentResult_WhenIdIsValid()
-        { 
+        [Fact]
+        public void TasksController_Delete_ReturnsNoContentResult_WhenIdIsValid()
+        {
             //Arrange
-            int id = 1; 
+            int id = 1;
 
             //Act
-            var result = await controller.Delete(id);
+            var result = controller.Delete(id);
 
             //Assert
             Assert.IsType<NoContentResult>(result);
         }
 
-         ///Test if delete actually deletes with valid Id
-        [Fact] 
-        public async void TasksController_Delete_ActuallyDeletes_WhenIdIsValid()
-        { 
+        ///Test if delete actually deletes with valid Id
+        [Fact]
+        public void TasksController_Delete_ActuallyDeletes_WhenIdIsValid()
+        {
             //Arrange
-            int id = 1; 
+            int id = 1;
 
             //Act
-            var result = await controller.Delete(id);
-            var getDeletedTaskResult = await controller.Get(id);
+            var result = controller.Delete(id);
+            var getDeletedTaskResult = controller.Get(id);
 
             //Assert
             Assert.IsType<NoContentResult>(result);
             Assert.IsType<NotFoundResult>(getDeletedTaskResult);
-            
         }
 
         ///Test Delete with invalid Id
-        [Fact] 
-        public async void TasksController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
-        { 
+        [Fact]
+        public void TasksController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
+        {
             //Arrange
-            int id = 2500; 
+            int id = 2500;
 
             //Act
-            var result = await controller.Delete(id);
+            var result = controller.Delete(id);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
         }
-
     }
 }

@@ -1,22 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public interface ISkillRepository 
-    { 
-        Task<Skill> Create(Skill s); 
+    public interface ISkillRepository
+    {
+        Skill Create(Skill s);
 
-        Task<IEnumerable<Skill>> RetrieveAll();
+        IEnumerable<Skill> RetrieveAll();
 
-        Task<Skill> Retrieve(int id);
+        Skill Retrieve(int id);
 
-        Task<Skill> Update (int id, Skill s);
+        Skill Update(Skill s);
 
-        Task<bool> Delete(int id);
-
+        bool Delete(int id);
     }
 }

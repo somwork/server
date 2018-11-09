@@ -1,4 +1,4 @@
-﻿namespace TaskHouseApi.Model.ServiceModel
+namespace TaskHouseApi.Model.ServiceModel
 {
     // Model use to send username and password
     // from client
