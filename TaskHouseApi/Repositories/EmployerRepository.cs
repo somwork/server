@@ -35,6 +35,7 @@ namespace TaskHouseApi.Repositories
         {
             return db.Employers
                 .Include(user => user.RefreshTokens)
+                .Include(user => user.Tasks)
                 .ToList<Employer>();
         }
 
@@ -42,6 +43,7 @@ namespace TaskHouseApi.Repositories
         {
             return db.Employers
                 .Include(user => user.RefreshTokens)
+                .Include(user => user.Tasks)
                 .Where(user => user.Id == Id)
                 .SingleOrDefault();
         }

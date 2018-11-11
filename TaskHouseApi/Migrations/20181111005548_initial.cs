@@ -145,7 +145,7 @@ namespace TaskHouseApi.Migrations
                     Deadline = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Urgency = table.Column<string>(nullable: true),
-                    EmployerId = table.Column<int>(nullable: true)
+                    EmployerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,7 +155,7 @@ namespace TaskHouseApi.Migrations
                         column: x => x.EmployerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

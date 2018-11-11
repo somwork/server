@@ -24,6 +24,9 @@ namespace TaskHouseApi.DatabaseContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");
+
+
+            Seed.SeedData(modelBuilder);
         }
     }
 }
