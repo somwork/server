@@ -14,10 +14,10 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class WorkersController : Controller
     {
-        private IWorkerRepository repo;
+        private IUserRepository repo;
         private IPasswordService passwordService;
 
-        public WorkersController(IWorkerRepository repo, IPasswordService passwordService)
+        public WorkersController(IUserRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
             this.passwordService = passwordService;
@@ -26,7 +26,7 @@ namespace TaskHouseApi.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Worker w = repo.Retrieve(Id);
+            Worker w = repo.Retrieve(Id) as Worker;
             if (w == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -49,7 +49,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
 
-            Worker existingWorker = (repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
+            Worker existingWorker = (repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username) as Worker;
 
             if (existingWorker != null)
             {
@@ -61,7 +61,7 @@ namespace TaskHouseApi.Controllers
             worker.Salt = hashResult.saltText;
             worker.Password = hashResult.saltechashedPassword;
 
-            Worker added = repo.Create(worker);
+            Worker added = repo.Create(worker) as Worker;
 
             return new ObjectResult(added);
         }
@@ -74,12 +74,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
-            Worker existing = repo.Retrieve(w.Id);
-
-            if (existing == null)
+            if (!repo.isInDatabase(w.Id))
             {
-                return NotFound(); // 404 Resource not found
+                return NotFound();
             }
+
             repo.Update(w);
             return new NoContentResult();
         }

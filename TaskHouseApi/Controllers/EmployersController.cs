@@ -14,10 +14,10 @@ namespace TaskHouseApi.Controllers
     {
         private IPasswordService passwordService;
 
-        private IEmployerRepository repo;
+        private IUserRepository repo;
 
         // constructor injects registered repository
-        public EmployersController(IEmployerRepository repo, IPasswordService passwordService)
+        public EmployersController(IUserRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
             this.passwordService = passwordService;
@@ -27,7 +27,7 @@ namespace TaskHouseApi.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Employer u = repo.Retrieve(Id);
+            Employer u = repo.Retrieve(Id) as Employer;
             if (u == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -52,7 +52,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request
             }
 
-            Employer existingEmployer = (repo.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
+            Employer existingEmployer = (repo.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username) as Employer;
 
             if (existingEmployer != null)
             {
@@ -64,7 +64,7 @@ namespace TaskHouseApi.Controllers
             employer.Salt = hashResult.saltText;
             employer.Password = hashResult.saltechashedPassword;
 
-            Employer added = repo.Create(employer);
+            Employer added = repo.Create(employer) as Employer;
 
             return new ObjectResult(added);
         }
@@ -78,10 +78,9 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
-            var existing = repo.Retrieve(e.Id);
-            if (existing == null)
+            if (!repo.isInDatabase(e.Id))
             {
-                return NotFound(); // 404 Resource not found
+                return NotFound();
             }
 
             repo.Update(e);

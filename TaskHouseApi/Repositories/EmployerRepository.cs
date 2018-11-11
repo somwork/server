@@ -6,32 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using TaskHouseApi.DatabaseContext;
 using TaskHouseApi.Model;
+using TaskHouseApi.Model.ServiceModel;
 
 namespace TaskHouseApi.Repositories
 {
-    public class EmployerRepository : IEmployerRepository
+    public class EmployerRepository : UserRepository
     {
-        //reference to database context
-        private PostgresContext db;
 
-        public EmployerRepository(PostgresContext db)
-        {
-            this.db = db;
-        }
+        public EmployerRepository(PostgresContext db) : base(db) { }
 
-        public Employer Create(Employer e)
-        {
-            db.Employers.Add(e);
-            int affected = db.SaveChanges();
-
-            if (affected != 1)
-            {
-                return null;
-            }
-            return e;
-        }
-
-        public IEnumerable<Employer> RetrieveAll()
+        public override IEnumerable<User> RetrieveAll()
         {
             return db.Employers
                 .Include(user => user.RefreshTokens)
@@ -39,37 +23,13 @@ namespace TaskHouseApi.Repositories
                 .ToList<Employer>();
         }
 
-        public Employer Retrieve(int Id)
+        public override User Retrieve(int Id)
         {
             return db.Employers
                 .Include(user => user.RefreshTokens)
                 .Include(user => user.Tasks)
                 .Where(user => user.Id == Id)
                 .SingleOrDefault();
-        }
-
-        public Employer Update(Employer e)
-        {
-            db.Employers.Update(e);
-            int affected = db.SaveChanges();
-            if (affected <= 1)
-            {
-                return null;
-            }
-            return e;
-        }
-
-        public bool Delete(int Id)
-        {
-            Employer e = db.Employers.Find(Id);
-            db.Employers.Remove(e);
-            int affected = db.SaveChanges();
-
-            if (affected != 1)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

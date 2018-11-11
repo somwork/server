@@ -10,63 +10,69 @@ using TaskHouseApi.Repositories;
 
 namespace TaskHouseApi.Repositories
 {
-    public class WorkerRepository : IWorkerRepository
+    public class WorkerRepository : UserRepository
     {
-        private PostgresContext db;
-
-        public WorkerRepository(PostgresContext db)
+        public WorkerRepository(PostgresContext db) : base(db)
         {
-            this.db = db;
         }
-        public Worker Create(Worker w)
-        {
-            db.Workers.Add(w);
-            int affected = db.SaveChanges();
+        // public Worker Create(Worker w)
+        // {
+        //     db.Workers.Add(w);
+        //     int affected = db.SaveChanges();
 
-            if (affected != 1)
-            {
-                return null;
-            }
-            return w;
-        }
+        //     if (affected != 1)
+        //     {
+        //         return null;
+        //     }
+        //     return w;
+        // }
 
-        public IEnumerable<Worker> RetrieveAll()
-        {
-            return db.Workers
-                .Include(user => user.RefreshTokens)
-                .ToList<Worker>();
-        }
+        // public IEnumerable<Worker> RetrieveAll()
+        // {
+        //     return db.Workers
+        //         .Include(user => user.RefreshTokens)
+        //         .ToList<Worker>();
+        // }
 
-        public Worker Retrieve(int Id)
-        {
-            return db.Workers
-                .Include(user => user.RefreshTokens)
-                .Where(user => user.Id == Id)
-                .SingleOrDefault();
-        }
+        // public Worker Retrieve(int Id)
+        // {
+        //     return db.Workers
+        //         .Include(user => user.RefreshTokens)
+        //         .Where(user => user.Id == Id)
+        //         .SingleOrDefault();
+        // }
 
-        public Worker Update(Worker u)
-        {
-            db.Workers.Update(u);
-            int affected = db.SaveChanges();
-            if (affected <= 1)
-            {
-                return null;
-            }
-            return u;
-        }
+        // public Worker Update(Worker u)
+        // {
+        //     db.Workers.Update(u);
+        //     int affected = db.SaveChanges();
+        //     if (affected <= 1)
+        //     {
+        //         return null;
+        //     }
+        //     return u;
+        // }
 
-        public bool Delete(int Id)
-        {
-            Worker u = db.Workers.Find(Id);
-            db.Workers.Remove(u);
-            int affected = db.SaveChanges();
+        // public bool Delete(int Id)
+        // {
+        //     Worker u = db.Workers.Find(Id);
+        //     db.Workers.Remove(u);
+        //     int affected = db.SaveChanges();
 
-            if (affected != 1)
-            {
-                return false;
-            }
-            return true;
-        }
+        //     if (affected != 1)
+        //     {
+        //         return false;
+        //     }
+        //     return true;
+        // }
+
+        // public bool isInDatabase(int Id)
+        // {
+        //     if (!db.Workers.Any(o => o.Id == Id))
+        //     {
+        //         return false;
+        //     }
+        //     return true;
+        // }
     }
 }

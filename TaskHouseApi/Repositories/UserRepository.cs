@@ -9,11 +9,62 @@ namespace TaskHouseApi.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private PostgresContext db;
+        protected internal PostgresContext db;
 
         public UserRepository(PostgresContext db)
         {
             this.db = db;
+        }
+
+        public User Create(User u)
+        {
+            db.Users.Add(u);
+            int affected = db.SaveChanges();
+
+            if (affected != 1)
+            {
+                return null;
+            }
+            return u;
+        }
+
+        public virtual IEnumerable<User> RetrieveAll()
+        {
+            return db.Users
+                .Include(user => user.RefreshTokens)
+                .ToList();
+        }
+
+        public virtual User Retrieve(int Id)
+        {
+            return db.Workers
+                .Include(user => user.RefreshTokens)
+                .Where(user => user.Id == Id)
+                .SingleOrDefault();
+        }
+
+        public User Update(User user)
+        {
+            db.Users.Update(user);
+            int affected = db.SaveChanges();
+            if (affected <= 1)
+            {
+                return null;
+            }
+            return user;
+        }
+
+        public bool Delete(int Id)
+        {
+            User u = db.Users.Find(Id);
+            db.Users.Remove(u);
+            int affected = db.SaveChanges();
+
+            if (affected != 1)
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool DeleteRefrechToken(RefreshToken refreshToken)
@@ -27,30 +78,13 @@ namespace TaskHouseApi.Repositories
             return true;
         }
 
-        public User Retrieve(int Id)
+        public bool isInDatabase(int Id)
         {
-            return db.Workers
-                .Include(user => user.RefreshTokens)
-                .Where(user => user.Id == Id)
-                .SingleOrDefault();
-        }
-
-        public IEnumerable<User> RetrieveAll()
-        {
-            return db.Users
-                .Include(user => user.RefreshTokens)
-                .ToList();
-        }
-
-        public User Update(User user)
-        {
-            db.Users.Update(user);
-            int affected = db.SaveChanges();
-            if (affected <= 1)
+            if (!db.Users.Any(o => o.Id == Id))
             {
-                return null;
+                return false;
             }
-            return user;
+            return true;
         }
     }
 }
