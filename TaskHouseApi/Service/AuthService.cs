@@ -22,7 +22,7 @@ namespace TaskHouseApi.Service
             User potentialUser = (userRepository.RetrieveAll())
                 .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
 
-            if (potentialUser == null || !isAuthenticated(loginModel, potentialUser))
+            if (potentialUser == null || !isPasswordCorrect(loginModel, potentialUser))
             {
                 return null;
             }
@@ -30,18 +30,11 @@ namespace TaskHouseApi.Service
             return potentialUser;
         }
 
-        private bool isAuthenticated(LoginModel loginModel, User potentialUser)
+        private bool isPasswordCorrect(LoginModel loginModel, User potentialUser)
         {
-            bool isPasswordGood = passwordService
+            return passwordService
                 .GenerateSaltedHashedPassword(loginModel.Password, potentialUser.Salt)
                 .Equals(potentialUser.Password);
-
-            if (!isPasswordGood)
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

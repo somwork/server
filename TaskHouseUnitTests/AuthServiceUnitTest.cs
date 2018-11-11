@@ -20,7 +20,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void AuthService_Authenticate_WhenGivenVaildLoginModelEmployer()
+        public void AuthService_Authenticate_ReturnEmployerAllianceWithLoginModel_WhenGivenVaildLoginModelEmployer()
         {
             LoginModel lm = new LoginModel { Username = "1234", Password = "1234" };
 
@@ -31,7 +31,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void AuthService_Authenticate_WhenGivenVaildLoginModelWorker()
+        public void AuthService_Authenticate_ReturnWokerAllianceWithLoginModel_WhenGivenVaildLoginModelWorker()
         {
             LoginModel lm = new LoginModel { Username = "w1", Password = "1234" };
 
@@ -42,7 +42,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void AuthService_Authenticate_WhenGivenInvalidUsernameInLoginModel()
+        public void AuthService_Authenticate_ReturnsNull_WhenGivenInvalidUsernameInLoginModel()
         {
             LoginModel lm = new LoginModel { Username = "----", Password = "1234" };
 
@@ -52,7 +52,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void AuthService_Authenticate_WhenGivenInvalidPasswordInLoginModel()
+        public void AuthService_Authenticate_ReturnsNull_WhenGivenInvalidPasswordInLoginModel()
         {
             LoginModel lm = new LoginModel { Username = "1234", Password = "----" };
 
@@ -62,7 +62,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void AuthService_Authenticate_WhenGivenInvalidPasswordAndUsernameInLoginModel()
+        public void AuthService_Authenticate_ReturnsNull_WhenGivenInvalidPasswordAndUsernameInLoginModel()
         {
             LoginModel lm = new LoginModel { Username = "----", Password = "----" };
 

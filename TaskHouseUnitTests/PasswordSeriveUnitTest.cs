@@ -13,7 +13,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void PasswordService_GenerateSaltedHashedPassword_WhenGivenVaildInput()
+        public void PasswordService_GenerateSaltedHashedPassword_ReturnCorrectSaltAndHashedPassword_WhenGivenVaildInput()
         {
             string password = "1234";
             string salt = "upYKQSsrlub5JAID61/6pA==";
@@ -24,7 +24,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void PasswordService_GenerateSaltedHashedPassword_WhenGivenInvaildPassword()
+        public void PasswordService_GenerateSaltedHashedPassword_ReturnANotMatchingSaltAndHashedPassword_WhenGivenInvaildPassword()
         {
             string password = "12345";
             string salt = "upYKQSsrlub5JAID61/6pA==";
@@ -35,7 +35,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void PasswordService_GenerateSaltedHashedPassword_WhenGivenInvaildSalt()
+        public void PasswordService_GenerateSaltedHashedPassword_ReturnANotMatchingSaltAndHashedPassword_WhenGivenInvaildSalt()
         {
             string password = "1234";
             string salt = "TupYKQSsrlub5JAID61/6pA==";
@@ -46,7 +46,7 @@ namespace TaskHouseUnitTests
         }
 
         [Fact]
-        public void PasswordService_GenerateSaltedHashedPassword_WhenGivenInvaildSaltAndPassword()
+        public void PasswordService_GenerateSaltedHashedPassword_ReturnANotMatchingSaltAndHashedPassword_WhenGivenInvaildSaltAndPassword()
         {
             string password = "41234";
             string salt = "TupYKQSsrlub5JAID61/6pA==";
