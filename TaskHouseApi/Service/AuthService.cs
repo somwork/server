@@ -22,7 +22,7 @@ namespace TaskHouseApi.Service
             User potentialUser = (userRepository.RetrieveAll())
                 .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
 
-            if (potentialUser == null)
+            if (potentialUser == null || !isAuthenticated(loginModel, potentialUser))
             {
                 return null;
             }

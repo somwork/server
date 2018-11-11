@@ -14,7 +14,7 @@ namespace TaskHouseUnitTests
     public class WorkersControllerUnitTests
     {
         WorkersController controller;
-        IWorkerRepository repo;
+        IUserRepository repo;
         IPasswordService passwordService = new PasswordService();
 
         public WorkersControllerUnitTests()
@@ -26,10 +26,10 @@ namespace TaskHouseUnitTests
         [Fact]
         public void WorkerController_Get_ReturnsObjectResult_WhenGivenValidId()
         {
-            int Id = 1;
+            int Id = 4;
             var result = controller.Get(Id);
             var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
+            var resultObject = resultObjectResult.Value as Worker;
 
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(Id, resultObject.Id);
@@ -50,7 +50,7 @@ namespace TaskHouseUnitTests
         {
             var result = controller.Get();
             var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as IEnumerable<Worker>;
+            var resultObject = resultObjectResult.Value as IEnumerable<User>;
 
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(3, resultObject.Count());

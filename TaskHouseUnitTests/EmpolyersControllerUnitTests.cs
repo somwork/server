@@ -14,7 +14,7 @@ namespace TaskHouseUnitTests
     public class EmpolyersControllerUnitTests
     {
         EmployersController controller;
-        IEmployerRepository repo;
+        IUserRepository repo;
         IPasswordService passwordService = new PasswordService();
 
         public EmpolyersControllerUnitTests()
@@ -29,7 +29,7 @@ namespace TaskHouseUnitTests
         {
             var result = controller.Get();
             var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as IEnumerable<Employer>;
+            var resultObject = resultObjectResult.Value as IEnumerable<User>;
 
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(3, resultObject.Count());
@@ -82,8 +82,6 @@ namespace TaskHouseUnitTests
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
-
-
         }
 
         /// Test Post with valid Employer
@@ -105,10 +103,6 @@ namespace TaskHouseUnitTests
             Assert.Equal(employer.Id, employer.Id);
 
         }
-
-
-
-
 
         ///Test Delete returns NoContentResult with valid Id
         [Fact]

@@ -20,14 +20,12 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class TokenController : Controller
     {
-        private IConfiguration config;
         private ITokenService tokenService;
         private IAuthService authService;
         private IUserRepository userRepository;
 
-        public TokenController(IConfiguration config, ITokenService tokenService, IAuthService authService, IUserRepository userRepository)
+        public TokenController(ITokenService tokenService, IAuthService authService, IUserRepository userRepository)
         {
-            this.config = config;
             this.tokenService = tokenService;
             this.authService = authService;
             this.userRepository = userRepository;
@@ -43,19 +41,12 @@ namespace TaskHouseApi.Controllers
                 return Unauthorized();
             }
 
-            // Finds the role of the user
-            string role = findRoleName(user);
-            if (role == null)
-            {
-                return StatusCode(500);
-            }
-
             // Sets the claims for the token
             var usersClaims = new[]
             {
                 // User Id
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, user.GetType().ToString())
             };
 
             string tokenString = tokenService.GenerateAccessToken(usersClaims);
@@ -146,21 +137,6 @@ namespace TaskHouseApi.Controllers
                 accessToken = newJwtToken,
                 refreshToken = newRefreshToken
             });
-        }
-
-        private string findRoleName(User user)
-        {
-            if (user is Worker)
-            {
-                return nameof(Worker);
-            }
-
-            if (user is Employer)
-            {
-                return nameof(Employer);
-            }
-
-            return null;
         }
     }
 }
