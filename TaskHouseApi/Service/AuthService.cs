@@ -8,75 +8,26 @@ namespace TaskHouseApi.Service
 {
     public class AuthService : IAuthService
     {
-        private IWorkerRepository workerRepository;
-        private IEmployerRepository employerRepository;
         private IPasswordService passwordService;
-        private PostgresContext db;
+        private IUserRepository userRepository;
 
-        public AuthService(IPasswordService passwordService, IWorkerRepository workerRepository, IEmployerRepository employerRepository, PostgresContext db)
+        public AuthService(IPasswordService passwordService, IUserRepository userRepository)
         {
-            this.workerRepository = workerRepository;
-            this.employerRepository = employerRepository;
             this.passwordService = passwordService;
-            this.db = db;
-        }
-
-        public bool DeleteRefrechToken(RefreshToken refreshToken)
-        {
-            db.Remove(refreshToken);
-            db.SaveChanges();
-            return true;
-        }
-
-        public User Retrieve(int Id)
-        {
-            Worker potentialWorker = workerRepository.Retrieve(Id);
-            if (potentialWorker != null)
-            {
-                return potentialWorker;
-            }
-
-            Employer potentialEmployer = employerRepository.Retrieve(Id);
-            if (potentialEmployer != null)
-            {
-                return potentialEmployer;
-            }
-
-            return null;
-        }
-
-        public User Update(User user)
-        {
-            if (user is Worker)
-            {
-                return workerRepository.Update((Worker)user);
-            }
-
-            if (user is Employer)
-            {
-                return employerRepository.Update((Employer)user);
-            }
-
-            return null;
+            this.userRepository = userRepository;
         }
 
         public User Authenticate(LoginModel loginModel)
         {
-            Worker potentialWorker = isWorker(loginModel);
+            User potentialUser = (userRepository.RetrieveAll())
+                .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
 
-            if (potentialWorker != null && isAuthenticated(loginModel, potentialWorker))
+            if (potentialUser == null)
             {
-                return potentialWorker;
+                return null;
             }
 
-            Employer potentialEmployer = isEmployer(loginModel);
-
-            if (potentialEmployer != null && isAuthenticated(loginModel, potentialEmployer))
-            {
-                return potentialEmployer;
-            }
-
-            return null;
+            return potentialUser;
         }
 
         private bool isAuthenticated(LoginModel loginModel, User potentialUser)
@@ -91,18 +42,6 @@ namespace TaskHouseApi.Service
             }
 
             return true;
-        }
-
-        private Worker isWorker(LoginModel loginModel)
-        {
-            return (workerRepository.RetrieveAll())
-                .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
-        }
-
-        private Employer isEmployer(LoginModel loginModel)
-        {
-            return (employerRepository.RetrieveAll())
-                .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
         }
     }
 }

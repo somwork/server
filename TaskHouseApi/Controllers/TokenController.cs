@@ -23,12 +23,14 @@ namespace TaskHouseApi.Controllers
         private IConfiguration config;
         private ITokenService tokenService;
         private IAuthService authService;
+        private IUserRepository userRepository;
 
-        public TokenController(IConfiguration config, ITokenService tokenService, IAuthService authService)
+        public TokenController(IConfiguration config, ITokenService tokenService, IAuthService authService, IUserRepository userRepository)
         {
             this.config = config;
             this.tokenService = tokenService;
             this.authService = authService;
+            this.userRepository = userRepository;
         }
 
         [HttpPost]
@@ -64,7 +66,7 @@ namespace TaskHouseApi.Controllers
                 new RefreshToken { Token = refreshToken }
             );
 
-            var result = authService.Update(user);
+            var result = userRepository.Update(user);
             if (result == null)
             {
                 return StatusCode(500);
@@ -92,7 +94,7 @@ namespace TaskHouseApi.Controllers
             int Id;
             Int32.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Id);
 
-            User user = authService.Retrieve(Id);
+            User user = userRepository.Retrieve(Id);
 
             // Checks that the user exists and has a refresh token
             if (user == null || user.RefreshTokens.Count() == 0)
@@ -121,7 +123,7 @@ namespace TaskHouseApi.Controllers
             var newRefreshToken = tokenService.GenerateRefreshToken();
 
             // Deletes the old refresh token from database
-            bool res = authService.DeleteRefrechToken(storedRefreshToken);
+            bool res = userRepository.DeleteRefrechToken(storedRefreshToken);
             if (res == false)
             {
                 return StatusCode(500);
@@ -133,7 +135,7 @@ namespace TaskHouseApi.Controllers
                 new RefreshToken { Token = newRefreshToken }
             );
 
-            var result = authService.Update(user);
+            var result = userRepository.Update(user);
             if (result == null)
             {
                 return StatusCode(500);
