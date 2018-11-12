@@ -10,7 +10,7 @@ using TaskHouseApi.Model.ServiceModel;
 
 namespace TaskHouseApi.Repositories
 {
-    public class EmployerRepository : UserRepository
+    public class EmployerRepository : UserRepository, IEmployerRepository
     {
 
         public EmployerRepository(PostgresContext db) : base(db) { }

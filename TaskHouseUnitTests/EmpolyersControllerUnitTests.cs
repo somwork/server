@@ -14,7 +14,7 @@ namespace TaskHouseUnitTests
     public class EmpolyersControllerUnitTests
     {
         EmployersController controller;
-        IUserRepository repo;
+        IEmployerRepository repo;
         IPasswordService passwordService = new PasswordService();
 
         public EmpolyersControllerUnitTests()

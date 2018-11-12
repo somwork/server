@@ -87,11 +87,11 @@ namespace TaskHouseApi
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IUserRepository, WorkerRepository>();
+            services.AddScoped<IWorkerRepository, WorkerRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
-            services.AddScoped<IUserRepository, EmployerRepository>();
+            services.AddScoped<IEmployerRepository, EmployerRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

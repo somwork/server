@@ -14,10 +14,10 @@ namespace TaskHouseApi.Controllers
     {
         private IPasswordService passwordService;
 
-        private IUserRepository repo;
+        private IEmployerRepository repo;
 
         // constructor injects registered repository
-        public EmployersController(IUserRepository repo, IPasswordService passwordService)
+        public EmployersController(IEmployerRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
             this.passwordService = passwordService;

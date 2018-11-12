@@ -14,10 +14,10 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class WorkersController : Controller
     {
-        private IUserRepository repo;
+        private IWorkerRepository repo;
         private IPasswordService passwordService;
 
-        public WorkersController(IUserRepository repo, IPasswordService passwordService)
+        public WorkersController(IWorkerRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
             this.passwordService = passwordService;

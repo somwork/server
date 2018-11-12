@@ -11,7 +11,7 @@ using TaskHouseApi.Model.ServiceModel;
 
 namespace TaskHouseUnitTests
 {
-    public class FakeEmpolyersRepository : FakeUserRepository
+    public class FakeEmpolyersRepository : FakeUserRepository, IEmployerRepository
     {
         public override IEnumerable<User> RetrieveAll()
         {

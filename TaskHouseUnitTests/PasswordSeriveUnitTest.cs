@@ -17,10 +17,11 @@ namespace TaskHouseUnitTests
         {
             string password = "1234";
             string salt = "upYKQSsrlub5JAID61/6pA==";
+            string correctSaltedAndHashedAndBase64Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=";
 
             var result = passwordService.GenerateSaltedHashedPassword(password, salt);
 
-            Assert.Equal("+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", result);
+            Assert.Equal(correctSaltedAndHashedAndBase64Password, result);
         }
 
         [Fact]
@@ -28,10 +29,11 @@ namespace TaskHouseUnitTests
         {
             string password = "12345";
             string salt = "upYKQSsrlub5JAID61/6pA==";
+            string correctSaltedAndHashedAndBase64Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=";
 
             var result = passwordService.GenerateSaltedHashedPassword(password, salt);
 
-            Assert.NotEqual("+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", result);
+            Assert.NotEqual(correctSaltedAndHashedAndBase64Password, result);
         }
 
         [Fact]
@@ -39,10 +41,11 @@ namespace TaskHouseUnitTests
         {
             string password = "1234";
             string salt = "TupYKQSsrlub5JAID61/6pA==";
+            string correctSaltedAndHashedAndBase64Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=";
 
             var result = passwordService.GenerateSaltedHashedPassword(password, salt);
 
-            Assert.NotEqual("+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", result);
+            Assert.NotEqual(correctSaltedAndHashedAndBase64Password, result);
         }
 
         [Fact]
@@ -50,10 +53,11 @@ namespace TaskHouseUnitTests
         {
             string password = "41234";
             string salt = "TupYKQSsrlub5JAID61/6pA==";
+            string correctSaltedAndHashedAndBase64Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=";
 
             var result = passwordService.GenerateSaltedHashedPassword(password, salt);
 
-            Assert.NotEqual("+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", result);
+            Assert.NotEqual(correctSaltedAndHashedAndBase64Password, result);
         }
     }
 }

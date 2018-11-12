@@ -10,7 +10,7 @@ using TaskHouseApi.Repositories;
 
 namespace TaskHouseApi.Repositories
 {
-    public class WorkerRepository : UserRepository
+    public class WorkerRepository : UserRepository, IWorkerRepository
     {
         public WorkerRepository(PostgresContext db) : base(db)
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Data;
 namespace TaskHouseUnitTests
 {
-    public class FakeWorkerRepository : FakeUserRepository
+    public class FakeWorkerRepository : FakeUserRepository, IWorkerRepository
     {
         public override IEnumerable<User> RetrieveAll()
         {
