@@ -23,16 +23,25 @@ namespace TaskHouseUnitTests
             controller = new TasksController(repo);
         }
 
+        ///Adds a httpContext to a TasksController
+        ///and adds a User with two claims:
+        ///1: NameIdentifier, the user Id
+        ///2: Role, the user role/type
         private TasksController login(TasksController con)
         {
             con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
             con.ControllerContext.HttpContext = new DefaultHttpContext();
-
+            
+            //Adds a User with claim to the current context
             con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
+                //Adds a claim for nameIdentifier, user Id
                 new Claim(ClaimTypes.NameIdentifier, "1"),
+                //Adds a claim for role, user role/tupe
                 new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Employer")
             }));
-
+            
+            //Returns the controller
             return con;
         }
 
