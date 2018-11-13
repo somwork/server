@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
+using System.Security.Claims;
 
 namespace TaskHouseApi.Controllers
 {
@@ -41,7 +42,7 @@ namespace TaskHouseApi.Controllers
         }
 
         // POST: api/tasks
-        [AllowAnonymous]
+        [Authorize(Roles = "TaskHouseApi.Model.Employer")]
         [HttpPost]
         public IActionResult Create([FromBody] Task task)
         {
@@ -49,6 +50,13 @@ namespace TaskHouseApi.Controllers
             {
                 return BadRequest(new { error = "CreateTask: task is null" }); //400 bad request
             }
+
+            int currentUserId = Int32.Parse(HttpContext.User.Claims.SingleOrDefault
+            (
+                c => c.Type == ClaimTypes.NameIdentifier).Value
+            );
+
+            task.EmployerId = currentUserId;
 
             Task added = repo.Create(task);
 
