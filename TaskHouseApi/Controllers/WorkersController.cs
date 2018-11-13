@@ -1,30 +1,32 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TaskHouseApi.Model;
+using TaskHouseApi.Repositories;
+using TaskHouseApi.Service;
+
 namespace TaskHouseApi.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using TaskHouseApi.Model;
-    using TaskHouseApi.Repositories;
-    using TaskHouseApi.Security;
-
     [Authorize]
     [Route("api/[controller]")]
     public class WorkersController : Controller
     {
         private IWorkerRepository repo;
+        private IPasswordService passwordService;
 
-        public WorkersController(IWorkerRepository repo)
+        public WorkersController(IWorkerRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
+            this.passwordService = passwordService;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int Id)
+        public IActionResult Get(int Id)
         {
-            Worker w = await repo.Retrieve(Id);
+            Worker w = repo.Retrieve(Id) as Worker;
             if (w == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -33,72 +35,71 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Worker>> Get()
+        public IActionResult Get()
         {
-            IEnumerable<Worker> wl = await repo.RetrieveAll();
-            return wl;
+            return new ObjectResult(repo.RetrieveAll());
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]Worker worker)
+        public IActionResult Create([FromBody]Worker worker)
         {
             if (worker == null)
             {
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
 
-            Worker existingWorker = (await repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
+            Worker existingWorker = (repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username) as Worker;
 
-            if (existingWorker != null) {
+            if (existingWorker != null)
+            {
                 return BadRequest(new { error = "Username in worker" }); // 400 Bad request
             }
 
-            var hashResult = SecurityHandler.GenerateNewPassword(worker);
+            var hashResult = passwordService.GenerateNewPassword(worker);
 
             worker.Salt = hashResult.saltText;
             worker.Password = hashResult.saltechashedPassword;
 
-            Worker added = await repo.Create(worker);
+            Worker added = repo.Create(worker) as Worker;
 
             return new ObjectResult(added);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] Worker w)
+        public IActionResult Update([FromBody] Worker w)
         {
-            if (w == null || w.Id != Id)
+            if (w == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Worker existing = await repo.Retrieve(Id);
-
-            if (existing == null)
+            if (!repo.isInDatabase(w.Id))
             {
-                return NotFound(); // 404 Resource not found
+                return NotFound();
             }
-            await repo.Update(Id, w);
+
+            repo.Update(w);
             return new NoContentResult();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int Id)
+        public IActionResult Delete(int Id)
         {
-            var existing = await repo.Retrieve(Id);
+            var existing = repo.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            bool deleted = await repo.Delete(Id);
+            bool deleted = repo.Delete(Id);
 
-            if (deleted==false)
+            if (deleted == false)
             {
                 return BadRequest();
             }
 
-            return new  NoContentResult();
+            return new NoContentResult();
         }
     }
 }

@@ -1,76 +1,19 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TaskHouseApi.DatabaseContext;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
 
 namespace TaskHouseApi.Repositories
 {
-    public class WorkerRepository : IWorkerRepository
+    public class WorkerRepository : UserRepository, IWorkerRepository
     {
-        private PostgresContext db;
-
-        public WorkerRepository(PostgresContext db){
-            this.db=db;
-        }
-
-        public async Task<Worker> Create(Worker w)
+        public WorkerRepository(PostgresContext db) : base(db)
         {
-            await db.Workers.AddAsync(w);
-            int affected = await db.SaveChangesAsync();
-
-            if (affected != 1)
-            {
-                return null;
-            }
-            return w;
         }
-
-        public async Task<IEnumerable<Worker>> RetrieveAll()
-        {
-            var WorkerList = await System.Threading.Tasks.Task.Run<IEnumerable<Worker>>(
-                () => db.Workers.ToList<Worker>());
-            return WorkerList;
-        }
-
-        public async Task<Worker> Retrieve(int Id)
-        {
-            return await System.Threading.Tasks.Task.Run(()=>db.Workers.Find(Id));
-        }
-
-        public async Task<Worker> Update(int Id, Worker u)
-        {
-            await System.Threading.Tasks.Task.Run(()=>{
-                db.Workers.Update(u);
-                int affected = db.SaveChanges();
-                if (affected != 1)
-                {
-                    return null;
-                }
-                return u;
-            });
-            return null;
-        }
-
-        public async Task<bool> Delete(int Id)
-        {
-            return await System.Threading.Tasks.Task.Run(() =>
-            {
-                Worker u = db.Workers.Find(Id);
-                db.Workers.Remove(u);
-                int affected = db.SaveChanges();
-
-                if (affected != 1)
-                {
-                    return false;
-                }
-                return true;
-            });
-        }
-
     }
 }

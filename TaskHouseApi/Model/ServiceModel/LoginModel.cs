@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TaskHouseApi.Model
+namespace TaskHouseApi.Model.ServiceModel
 {
+    // Model use to send username and password
+    // from client
     public class LoginModel
     {
         public string Username { get; set; }

@@ -1,22 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TaskHouseApi.Model;
 
 namespace TaskHouseApi.Repositories
 {
-    public interface ITaskRepository 
-    { 
-        Task<TaskHouseApi.Model.Task> Create(TaskHouseApi.Model.Task t); 
+    public interface ITaskRepository
+    {
+        Task Create(Task t);
 
-        Task<IEnumerable<TaskHouseApi.Model.Task>> RetrieveAll();
+        IEnumerable<Task> RetrieveAll();
 
-        Task<TaskHouseApi.Model.Task> Retrieve(int id);
+        Task Retrieve(int id);
 
-        Task<TaskHouseApi.Model.Task> Update (int id, TaskHouseApi.Model.Task t);
+        Task Update(Task t);
 
-        Task<bool> Delete(int id);
-
+        bool Delete(int id);
     }
 }

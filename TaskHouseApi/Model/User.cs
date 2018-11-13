@@ -1,9 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using TaskHouseApi.Model.ServiceModel;
 
 namespace TaskHouseApi.Model
 {
-    public class User
+    public abstract class User
     {
         public int Id { get; set; }
         public string Username { get; set; }
@@ -12,9 +14,12 @@ namespace TaskHouseApi.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Salt { get; set; }
+        public List<RefreshToken> RefreshTokens { get; set; }
+        public string Discriminator { get; set; }
 
         public User()
         {
+            RefreshTokens = new List<RefreshToken>();
         }
     }
 }

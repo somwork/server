@@ -47,36 +47,36 @@ namespace TaskHouseUnitTests
             };
         }
 
-        public async Task<Location> Create(Location l)
+        public Location Create(Location l)
         {
             locationCache.Add(l);
             return l;
         }
 
-        public async Task<Location> Retrieve(int Id)
+        public Location Retrieve(int Id)
         {
             return locationCache.Where(l => l.Id == Id).SingleOrDefault();
         }
 
-        public async Task<IEnumerable<Location> > RetrieveAll()
+        public IEnumerable<Location> RetrieveAll()
         {
             return locationCache;
         }
 
-        public async Task<Location> Update(int Id, Location location)
+        public Location Update(Location location)
         {
-            Location old = locationCache.Where(l => l.Id == Id).SingleOrDefault();
+            Location old = Retrieve(location.Id);
             int index = locationCache.IndexOf(old);
 
             locationCache[index] = location;
             return location;
         }
 
-        public async Task<bool> Delete(int Id)
+        public bool Delete(int Id)
         {
             Location location = locationCache.Where(l => l.Id == Id).SingleOrDefault();
 
-            if(location == null)
+            if (location == null)
             {
                 return false;
             }

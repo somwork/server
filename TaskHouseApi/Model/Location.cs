@@ -1,5 +1,3 @@
-using System;
-
 namespace TaskHouseApi.Model
 {
     public class Location
@@ -14,8 +12,7 @@ namespace TaskHouseApi.Model
         public Location()
         {
 
-        } 
-
         }
     }
+}
 

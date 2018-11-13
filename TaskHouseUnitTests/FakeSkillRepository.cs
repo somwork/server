@@ -5,7 +5,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace TaskHouseUnitTests
 {
@@ -36,44 +35,42 @@ namespace TaskHouseUnitTests
             };
         }
 
-        public async Task<Skill> Create(Skill s)
+        public Skill Create(Skill s)
         {
             skillCache.Add(s);
             return s;
         }
 
-        public async Task<IEnumerable<Skill>> RetrieveAll()
+        public IEnumerable<Skill> RetrieveAll()
         {
             return skillCache;
         }
 
-        public async Task<Skill> Retrieve(int id)
+        public Skill Retrieve(int id)
         {
             return skillCache.Where(s => s.Id == id).SingleOrDefault();
         }
 
-
-        public async Task<Skill> Update(int Id, Skill s)
+        public Skill Update(Skill s)
         {
-            Skill old = skillCache.Where(skill => skill.Id == Id).SingleOrDefault();
+            Skill old = Retrieve(s.Id);
             int index = skillCache.IndexOf(old);
 
             skillCache[index] = s;
             return s;
-
         }
 
-        public async Task<bool> Delete(int Id)
+        public bool Delete(int Id)
         {
-            Skill skill = skillCache.Where(s => s.Id == Id).SingleOrDefault();
+            Skill temp = skillCache.Find(s => s.Id == Id);
+            skillCache.Remove(temp);
+            temp = skillCache.Find(s => s.Id == Id);
 
-            if (skill == null) return false;
-
-            skillCache.Remove(skill);
-
+            if (temp != null)
+            {
+                return false;
+            }
             return true;
-
         }
-
     }
 }

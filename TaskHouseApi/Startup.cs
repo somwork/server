@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,12 +16,15 @@ using TaskHouseApi.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TaskHouseApi.Service;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 
 namespace TaskHouseApi
 {
     public class Startup
     {
+        public static bool DEV_MODE_ON { get; private set; } = true;
 
         public Startup(IConfiguration configuration)
         {
@@ -33,32 +36,64 @@ namespace TaskHouseApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<PostgresContext>(options => options.UseNpgsql(
-                "Server=localhost;Port=5432;Database=root;Username=root;Password=root;"));
+            if (DEV_MODE_ON)
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("AllowAll", builder =>
+                    {
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+                });
+            }
+
+            services.AddDbContext<PostgresContext>(options =>
+                options.UseNpgsql(
+                    "Server=localhost;Port=5432;Database=root;Username=root;Password=root;")
+                );
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = false, //true
+                        ValidateAudience = false, //true
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                        //ValidIssuer = Configuration["Jwt:Issuer"],
+                        //ValidAudience = Configuration["Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                        ClockSkew = TimeSpan.Zero
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("Token-Expired", "true");
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
-
-
-
-            services.AddScoped<IWorkerRepository, TaskHouseApi.Repositories.WorkerRepository>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IWorkerRepository, WorkerRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
-            services.AddScoped<IEmployerRepository, TaskHouseApi.Repositories.EmployerRepository>();
+            services.AddScoped<IEmployerRepository, EmployerRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -74,13 +109,14 @@ namespace TaskHouseApi
                 app.UseHsts();
             }
 
+            if (DEV_MODE_ON)
+            {
+                app.UseCors("AllowAll");
+            }
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
-    }
-
-    internal class WorkerRepository
-    {
     }
 }

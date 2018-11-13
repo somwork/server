@@ -7,6 +7,7 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using TaskHouseApi.Service;
 
 namespace TaskHouseUnitTests
 {
@@ -14,35 +15,36 @@ namespace TaskHouseUnitTests
     {
         EmployersController controller;
         IEmployerRepository repo;
+        IPasswordService passwordService = new PasswordService();
 
         public EmpolyersControllerUnitTests()
         {
-            repo = new  FakeEmpolyersRepository();
-            controller = new EmployersController(repo);
+            repo = new FakeEmpolyersRepository();
+            controller = new EmployersController(repo, passwordService);
         }
-        
+
         /// Test Get all
         [Fact]
-        public async void EmpolyerController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters()
+        public void EmpolyerController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters()
         {
-            //Arrange and act
-            IEnumerable<Employer> result = await controller.Get();
+            var result = controller.Get();
+            var resultObjectResult = result as ObjectResult;
+            var resultObject = resultObjectResult.Value as IEnumerable<User>;
 
-            //Asserts
-            Assert.Equal(3, result.Count());
-
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(3, resultObject.Count());
         }
 
         ///Test Get with valid Id as parameter
         [Fact]
-        public async void EmpolyerController_Get_ReturnsObjectReponseWithCorrectEmpolyer_WhenGivenValidId() 
-        { 
+        public void EmpolyerController_Get_ReturnsObjectReponseWithCorrectEmpolyer_WhenGivenValidId()
+        {
             //arrange
             int empolyerId = 2;
 
             //Act
-            var result = await controller.Get(empolyerId);
-            var resultAsObject = await controller.Get(empolyerId) as ObjectResult;
+            var result = controller.Get(empolyerId);
+            var resultAsObject = controller.Get(empolyerId) as ObjectResult;
             var resultObject = resultAsObject.Value as Employer;
 
             //Assert
@@ -53,47 +55,45 @@ namespace TaskHouseUnitTests
 
         ///Test Get with invalid Id as parameter
         [Fact]
-        public  async void EmpolyerController_Get_ReturnsNotFound_WhenGivenInvalidId()
-        { 
+        public void EmpolyerController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        {
             //arrange
             int empolyerId = 5000;
 
             //Act
-            var result = await controller.Get(empolyerId) as NotFoundResult;
-            
+            var result = controller.Get(empolyerId) as NotFoundResult;
+
             //Assert
             Assert.Equal(404, result.StatusCode);
 
         }
 
-        
+
 
         ///Test post with null empolyer object
         [Fact]
-         public async void EmpolyerController_Create_ReturnsBadRequest_WhenGivenNullEmpolyer()
-        { 
+        public void EmpolyerController_Create_ReturnsBadRequest_WhenGivenNullEmpolyer()
+        {
             //Arrange
             Employer employer = null;
 
             //Act
-            var result = await controller.Create(employer);
+            var result = controller.Create(employer);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
-          
-
         }
 
         /// Test Post with valid Employer
         [Fact]
-        public async void EmpolyeresController_Create_ReturnsObjectResultContainingCreatedEmpolyer_WhenGivenValidEmpolyer()
+        public void EmpolyeresController_Create_ReturnsObjectResultContainingCreatedEmpolyer_WhenGivenValidEmpolyer()
         {
             //Arrange
             Employer employer = new Employer();
             employer.LastName = "TestEmpolyer";
 
             //Act
-            var result = await controller.Create(employer);
+            var result = controller.Create(employer);
             var createdResultObject = result as ObjectResult;
             var createdEmployer = createdResultObject.Value as Employer;
 
@@ -104,51 +104,47 @@ namespace TaskHouseUnitTests
 
         }
 
-        
-
-        
-
         ///Test Delete returns NoContentResult with valid Id
-        [Fact] 
-        public async void EmpolyerController_Delete_ReturnsNoContentResult_WhenIdIsValid()
-        { 
+        [Fact]
+        public void EmpolyerController_Delete_ReturnsNoContentResult_WhenIdIsValid()
+        {
             //Arrange
-            int id = 1; 
+            int id = 1;
 
             //Act
-            var result = await controller.Delete(id);
+            var result = controller.Delete(id);
 
             //Assert
             Assert.IsType<NoContentResult>(result);
         }
 
-         ///Test if delete actually deletes with valid Id
-        [Fact] 
-        public async void EmpolyersController_Delete_ActuallyDeletes_WhenIdIsValid()
-        { 
+        ///Test if delete actually deletes with valid Id
+        [Fact]
+        public void EmpolyersController_Delete_ActuallyDeletes_WhenIdIsValid()
+        {
             //Arrange
-            int id = 1; 
+            int id = 1;
 
             //Act
-            var result = await controller.Delete(id);
-            var getDeletedEmpolyerResult = await controller.Get(id);
+            var result = controller.Delete(id);
+            var getDeletedEmpolyerResult = controller.Get(id);
 
             //Assert
             Assert.IsType<NoContentResult>(result);
             Assert.IsType<NotFoundResult>(getDeletedEmpolyerResult);
-            
+
         }
 
-       
+
         ///Test Delete with invalid Id
-        [Fact] 
-        public async void EmpolyerController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
-        { 
+        [Fact]
+        public void EmpolyerController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
+        {
             //Arrange
-            int id = 2500; 
+            int id = 2500;
 
             //Act
-            var result = await controller.Delete(id);
+            var result = controller.Delete(id);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
@@ -156,7 +152,7 @@ namespace TaskHouseUnitTests
 
         ///Test put with valid Id and Skill object
         [Fact]
-        public async void EmpolyersController_Update_ReturnsNoContentResult_WhenParametersAreValid()
+        public void EmpolyersController_Update_ReturnsNoContentResult_WhenParametersAreValid()
         {
             //Arrange
             Employer employer = new Employer()
@@ -167,8 +163,8 @@ namespace TaskHouseUnitTests
             int id = 1;
 
             //Act
-            var result = await controller.Update(id, employer);
-            var updatedResultObject = await controller.Get(id) as ObjectResult;
+            var result = controller.Update(employer);
+            var updatedResultObject = controller.Get(id) as ObjectResult;
             var updatedEmployer = updatedResultObject.Value as Employer;
 
             //Assert
@@ -178,7 +174,7 @@ namespace TaskHouseUnitTests
 
         ///Test put with valid Id and Skill object, on not existing skill
         [Fact]
-        public async void EmployersController_Update_ReturnsNotFoundResult_WhenParametersAreValidButEmployerDoesNotExist()
+        public void EmployersController_Update_ReturnsNotFoundResult_WhenParametersAreValidButEmployerDoesNotExist()
         {
             //Arrange
             Employer Employer = new Employer()
@@ -186,10 +182,9 @@ namespace TaskHouseUnitTests
                 Id = 10,
                 Email = "Email"
             };
-            int id = 10;
 
             //Act
-            var result = await controller.Update(id, Employer);
+            var result = controller.Update(Employer);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
@@ -197,38 +192,17 @@ namespace TaskHouseUnitTests
 
         ///Test put with invalid Id and null empolyer object
         [Fact]
-        public async void EmpolyerController_Update_ReturnsBadRequestResult_WhenIdIsInvalidAndEmpolyerIsNull()
-        { 
-            //Arrange
-            Employer employer = null;
-            int id = 2600;
-
-            //Act
-            var result = await controller.Update(id, employer);
-
-            //Assert
-            Assert.IsType<BadRequestResult>(result); 
-            //Inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
-        }
-
-        ///Test put with invalid Id and valid Skill object
-        [Fact]
-        public async void SkillsController_Update_ReturnsBadRequestResult_WhenIdIsInvalid()
+        public void EmpolyerController_Update_ReturnsBadRequestResult_WhenEmpolyerIsNull()
         {
             //Arrange
-            Employer employer = new Employer()
-            {
-                Id = 1,
-                Email = "Email1"
-            };
-            int id = 50;
+            Employer employer = null;
 
             //Act
-            var result = await controller.Update(id, employer);
+            var result = controller.Update(employer);
 
             //Assert
             Assert.IsType<BadRequestResult>(result);
-            //inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
+            //Inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
     }
 }

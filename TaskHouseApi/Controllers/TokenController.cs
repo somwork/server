@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using TaskHouseApi.Security;
 using TaskHouseApi.Model;
+using TaskHouseApi.Model.ServiceModel;
 using TaskHouseApi.Repositories;
+using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
 {
@@ -19,66 +20,123 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class TokenController : Controller
     {
-        private IConfiguration config;
-        private IEmployerRepository repo;
+        private ITokenService tokenService;
+        private IAuthService authService;
+        private IUserRepository userRepository;
 
-        public TokenController(IConfiguration config, IEmployerRepository repo)
-
+        public TokenController(ITokenService tokenService, IAuthService authService, IUserRepository userRepository)
         {
-            this.config = config;
-            this.repo = repo;
+            this.tokenService = tokenService;
+            this.authService = authService;
+            this.userRepository = userRepository;
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Create([FromBody]LoginModel login)
+        public ActionResult Create([FromBody]LoginModel login)
         {
-            ActionResult response = Unauthorized();
-            User user = await Authenticate(login);
-
+            // Check's if user is autherised
+            User user = authService.Authenticate(login);
             if (user == null)
             {
-                return response;
+                return Unauthorized();
             }
 
-            string tokenString = BuildToken(user);
-            return response = Ok(new { token = tokenString });
-        }
-
-        private async Task<User> Authenticate(LoginModel loginModel)
-        {
-            User potentialUser = (await repo.RetrieveAll())
-                .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
-
-            if (potentialUser == null)
+            // Sets the claims for the token
+            var usersClaims = new[]
             {
-                return null;
-            }
+                // User Id
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.GetType().ToString())
+            };
 
-            bool isAuthenticated = SecurityHandler
-                .GenerateSaltedHashedPassword(loginModel.Password, potentialUser.Salt)
-                .Equals(potentialUser.Password);
+            string tokenString = tokenService.GenerateAccessToken(usersClaims);
+            string refreshToken = tokenService.GenerateRefreshToken();
 
-            if (!isAuthenticated)
-            {
-                return null;
-            }
-
-            return potentialUser;
-        }
-
-        private string BuildToken(User user)
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                config["Jwt:Issuer"],
-                config["Jwt:Issuer"],
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds
+            user.RefreshTokens.Add
+            (
+                new RefreshToken { Token = refreshToken }
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var result = userRepository.Update(user);
+            if (result == null)
+            {
+                return StatusCode(500);
+            }
+
+            return new ObjectResult(new
+            {
+                accessToken = tokenString,
+                refreshToken = refreshToken
+            });
+        }
+
+        [HttpPut]
+        public IActionResult Refresh([FromBody]RefreshModel refreshModel)
+        {
+            var principal = tokenService.GetPrincipalFromExpiredToken(refreshModel.AccessToken);
+
+            // If null, the token isn't valid
+            if (principal == null)
+            {
+                return BadRequest();
+            }
+
+            // Gets the user Id from Claims
+            int Id;
+            Int32.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Id);
+
+            User user = userRepository.Retrieve(Id);
+
+            // Checks that the user exists and has a refresh token
+            if (user == null || user.RefreshTokens.Count() == 0)
+            {
+                return BadRequest();
+            }
+
+            // Checks that the refresh token from the client,
+            // matches one asignt to the user
+            RefreshToken storedRefreshToken = null;
+            foreach (RefreshToken r in user.RefreshTokens)
+            {
+                if ((r.Token).Equals(refreshModel.RefreshToken))
+                {
+                    storedRefreshToken = r;
+                }
+            }
+
+            if (storedRefreshToken == null)
+            {
+                return BadRequest();
+            }
+
+            // Generates a new access token and refresh token
+            var newJwtToken = tokenService.GenerateAccessToken(principal.Claims);
+            var newRefreshToken = tokenService.GenerateRefreshToken();
+
+            // Deletes the old refresh token from database
+            bool res = userRepository.DeleteRefrechToken(storedRefreshToken);
+            if (res == false)
+            {
+                return StatusCode(500);
+            }
+
+            // Add the new refresh token to user
+            user.RefreshTokens.Add
+            (
+                new RefreshToken { Token = newRefreshToken }
+            );
+
+            var result = userRepository.Update(user);
+            if (result == null)
+            {
+                return StatusCode(500);
+            }
+
+            return new ObjectResult(new
+            {
+                accessToken = newJwtToken,
+                refreshToken = newRefreshToken
+            });
         }
     }
 }

@@ -1,12 +1,10 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TaskHouseApi.Security;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using TaskHouseApi.Repositories;
+using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
 {
@@ -14,97 +12,96 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class EmployersController : Controller
     {
+        private IPasswordService passwordService;
+
         private IEmployerRepository repo;
 
-        // constructor injects registered repository 
-        public EmployersController(IEmployerRepository repo)
+        // constructor injects registered repository
+        public EmployersController(IEmployerRepository repo, IPasswordService passwordService)
         {
             this.repo = repo;
+            this.passwordService = passwordService;
         }
 
-
-        // GET: api/empolyers/[id] 
+        // GET: api/employers/[id]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int Id)
+        public IActionResult Get(int Id)
         {
-            Employer u = await repo.Retrieve(Id);
+            Employer u = repo.Retrieve(Id) as Employer;
             if (u == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound(); // 404 Resource not found
             }
-            return new ObjectResult(u); // 200 OK 
+            return new ObjectResult(u); // 200 OK
         }
 
         // GET: api/empolyers/
         [HttpGet]
-        public async Task<IEnumerable<Employer>> Get()
+        public IActionResult Get()
         {
-            return await repo.RetrieveAll();
+            return new ObjectResult(repo.RetrieveAll());
         }
 
         // POST: api/employers
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]Employer employer)
+        public IActionResult Create([FromBody]Employer employer)
         {
             if (employer == null)
             {
-                return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request 
+                return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request
             }
 
-            Employer existingEmployer = (await repo.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
+            Employer existingEmployer = (repo.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username) as Employer;
 
-            if (existingEmployer != null) {
+            if (existingEmployer != null)
+            {
                 return BadRequest(new { error = "Username in use" });
             }
 
-            var hashResult = SecurityHandler.GenerateNewPassword(employer);
+            var hashResult = passwordService.GenerateNewPassword(employer);
 
             employer.Salt = hashResult.saltText;
             employer.Password = hashResult.saltechashedPassword;
 
-            Employer added = await repo.Create(employer);
-            
+            Employer added = repo.Create(employer) as Employer;
+
             return new ObjectResult(added);
-
-            
         }
 
-        // PUT: api/employers/[id] 
+        // PUT: api/employers/[id]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int Id, [FromBody] Employer e)
+        public IActionResult Update([FromBody] Employer e)
         {
-            if (e == null || e.Id != Id)
+            if (e == null)
             {
-                return BadRequest(); // 400 Bad request 
+                return BadRequest(); // 400 Bad request
             }
 
-            var existing = await repo.Retrieve(Id);
-            if (existing == null)
+            if (!repo.isInDatabase(e.Id))
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound();
             }
 
-            await repo.Update(Id, e);
-            return new NoContentResult(); // 204 No content 
+            repo.Update(e);
+            return new NoContentResult(); // 204 No content
         }
 
-
-        // DELETE: api/employers/[id] 
+        // DELETE: api/employers/[id]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int Id)
+        public IActionResult Delete(int Id)
         {
-            var existing = await repo.Retrieve(Id);
+            var existing = repo.Retrieve(Id);
             if (existing == null)
             {
-                return NotFound(); // 404 Resource not found 
+                return NotFound(); // 404 Resource not found
             }
 
-            bool deleted = await repo.Delete(Id);
+            bool deleted = repo.Delete(Id);
 
             if (!deleted)
             {
-                return BadRequest(); 
+                return BadRequest();
             }
 
             return new NoContentResult(); // 204 No content
