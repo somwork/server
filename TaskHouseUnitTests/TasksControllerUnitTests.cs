@@ -7,6 +7,8 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace TaskHouseUnitTests
 {
@@ -19,6 +21,19 @@ namespace TaskHouseUnitTests
         {
             repo = new FakeTaskRepository();
             controller = new TasksController(repo);
+        }
+
+        private TasksController login(TasksController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Employer")
+            }));
+
+            return con;
         }
 
         ///Test Get all
@@ -70,6 +85,9 @@ namespace TaskHouseUnitTests
         {
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
+
+            controller = login(controller);
+
             task.Description = "TestTask";
 
             //Act
@@ -88,6 +106,8 @@ namespace TaskHouseUnitTests
         {
             //Arrange
             TaskHouseApi.Model.Task task = null;
+
+            controller = login(controller);
 
             //Act
             var result = controller.Create(task);
