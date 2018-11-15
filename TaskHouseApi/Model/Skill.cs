@@ -1,8 +1,7 @@
 namespace TaskHouseApi.Model
 {
-    public class Skill
+    public class Skill : BaseModel
     {
-        public int Id { get; set; }
         public string Title { get; set; }
 
         public Skill()

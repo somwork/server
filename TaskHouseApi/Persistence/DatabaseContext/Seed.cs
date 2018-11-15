@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskHouseApi.Model;
 
-namespace TaskHouseApi.DatabaseContext
+namespace TaskHouseApi.Persistence.DatabaseContext
 {
     public static class Seed
     {

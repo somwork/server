@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskHouseApi.Model;
 using TaskHouseApi.Model.ServiceModel;
 
-namespace TaskHouseApi.DatabaseContext
+namespace TaskHouseApi.Persistence.DatabaseContext
 {
     public class PostgresContext : DbContext
     {

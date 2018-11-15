@@ -1,7 +1,8 @@
 using System;
 using Xunit;
 using TaskHouseApi.Controllers;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using System.Collections.Generic;
@@ -14,13 +15,13 @@ namespace TaskHouseUnitTests
     public class EmpolyersControllerUnitTests
     {
         EmployersController controller;
-        IEmployerRepository repo;
         IPasswordService passwordService = new PasswordService();
+        IUnitOfWork unitOfWork;
 
         public EmpolyersControllerUnitTests()
         {
-            repo = new FakeEmpolyersRepository();
-            controller = new EmployersController(repo, passwordService);
+            unitOfWork = new FakeUnitOfWork();
+            controller = new EmployersController(unitOfWork, passwordService);
         }
 
         /// Test Get all

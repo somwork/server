@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
 using System.Security.Claims;
+using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
@@ -14,19 +15,19 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class TasksController : Controller
     {
-        private ITaskRepository repo;
+        private IUnitOfWork unitOfWork;
 
         // constructor injects registrered repository
-        public TasksController(ITaskRepository repo)
+        public TasksController(IUnitOfWork unitOfWork)
         {
-            this.repo = repo;
+            this.unitOfWork = unitOfWork;
         }
 
         //GET: api/tasks/id
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Task t = repo.Retrieve(Id);
+            Task t = unitOfWork.Tasks.Retrieve(Id);
             if (t == null)
             {
                 return NotFound(); //404 resource not found
@@ -38,7 +39,7 @@ namespace TaskHouseApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(repo.RetrieveAll());
+            return new ObjectResult(unitOfWork.Tasks.RetrieveAll());
         }
 
         // POST: api/tasks
@@ -58,9 +59,10 @@ namespace TaskHouseApi.Controllers
 
             task.EmployerId = currentUserId;
 
-            Task added = repo.Create(task);
+            unitOfWork.Tasks.Create(task);
+            unitOfWork.Save();
 
-            return new ObjectResult(added); //200 ok
+            return new ObjectResult(task); //200 ok
         }
 
         //PUT: api/tasks/[id]
@@ -73,14 +75,15 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); //400 bad request
             }
 
-            Task existing = repo.Retrieve(t.Id);
+            Task existing = unitOfWork.Tasks.Retrieve(t.Id);
 
             if (existing == null)
             {
                 return NotFound(); //404 resource not found
             }
 
-            repo.Update(t);
+            unitOfWork.Tasks.Update(t);
+            unitOfWork.Save();
             return new NoContentResult();  //204 no content
         }
 
@@ -88,18 +91,14 @@ namespace TaskHouseApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Task existing = repo.Retrieve(Id);
+            Task existing = unitOfWork.Tasks.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); //404 resource not found
             }
 
-            bool deleted = repo.Delete(Id);
-
-            if (!deleted)
-            {
-                return BadRequest(); //400 bad request
-            }
+            unitOfWork.Tasks.Delete(Id);
+            unitOfWork.Save();
 
             return new NoContentResult(); //204 No content
         }

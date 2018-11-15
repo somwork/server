@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskHouseApi.Model
 {
-    public class Task
+    public class Task : BaseModel
     {
-        public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime Deadline { get; set; }
         public string Description { get; set; }

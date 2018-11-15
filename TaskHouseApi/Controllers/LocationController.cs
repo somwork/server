@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
@@ -12,26 +13,26 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class LocationsController : Controller
     {
-        private ILocationRepository repo;
+        private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public LocationsController(ILocationRepository repo)
+        public LocationsController(IUnitOfWork unitOfWork)
         {
-            this.repo = repo;
+            this.unitOfWork = unitOfWork;
         }
 
         // GET: api/locations/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(repo.RetrieveAll());
+            return new ObjectResult(unitOfWork.Locations.RetrieveAll());
         }
 
         // GET: api/locations/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Location l = repo.Retrieve(Id);
+            Location l = unitOfWork.Locations.Retrieve(Id);
             if (l == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -50,9 +51,10 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateLocation: location is null" });
             }
 
-            Location added = repo.Create(location);
+            unitOfWork.Locations.Create(location);
+            unitOfWork.Save();
 
-            return new ObjectResult(added);
+            return new ObjectResult(location);
         }
 
         // PUT: api/locations/[id]
@@ -64,14 +66,15 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
-            Location existing = repo.Retrieve(l.Id);
+            Location existing = unitOfWork.Locations.Retrieve(l.Id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            repo.Update(l);
+            unitOfWork.Locations.Update(l);
+            unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
@@ -79,18 +82,14 @@ namespace TaskHouseApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Location existing = repo.Retrieve(Id);
+            Location existing = unitOfWork.Locations.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            bool deleted = repo.Delete(Id);
-
-            if (!deleted)
-            {
-                return BadRequest();
-            }
+            unitOfWork.Locations.Delete(Id);
+            unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content
         }

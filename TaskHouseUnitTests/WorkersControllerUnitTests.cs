@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 using TaskHouseApi.Controllers;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using System.Collections.Generic;
@@ -13,14 +13,14 @@ namespace TaskHouseUnitTests
 {
     public class WorkersControllerUnitTests
     {
+        IUnitOfWork unitOfWork;
         WorkersController controller;
-        IWorkerRepository repo;
         IPasswordService passwordService = new PasswordService();
 
         public WorkersControllerUnitTests()
         {
-            repo = new FakeWorkerRepository();
-            controller = new WorkersController(repo, passwordService);
+            unitOfWork = new FakeUnitOfWork();
+            controller = new WorkersController(unitOfWork, passwordService);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace TaskHouseUnitTests
         [Fact]
         public void WorkerController_Delete_ReturnsNoContentResult_WhenIdIsValid()
         {
-            int Id = 1;
+            int Id = 4;
             var result = controller.Delete(Id);
 
             Assert.IsType<NoContentResult>(result);
@@ -131,10 +131,10 @@ namespace TaskHouseUnitTests
         [Fact]
         public void WorkerController_Update_ReturnsObjectResult_withValidIdAndValidWorker()
         {
-            int Id = 1;
+            int Id = 4;
             Worker worker = new Worker()
             {
-                Id = 1,
+                Id = 4,
                 Username = "Tusernamedasdasg",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                 Email = "test@test.com",

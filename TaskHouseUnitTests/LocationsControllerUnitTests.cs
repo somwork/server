@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 using TaskHouseApi.Controllers;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using System.Collections.Generic;
@@ -12,13 +12,13 @@ namespace TaskHouseUnitTests
 {
     public class LocationsControllerUnitTests
     {
-        ILocationRepository repo;
+        IUnitOfWork unitOfWork;
         LocationsController controller;
 
         public LocationsControllerUnitTests()
         {
-            repo = new FakeLocationRepository();
-            controller = new LocationsController(repo);
+            unitOfWork = new FakeUnitOfWork();
+            controller = new LocationsController(unitOfWork);
         }
 
         //Test retrieve all in repository

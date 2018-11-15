@@ -3,7 +3,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
@@ -14,12 +15,12 @@ namespace TaskHouseApi.Controllers
     {
         private IPasswordService passwordService;
 
-        private IEmployerRepository repo;
+        private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public EmployersController(IEmployerRepository repo, IPasswordService passwordService)
+        public EmployersController(IUnitOfWork unitOfWork, IPasswordService passwordService)
         {
-            this.repo = repo;
+            this.unitOfWork = unitOfWork;
             this.passwordService = passwordService;
         }
 
@@ -27,7 +28,7 @@ namespace TaskHouseApi.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Employer u = repo.Retrieve(Id) as Employer;
+            Employer u = unitOfWork.Employers.Retrieve(Id);
             if (u == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -39,7 +40,7 @@ namespace TaskHouseApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(repo.RetrieveAll());
+            return new ObjectResult(unitOfWork.Employers.RetrieveAll());
         }
 
         // POST: api/employers
@@ -52,7 +53,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request
             }
 
-            Employer existingEmployer = (repo.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username) as Employer;
+            Employer existingEmployer = (unitOfWork.Employers.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
 
             if (existingEmployer != null)
             {
@@ -64,9 +65,10 @@ namespace TaskHouseApi.Controllers
             employer.Salt = hashResult.saltText;
             employer.Password = hashResult.saltechashedPassword;
 
-            Employer added = repo.Create(employer) as Employer;
+            unitOfWork.Employers.Create(employer);
+            unitOfWork.Save();
 
-            return new ObjectResult(added);
+            return new ObjectResult(employer);
         }
 
         // PUT: api/employers/[id]
@@ -78,12 +80,13 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
-            if (!repo.isInDatabase(e.Id))
+            if (!unitOfWork.Employers.isInDatabase(e.Id))
             {
                 return NotFound();
             }
 
-            repo.Update(e);
+            unitOfWork.Employers.Update(e);
+            unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
@@ -91,18 +94,14 @@ namespace TaskHouseApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            var existing = repo.Retrieve(Id);
+            var existing = unitOfWork.Employers.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            bool deleted = repo.Delete(Id);
-
-            if (!deleted)
-            {
-                return BadRequest();
-            }
+            unitOfWork.Employers.Delete(Id);
+            unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content
         }

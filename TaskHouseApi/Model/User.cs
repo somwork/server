@@ -5,9 +5,8 @@ using TaskHouseApi.Model.ServiceModel;
 
 namespace TaskHouseApi.Model
 {
-    public abstract class User
+    public abstract class User : BaseModel
     {
-        public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }

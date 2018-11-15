@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 using TaskHouseApi.Controllers;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using System.Collections.Generic;
@@ -14,13 +14,13 @@ namespace TaskHouseUnitTests
 {
     public class TasksControllerUnitTests
     {
+        IUnitOfWork unitOfWork;
         TasksController controller;
-        ITaskRepository repo;
 
         public TasksControllerUnitTests()
         {
-            repo = new FakeTaskRepository();
-            controller = new TasksController(repo);
+            unitOfWork = new FakeUnitOfWork();
+            controller = new TasksController(unitOfWork);
         }
 
         ///Adds a httpContext to a TasksController
@@ -32,7 +32,7 @@ namespace TaskHouseUnitTests
             con.ControllerContext = new ControllerContext();
             //Creates a new HttpContext
             con.ControllerContext.HttpContext = new DefaultHttpContext();
-            
+
             //Adds a User with claim to the current context
             con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
                 //Adds a claim for nameIdentifier, user Id
@@ -40,7 +40,7 @@ namespace TaskHouseUnitTests
                 //Adds a claim for role, user role/tupe
                 new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Employer")
             }));
-            
+
             //Returns the controller
             return con;
         }

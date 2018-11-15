@@ -1,25 +1,26 @@
 using TaskHouseApi.Model;
 using TaskHouseApi.Model.ServiceModel;
-using TaskHouseApi.Repositories;
 using System.Linq;
-using TaskHouseApi.DatabaseContext;
+using TaskHouseApi.Persistence.DatabaseContext;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Service
 {
     public class AuthService : IAuthService
     {
         private IPasswordService passwordService;
-        private IUserRepository userRepository;
+        private IUnitOfWork unitOfWork;
 
-        public AuthService(IPasswordService passwordService, IUserRepository userRepository)
+        public AuthService(IPasswordService passwordService, IUnitOfWork unitOfWork)
         {
             this.passwordService = passwordService;
-            this.userRepository = userRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public User Authenticate(LoginModel loginModel)
         {
-            User potentialUser = (userRepository.RetrieveAll())
+            User potentialUser = (unitOfWork.Users.RetrieveAll())
                 .SingleOrDefault(user => user.Username.Equals(loginModel.Username));
 
             if (potentialUser == null || !isPasswordCorrect(loginModel, potentialUser))

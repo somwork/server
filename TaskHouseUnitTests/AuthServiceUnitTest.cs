@@ -1,6 +1,7 @@
 using TaskHouseApi.Model;
 using TaskHouseApi.Model.ServiceModel;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 using TaskHouseApi.Service;
 using Xunit;
 
@@ -9,14 +10,14 @@ namespace TaskHouseUnitTests
     public class AuthServiceUnitTest
     {
         private IPasswordService passwordService;
-        private IUserRepository userRepository;
+        private IUnitOfWork unitOfWork;
         private IAuthService authService;
 
         public AuthServiceUnitTest()
         {
             passwordService = new PasswordService();
-            userRepository = new FakeUserRepository();
-            authService = new AuthService(passwordService, userRepository);
+            unitOfWork = new FakeUnitOfWork();
+            authService = new AuthService(passwordService, unitOfWork);
         }
 
         [Fact]

@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 using TaskHouseApi.Controllers;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using System.Collections.Generic;
@@ -12,13 +12,13 @@ namespace TaskHouseUnitTests
 {
     public class SkillsControllerUnitTests
     {
+        IUnitOfWork unitOfWork;
         SkillsController controller;
-        ISkillRepository repo;
 
         public SkillsControllerUnitTests()
         {
-            repo = new FakeSkillRepository();
-            controller = new SkillsController(repo);
+            unitOfWork = new FakeUnitOfWork();
+            controller = new SkillsController(unitOfWork);
         }
 
         ///Test Get all

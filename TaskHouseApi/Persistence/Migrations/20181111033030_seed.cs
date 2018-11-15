@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TaskHouseApi.Migrations
+namespace TaskHouseApi.Persistence.Migrations
 {
     public partial class seed : Migration
     {

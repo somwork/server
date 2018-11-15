@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
@@ -12,26 +13,26 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class SkillsController : Controller
     {
-        private ISkillRepository repo;
+        private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public SkillsController(ISkillRepository repo)
+        public SkillsController(IUnitOfWork unitOfWork)
         {
-            this.repo = repo;
+            this.unitOfWork = unitOfWork;
         }
 
         // GET: api/skills/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(repo.RetrieveAll());
+            return new ObjectResult(unitOfWork.Skills.RetrieveAll());
         }
 
         // GET: api/skills/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Skill s = repo.Retrieve(Id);
+            Skill s = unitOfWork.Skills.Retrieve(Id);
             if (s == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -50,9 +51,10 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateLocation: skill is null" });
             }
 
-            Skill added = repo.Create(skill);
+            unitOfWork.Skills.Create(skill);
+            unitOfWork.Save();
 
-            return new ObjectResult(added);
+            return new ObjectResult(skill);
         }
 
         // PUT: api/skills/[id]
@@ -64,14 +66,15 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
-            Skill existing = repo.Retrieve(s.Id);
+            Skill existing = unitOfWork.Skills.Retrieve(s.Id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            repo.Update(s);
+            unitOfWork.Skills.Update(s);
+            unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
@@ -79,18 +82,14 @@ namespace TaskHouseApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Skill existing = repo.Retrieve(Id);
+            Skill existing = unitOfWork.Skills.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            bool deleted = repo.Delete(Id);
-
-            if (!deleted)
-            {
-                return BadRequest();
-            }
+            unitOfWork.Skills.Delete(Id);
+            unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content
         }
