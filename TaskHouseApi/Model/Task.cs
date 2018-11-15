@@ -10,8 +10,8 @@ namespace TaskHouseApi.Model
         public string Description { get; set; }
         public string Urgency { get; set; }
 
-        [ForeignKey("EmployerId")]
         public int EmployerId { get; set; }
+        public Employer Employer { get; set; }
 
         public Task()
         {

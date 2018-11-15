@@ -23,6 +23,9 @@ namespace TaskHouseApi.Persistence.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // modelBuilder.Entity<User>()
+            // .
+
             modelBuilder.Entity<User>().ToTable("Users");
 
 

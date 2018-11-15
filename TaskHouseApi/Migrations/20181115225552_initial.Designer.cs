@@ -2,16 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskHouseApi.Persistence.DatabaseContext;
 
-namespace TaskHouseApi.Persistence.Migrations
+namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    partial class PostgresContextModelSnapshot : ModelSnapshot
+    [Migration("20181115225552_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,7 +114,7 @@ namespace TaskHouseApi.Persistence.Migrations
 
                     b.Property<string>("Token");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -229,14 +231,15 @@ namespace TaskHouseApi.Persistence.Migrations
 
             modelBuilder.Entity("TaskHouseApi.Model.ServiceModel.RefreshToken", b =>
                 {
-                    b.HasOne("TaskHouseApi.Model.User")
+                    b.HasOne("TaskHouseApi.Model.User", "User")
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Task", b =>
                 {
-                    b.HasOne("TaskHouseApi.Model.Employer")
+                    b.HasOne("TaskHouseApi.Model.Employer", "Employer")
                         .WithMany("Tasks")
                         .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Cascade);
