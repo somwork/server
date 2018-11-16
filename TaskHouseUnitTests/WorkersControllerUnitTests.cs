@@ -102,7 +102,7 @@ namespace TaskHouseUnitTests
         {
             Worker worker = null;
 
-            var result = controller.Update(worker);
+            var result = controller.Update(0, worker);
 
             Assert.IsType<BadRequestResult>(result);
         }
@@ -143,7 +143,7 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            var Result = controller.Update(worker);
+            var Result = controller.Update(Id, worker);
             var resultAsObject = controller.Get(Id) as ObjectResult;
             var resultObject = resultAsObject.Value as Worker;
 

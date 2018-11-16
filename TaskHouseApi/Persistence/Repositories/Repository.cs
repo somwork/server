@@ -50,8 +50,9 @@ namespace TaskHouseApi.Persistence.Repositories
 
         public void Update(T baseModel)
         {
-            dbSet.Attach(baseModel);
-            context.Entry(baseModel).State = EntityState.Modified;
+            dbSet.Update(baseModel);
+            // dbSet.Attach(baseModel);
+            // context.Entry(baseModel).State = EntityState.Modified;
         }
     }
 }

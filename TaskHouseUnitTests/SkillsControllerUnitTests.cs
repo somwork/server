@@ -112,9 +112,10 @@ namespace TaskHouseUnitTests
                 Id = 1,
                 Title = "UpdatedSkill"
             };
+            int id = 1;
 
             //Act
-            var result = controller.Update(skill);
+            var result = controller.Update(id, skill);
             var updatedResultObject = controller.Get(skill.Id) as ObjectResult;
             var updatedSkill = updatedResultObject.Value as Skill;
 
@@ -129,9 +130,10 @@ namespace TaskHouseUnitTests
         {
             //Arrange
             Skill skill = null;
+            int id = 0;
 
             //Act
-            var result = controller.Update(skill);
+            var result = controller.Update(id, skill);
 
             //Assert
             Assert.IsType<BadRequestResult>(result);
@@ -148,9 +150,10 @@ namespace TaskHouseUnitTests
                 Id = 10,
                 Title = "Skill1"
             };
+            int id = 10;
 
             //Act
-            var result = controller.Update(skill);
+            var result = controller.Update(id, skill);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);

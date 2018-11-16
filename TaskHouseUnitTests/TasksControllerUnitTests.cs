@@ -139,7 +139,7 @@ namespace TaskHouseUnitTests
             int id = 1;
 
             //Act
-            var result = controller.Update(task);
+            var result = controller.Update(id, task);
             var updatedResultObject = controller.Get(id) as ObjectResult;
             var updatedTask = updatedResultObject.Value as TaskHouseApi.Model.Task;
 
@@ -154,9 +154,10 @@ namespace TaskHouseUnitTests
         {
             //Arrange
             TaskHouseApi.Model.Task task = null;
+            int id = 0;
 
             //Act
-            var result = controller.Update(task);
+            var result = controller.Update(id, task);
 
             //Assert
             Assert.IsType<BadRequestResult>(result);
@@ -173,9 +174,10 @@ namespace TaskHouseUnitTests
                 Id = 10,
                 Description = "Task1"
             };
+            int id = 10;
 
             //Act
-            var result = controller.Update(task);
+            var result = controller.Update(id, task);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);

@@ -59,20 +59,21 @@ namespace TaskHouseApi.Controllers
 
         // PUT: api/skills/[id]
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] Skill s)
+        public IActionResult Update(int id, [FromBody] Skill s)
         {
             if (s == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Skill existing = unitOfWork.Skills.Retrieve(s.Id);
+            Skill existing = unitOfWork.Skills.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
+            s.Id = id;
             unitOfWork.Skills.Update(s);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
