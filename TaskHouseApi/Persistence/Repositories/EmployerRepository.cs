@@ -15,22 +15,5 @@ namespace TaskHouseApi.Persistence.Repositories
     {
 
         public EmployerRepository(PostgresContext db) : base(db) { }
-
-        // public override IEnumerable<User> RetrieveAll()
-        // {
-        //     return db.Employers
-        //         .Include(user => user.RefreshTokens)
-        //         .Include(user => user.Tasks)
-        //         .ToList<Employer>();
-        // }
-
-        // public override User Retrieve(int Id)
-        // {
-        //     return db.Employers
-        //         .Include(user => user.RefreshTokens)
-        //         .Include(user => user.Tasks)
-        //         .Where(user => user.Id == Id)
-        //         .SingleOrDefault();
-        // }
     }
 }

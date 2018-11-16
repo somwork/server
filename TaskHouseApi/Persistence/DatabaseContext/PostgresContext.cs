@@ -29,7 +29,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
             modelBuilder.Entity<User>().ToTable("Users");
 
 
-            Seed.SeedData(modelBuilder);
+            //Seed.SeedData(modelBuilder);
         }
     }
 }
