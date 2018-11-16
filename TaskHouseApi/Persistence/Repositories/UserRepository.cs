@@ -24,20 +24,12 @@ namespace TaskHouseApi.Persistence.Repositories
         {
             postgresContext.Remove(refreshToken);
             int affected = postgresContext.SaveChanges();
-            if (affected != 1)
-            {
-                return false;
-            }
-            return true;
+            return affected != 1;
         }
 
         public bool isInDatabase(int Id)
         {
-            if (!postgresContext.Users.Any(o => o.Id == Id))
-            {
-                return false;
-            }
-            return true;
+            return !postgresContext.Users.Any(o => o.Id == Id);
         }
     }
 }
