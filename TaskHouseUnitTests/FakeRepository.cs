@@ -47,5 +47,10 @@ namespace TaskHouseUnitTests
 
             list[index] = baseModel;
         }
+
+        public void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

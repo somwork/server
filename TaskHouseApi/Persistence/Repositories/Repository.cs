@@ -4,6 +4,8 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Reflection;
+using System.Collections;
 
 namespace TaskHouseApi.Persistence.Repositories
 {
@@ -53,6 +55,54 @@ namespace TaskHouseApi.Persistence.Repositories
             dbSet.Update(baseModel);
             // dbSet.Attach(baseModel);
             // context.Entry(baseModel).State = EntityState.Modified;
+        }
+
+        public void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
+        {
+            PropertyInfo[] propertyInfos = baseModel.GetType().GetProperties();
+            if (propertyInfos.Count() == 0)
+            {
+                return;
+            }
+
+            bool IsModified = false;
+            foreach (PropertyInfo property in propertyInfos)
+            {
+                /// If the as ICollection or name is Id do nothing
+                if (property.GetValue(baseModel) is ICollection || property.Name == "Id")
+                {
+                    continue;
+                }
+
+                /// Attach basemodel
+                if (!IsModified)
+                {
+                    dbSet.Attach(baseModel);
+                    IsModified = true;
+                }
+
+                /// If property name is in ignore is don't change the value
+                if (nameOfPropertysToIgnore.Contains(property.Name))
+                {
+                    context.Entry(baseModel).Property(property.Name).IsModified = false;
+                    continue;
+                }
+
+                /// Gets the property value
+                var propertyValue = property.GetValue(baseModel);
+
+                /// If the value is null
+                if (propertyValue == null)
+                {
+                    /// ??????????
+                    /// SHOULD THE property be set to null ?
+                    /// ??????????
+                    continue;
+                }
+
+                /// Marks the property as modified
+                context.Entry(baseModel).Property(property.Name).IsModified = true;
+            }
         }
     }
 }

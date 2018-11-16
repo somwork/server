@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
@@ -49,6 +50,7 @@ namespace TaskHouseApi.Controllers
             {
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
+            PropertyInfo[] propertyInfo = worker.GetType().GetProperties();
 
             Worker existingWorker = (unitOfWork.Workers.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
@@ -76,13 +78,18 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
+            PropertyInfo[] propertyInfo = w.GetType().GetProperties();
+            var re = propertyInfo[2].GetValue(w);
+            var name = propertyInfo[2].Name;
+
             if (!unitOfWork.Workers.isInDatabase(id))
             {
                 return NotFound();
             }
 
             w.Id = id;
-            unitOfWork.Workers.Update(w);
+            //unitOfWork.Workers.Update(w);
+            unitOfWork.Workers.UpdatePart(w, new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" });
             unitOfWork.Save();
             return new NoContentResult();
         }
