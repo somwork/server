@@ -53,8 +53,6 @@ namespace TaskHouseApi.Persistence.Repositories
         public void Update(T baseModel)
         {
             dbSet.Update(baseModel);
-            // dbSet.Attach(baseModel);
-            // context.Entry(baseModel).State = EntityState.Modified;
         }
 
         public void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)

@@ -78,10 +78,6 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); // 400 Bad request
             }
 
-            PropertyInfo[] propertyInfo = w.GetType().GetProperties();
-            var re = propertyInfo[2].GetValue(w);
-            var name = propertyInfo[2].Name;
-
             if (!unitOfWork.Workers.isInDatabase(id))
             {
                 return NotFound();
