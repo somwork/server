@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using TaskHouseApi.Model;
 using System.Linq;
 using System;
+using TaskHouseUnitTests.FakeRepositorys;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class EducationsControllerUnitTests
     {

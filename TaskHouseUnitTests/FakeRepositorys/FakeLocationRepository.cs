@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.FakeRepositorys
 {
     public class FakeLocationRepository : FakeRepository<Location>, ILocationRepository
     {

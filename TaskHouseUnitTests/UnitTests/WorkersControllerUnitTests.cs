@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaskHouseApi.Service;
+using TaskHouseUnitTests.FakeRepositorys;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class WorkersControllerUnitTests
     {

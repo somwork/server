@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using TaskHouseApi.Model;
 using System.Linq;
+using TaskHouseUnitTests.FakeRepositorys;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class OffersControllerUnitTests
     {

@@ -7,8 +7,9 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using TaskHouseUnitTests.FakeRepositorys;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class LocationsControllerUnitTests
     {

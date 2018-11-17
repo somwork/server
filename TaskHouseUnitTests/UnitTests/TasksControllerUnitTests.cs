@@ -9,8 +9,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using TaskHouseUnitTests.FakeRepositorys;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class TasksControllerUnitTests
     {
