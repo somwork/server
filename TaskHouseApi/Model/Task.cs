@@ -12,6 +12,7 @@ namespace TaskHouseApi.Model
         public string Urgency { get; set; }
         public List<Offer> Offers { get; set; }
         public Reference Reference { get; set; }
+        public List<Category> Categories { get; set; }
 
         public int EmployerId { get; set; }
         public Employer Employer { get; set; }
