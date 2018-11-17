@@ -14,6 +14,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         ITaskRepository Tasks { get; }
         IOfferRepository Offers { get; }
         IReferenceRepository References { get; }
+        IEducationRepository Educations { get; }
         int Save();
     }
 }

@@ -22,6 +22,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ITaskRepository taskRepository;
         private IOfferRepository offerRepository;
         private IReferenceRepository referenceRepository;
+        private IEducationRepository educationRepository;
 
         public IUserRepository<User> Users
         {
@@ -116,6 +117,18 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                     this.referenceRepository = new ReferenceRepository(context);
                 }
                 return referenceRepository;
+            }
+        }
+        public IEducationRepository Educations
+        {
+            get
+            {
+
+                if (this.educationRepository == null)
+                {
+                    this.educationRepository = new EducationRepository(context);
+                }
+                return educationRepository;
             }
         }
 
