@@ -20,6 +20,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
+        private IOfferRepository offerRepository;
 
         public IUserRepository<User> Users
         {
@@ -90,6 +91,18 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                     this.taskRepository = new TaskRepository(context);
                 }
                 return taskRepository;
+            }
+        }
+        public IOfferRepository Offers
+        {
+            get
+            {
+
+                if (this.offerRepository == null)
+                {
+                    this.offerRepository = new OfferRepository(context);
+                }
+                return offerRepository;
             }
         }
 

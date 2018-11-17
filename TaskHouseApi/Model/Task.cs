@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskHouseApi.Model
@@ -9,6 +10,7 @@ namespace TaskHouseApi.Model
         public DateTime Deadline { get; set; }
         public string Description { get; set; }
         public string Urgency { get; set; }
+        public List<Offer> Offers { get; set; }
 
         public int EmployerId { get; set; }
         public Employer Employer { get; set; }
