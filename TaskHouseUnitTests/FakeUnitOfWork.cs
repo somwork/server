@@ -16,6 +16,7 @@ namespace TaskHouseUnitTests
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
         private IOfferRepository offerRepository;
+        private IReferenceRepository referenceRepository;
 
         public IUserRepository<User> Users
         {
@@ -102,6 +103,18 @@ namespace TaskHouseUnitTests
                     this.offerRepository = new FakeOfferRepository();
                 }
                 return offerRepository;
+            }
+        }
+        public IReferenceRepository References
+        {
+            get
+            {
+
+                if (this.referenceRepository == null)
+                {
+                    this.referenceRepository = new FakeReferenceRepository();
+                }
+                return referenceRepository;
             }
         }
 

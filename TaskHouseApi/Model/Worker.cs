@@ -5,6 +5,7 @@ namespace TaskHouseApi.Model
     public class Worker : User
     {
         public List<Offer> Offers { get; set; }
+        public List<Reference> References { get; set; }
         public Worker()
         {
         }

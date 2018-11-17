@@ -7,85 +7,85 @@ namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class OffersController : Controller
+    public class ReferencesController : Controller
     {
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public OffersController(IUnitOfWork unitOfWork)
+        public ReferencesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        // GET: api/offers/
+        // GET: api/reference/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(unitOfWork.Offers.RetrieveAll());
+            return new ObjectResult(unitOfWork.References.RetrieveAll());
         }
 
-        // GET: api/offers/[id]
+        // GET: api/reference/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Offer l = unitOfWork.Offers.Retrieve(Id);
-            if (l == null)
+            Reference r = unitOfWork.References.Retrieve(Id);
+            if (r == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            return new ObjectResult(l); // 200 ok
+            return new ObjectResult(r); // 200 ok
         }
 
-        // POST: api/offers
+        // POST: api/reference
         [HttpPost]
-        public IActionResult Create([FromBody]Offer offer)
+        public IActionResult Create([FromBody]Reference reference)
         {
-            if (offer == null)
+            if (reference == null)
             {
                 // 400 Bad request
                 return BadRequest(new { error = "Createoffer: offer is null" });
             }
 
-            unitOfWork.Offers.Create(offer);
+            unitOfWork.References.Create(reference);
             unitOfWork.Save();
 
-            return new ObjectResult(offer);
+            return new ObjectResult(reference);
         }
 
-        // PUT: api/offers/[id]
+        // PUT: api/reference/[id]
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Offer offer)
+        public IActionResult Update(int id, [FromBody] Reference reference)
         {
-            if (offer == null)
+            if (reference == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Offer existing = unitOfWork.Offers.Retrieve(id);
+            Reference existing = unitOfWork.References.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            offer.Id = id;
-            unitOfWork.Offers.Update(offer);
+            reference.Id = id;
+            unitOfWork.References.Update(reference);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
-        // DELETE: api/offers/[id]
+        // DELETE: api/reference/[id]
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Offer existing = unitOfWork.Offers.Retrieve(Id);
+            Reference existing = unitOfWork.References.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            unitOfWork.Offers.Delete(Id);
+            unitOfWork.References.Delete(Id);
             unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content

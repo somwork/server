@@ -21,6 +21,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
         private IOfferRepository offerRepository;
+        private IReferenceRepository referenceRepository;
 
         public IUserRepository<User> Users
         {
@@ -103,6 +104,18 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                     this.offerRepository = new OfferRepository(context);
                 }
                 return offerRepository;
+            }
+        }
+        public IReferenceRepository References
+        {
+            get
+            {
+
+                if (this.referenceRepository == null)
+                {
+                    this.referenceRepository = new ReferenceRepository(context);
+                }
+                return referenceRepository;
             }
         }
 
