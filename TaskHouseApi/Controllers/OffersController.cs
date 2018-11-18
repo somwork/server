@@ -45,7 +45,7 @@ namespace TaskHouseApi.Controllers
             if (offer == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "Createoffer: offer is null" });
+                return BadRequest(new { error = "Create offer: offer is null" });
             }
 
             unitOfWork.Offers.Create(offer);
