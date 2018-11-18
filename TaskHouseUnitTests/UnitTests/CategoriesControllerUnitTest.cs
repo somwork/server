@@ -10,20 +10,20 @@ using TaskHouseUnitTests.FakeRepositorys;
 
 namespace TaskHouseUnitTests.UnitTests
 {
-    public class CategorysControllerUnitTests
+    public class CategoriesControllerUnitTests
     {
         IUnitOfWork unitOfWork;
-        CategorysController controller;
+        CategoriesController controller;
 
-        public CategorysControllerUnitTests()
+        public CategoriesControllerUnitTests()
         {
             unitOfWork = new FakeUnitOfWork();
-            controller = new CategorysController(unitOfWork);
+            controller = new CategoriesController(unitOfWork);
         }
 
         //Test retrieve all in repository
         [Fact]
-        public void CategorysController_Get_ReturnAllElementsInRepo_WhenGivenNoParameters()
+        public void CategoriesController_Get_ReturnAllElementsInRepo_WhenGivenNoParameters()
         {
             var result = controller.Get();
             var resultObjectResult = result as ObjectResult;
@@ -35,7 +35,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         //Test GET with id
-        public void CategorysController_Get_ReturnObject_WhenIdIsValid()
+        public void CategoriesController_Get_ReturnObject_WhenIdIsValid()
         {
             //Arrange id for category object
             int categoryId = 1;
@@ -52,7 +52,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         // Test GET with invalid ID
-        public void CategorysController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        public void CategoriesController_Get_ReturnsNotFound_WhenGivenInvalidId()
         {
             //Arrange id for location object
             int categoryId = 403;
@@ -66,7 +66,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         //Test POST for creating new category
-        public void CategorysController_Create_ReturnsObject_WhenNewObject()
+        public void CategoriesController_Create_ReturnsObject_WhenNewObject()
         {
             //Arrange new ObjectResult
             var category = new Category();
@@ -84,7 +84,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         //Test POST for creating new category that is null
-        public void CategorysController_Create_ReturnsBadRequest_WhenObjectIsNull()
+        public void CategoriesController_Create_ReturnsBadRequest_WhenObjectIsNull()
         {
             //Arrange new ObjectResult
             Category category = null;
@@ -98,7 +98,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         // Test PUT for update category
-        public void CategorysController_Update_ReturnsNoContentResultAndCreatedbject_WhenParametersAreValid()
+        public void CategoriesController_Update_ReturnsNoContentResultAndCreatedbject_WhenParametersAreValid()
         {
             //Arrange
             Category category = new Category()
@@ -121,7 +121,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         ///Test put with invalid Id and null category object
         [Fact]
-        public void CategorysController_Update_ReturnsBadRequestResult_WhencategoryIsNull()
+        public void CategoriesController_Update_ReturnsBadRequestResult_WhencategoryIsNull()
         {
             //Arrange
             Category category = null;
@@ -137,7 +137,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         // Test PUT for update category when Id is invalid
-        public void CategorysController_Update_ReturnsBadRequest_WhenIdIsInvalid()
+        public void CategoriesController_Update_ReturnsBadRequest_WhenIdIsInvalid()
         {
             //Arrange
             Category category = new Category()
@@ -157,7 +157,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         // Test DELETE for category
-        public void CategorysController_Delete_ReturnsNoContentResult_WhenDeleted()
+        public void CategoriesController_Delete_ReturnsNoContentResult_WhenDeleted()
         {
             //Arrange
             int Id = 1;
@@ -173,7 +173,7 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         //Test DELETE for invalid Id for category
-        public void CategorysController_Delete_ReturnsNotFoundResult_WhenIdInvalid()
+        public void CategoriesController_Delete_ReturnsNotFoundResult_WhenIdInvalid()
         {
             //Arrange
             int Id = 100;

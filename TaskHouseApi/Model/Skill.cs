@@ -6,7 +6,7 @@ namespace TaskHouseApi.Model
     {
         public string Title { get; set; }
         public int WorkerId { get; set; }
-        public List<Category> Categorys { get; set; }
+        public List<Category> Categories { get; set; }
 
         public Skill()
         {

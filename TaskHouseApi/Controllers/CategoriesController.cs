@@ -7,12 +7,12 @@ namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class CategorysController : Controller
+    public class CategoriesController : Controller
     {
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public CategorysController(IUnitOfWork unitOfWork)
+        public CategoriesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
