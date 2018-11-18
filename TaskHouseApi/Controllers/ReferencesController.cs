@@ -44,7 +44,7 @@ namespace TaskHouseApi.Controllers
             if (reference == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "Createoffer: offer is null" });
+                return BadRequest(new { error = "Create reference: reference is null" });
             }
 
             unitOfWork.References.Create(reference);
