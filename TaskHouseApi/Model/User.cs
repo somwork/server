@@ -13,8 +13,9 @@ namespace TaskHouseApi.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Salt { get; set; }
-        public virtual List<RefreshToken> RefreshTokens { get; set; }
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public string Discriminator { get; set; }
+        public Location Location { get; set; }
 
         public User()
         {
