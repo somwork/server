@@ -44,7 +44,7 @@ namespace TaskHouseApi.Controllers
             if (education == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "Createoffer: offer is null" });
+                return BadRequest(new { error = "Create education: education is null" });
             }
 
             unitOfWork.Educations.Create(education);
