@@ -5,7 +5,7 @@ using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
-namespace TaskHouseUnitTests.FakeRepositorys
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeUnitOfWork : IUnitOfWork
     {

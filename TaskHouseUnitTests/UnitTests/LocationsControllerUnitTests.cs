@@ -7,7 +7,7 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using TaskHouseUnitTests.FakeRepositorys;
+using TaskHouseUnitTests.FakeRepositories;
 
 namespace TaskHouseUnitTests.UnitTests
 {

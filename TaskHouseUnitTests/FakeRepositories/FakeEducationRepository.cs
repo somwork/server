@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 
-namespace TaskHouseUnitTests.FakeRepositorys
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeEducationRepository : FakeRepository<Education>, IEducationRepository
     {

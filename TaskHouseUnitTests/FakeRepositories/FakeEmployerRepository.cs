@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TaskHouseApi.Model.ServiceModel;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 
-namespace TaskHouseUnitTests.FakeRepositorys
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeEmployerRepository : FakeUserRepository<Employer>, IEmployerRepository
     {

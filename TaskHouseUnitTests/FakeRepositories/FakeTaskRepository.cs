@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TaskHouseUnitTests.FakeRepositorys
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeTaskRepository : FakeRepository<Task>, ITaskRepository
     {

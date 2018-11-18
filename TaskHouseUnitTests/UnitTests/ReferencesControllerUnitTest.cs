@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using TaskHouseApi.Model;
 using System.Linq;
-using TaskHouseUnitTests.FakeRepositorys;
+using TaskHouseUnitTests.FakeRepositories;
 
 namespace TaskHouseUnitTests.UnitTests
 {
