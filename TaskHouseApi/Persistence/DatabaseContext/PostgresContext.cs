@@ -17,6 +17,10 @@ namespace TaskHouseApi.Persistence.DatabaseContext
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<Reference> References { get; set; }
+        public DbSet<CategorySkill> CategorySkill { get; set; }
+        public DbSet<CategoryTask> CategoryTask { get; set; }
 
         public PostgresContext(DbContextOptions options)
             : base(options) { }
@@ -26,6 +30,8 @@ namespace TaskHouseApi.Persistence.DatabaseContext
             // modelBuilder.Entity<User>()
             // .
 
+            modelBuilder.Entity<CategorySkill>().HasKey(sc => new { sc.CategoryId, sc.SkillId });
+            modelBuilder.Entity<CategoryTask>().HasKey(sc => new { sc.CategoryId, sc.TaskId });
             modelBuilder.Entity<User>().ToTable("Users");
 
 

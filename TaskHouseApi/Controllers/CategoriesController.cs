@@ -44,7 +44,7 @@ namespace TaskHouseApi.Controllers
             if (category == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "Createoffer: offer is null" });
+                return BadRequest(new { error = "Create category: category is null" });
             }
 
             unitOfWork.Categorys.Create(category);

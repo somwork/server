@@ -6,10 +6,11 @@ namespace TaskHouseApi.Model
     {
         public string Title { get; set; }
         public int WorkerId { get; set; }
-        public List<Category> Categories { get; set; }
+        public virtual ICollection<CategorySkill> CategorySkill { get; set; }
 
         public Skill()
         {
+            CategorySkill = new List<CategorySkill>();
         }
     }
 }
