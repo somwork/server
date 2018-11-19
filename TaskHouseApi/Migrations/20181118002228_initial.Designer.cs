@@ -10,7 +10,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181116121947_initial")]
+    [Migration("20181118002228_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,32 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("TaskHouseApi.Model.CategorySkill", b =>
+                {
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("SkillId");
+
+                    b.HasKey("CategoryId", "SkillId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("CategorySkill");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.CategoryTask", b =>
+                {
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("TaskId");
+
+                    b.HasKey("CategoryId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("CategoryTask");
+                });
+
             modelBuilder.Entity("TaskHouseApi.Model.Education", b =>
                 {
                     b.Property<int>("Id")
@@ -62,7 +88,11 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int>("WorkerId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkerId");
 
                     b.ToTable("Educations");
                 });
@@ -80,9 +110,14 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("SecondaryLine");
 
+                    b.Property<int>("UserId");
+
                     b.Property<string>("ZipCode");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Locations");
                 });
@@ -99,6 +134,53 @@ namespace TaskHouseApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Offer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Accepted");
+
+                    b.Property<string>("Currency");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<int>("TaskId");
+
+                    b.Property<int>("WorkerId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Reference", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("Statement");
+
+                    b.Property<int>("TaskId");
+
+                    b.Property<int>("WorkerId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId")
+                        .IsUnique();
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("References");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.ServiceModel.RefreshToken", b =>
@@ -124,7 +206,11 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int>("WorkerId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkerId");
 
                     b.ToTable("Skills");
                 });
@@ -198,11 +284,87 @@ namespace TaskHouseApi.Migrations
                     b.HasDiscriminator().HasValue("Worker");
                 });
 
+            modelBuilder.Entity("TaskHouseApi.Model.CategorySkill", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Category", "Category")
+                        .WithMany("CategorySkill")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskHouseApi.Model.Skill", "Skill")
+                        .WithMany("CategorySkill")
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.CategoryTask", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Category", "Category")
+                        .WithMany("CategoryTask")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskHouseApi.Model.Task", "Task")
+                        .WithMany("CategoryTask")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Education", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Worker")
+                        .WithMany("Educations")
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Location", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.User")
+                        .WithOne("Location")
+                        .HasForeignKey("TaskHouseApi.Model.Location", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Offer", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Task")
+                        .WithMany("Offers")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskHouseApi.Model.Worker")
+                        .WithMany("Offers")
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Reference", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Task")
+                        .WithOne("Reference")
+                        .HasForeignKey("TaskHouseApi.Model.Reference", "TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskHouseApi.Model.Worker")
+                        .WithMany("References")
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("TaskHouseApi.Model.ServiceModel.RefreshToken", b =>
                 {
                     b.HasOne("TaskHouseApi.Model.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Skill", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Worker")
+                        .WithMany("Skills")
+                        .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

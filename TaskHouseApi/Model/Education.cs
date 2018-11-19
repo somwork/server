@@ -8,6 +8,8 @@ namespace TaskHouseApi.Model
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
 
+        public int WorkerId { get; set; }
+
         public Education()
         {
 
