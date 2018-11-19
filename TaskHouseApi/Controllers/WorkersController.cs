@@ -50,7 +50,6 @@ namespace TaskHouseApi.Controllers
             {
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
-            PropertyInfo[] propertyInfo = worker.GetType().GetProperties();
 
             Worker existingWorker = (unitOfWork.Workers.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
@@ -84,7 +83,6 @@ namespace TaskHouseApi.Controllers
             }
 
             w.Id = id;
-            //unitOfWork.Workers.Update(w);
             unitOfWork.Workers.UpdatePart(w, new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" });
             unitOfWork.Save();
             return new NoContentResult();

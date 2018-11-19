@@ -68,22 +68,13 @@ namespace TaskHouseUnitTests
                 {
                     continue;
                 }
-
-                /// If property name is in ignore is don't change the value
-                if (nameOfPropertysToIgnore.Contains(property.Name))
-                {
-                    continue;
-                }
-
-                /// Gets the property value
+                
+                 /// Gets the property value
                 var propertyValue = property.GetValue(baseModel);
 
-                /// If the value is null
-                if (propertyValue == null)
+                /// If property name is in ignore is don't change the value
+                if (nameOfPropertysToIgnore.Contains(property.Name) || propertyValue == null)
                 {
-                    /// ??????????
-                    /// SHOULD THE property be set to null ?
-                    /// ??????????
                     continue;
                 }
 
