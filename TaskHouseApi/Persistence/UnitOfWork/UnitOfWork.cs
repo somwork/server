@@ -37,7 +37,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.workerRepository == null)
                 {
                     this.workerRepository = new WorkerRepository(context);
@@ -49,7 +48,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.employerRepository == null)
                 {
                     this.employerRepository = new EmployerRepository(context);
@@ -61,7 +59,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.locationRepository == null)
                 {
                     this.locationRepository = new LocationRepository(context);
@@ -73,7 +70,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.skillRepository == null)
                 {
                     this.skillRepository = new SkillRepository(context);
@@ -85,7 +81,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.taskRepository == null)
                 {
                     this.taskRepository = new TaskRepository(context);
@@ -97,7 +92,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.offerRepository == null)
                 {
                     this.offerRepository = new OfferRepository(context);
