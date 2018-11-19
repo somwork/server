@@ -29,7 +29,7 @@ namespace TaskHouseApi.Persistence.Repositories
 
         public bool isInDatabase(int Id)
         {
-            postgresContext.Users.Any(o => o.Id == Id);
+            return postgresContext.Users.Any(o => o.Id == Id);
         }
     }
 }
