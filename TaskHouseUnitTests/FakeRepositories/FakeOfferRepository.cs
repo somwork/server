@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeOfferRepository : FakeRepository<Offer>, IOfferRepository
     {

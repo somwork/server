@@ -10,12 +10,16 @@ namespace TaskHouseApi.Model
         public DateTime Deadline { get; set; }
         public string Description { get; set; }
         public string Urgency { get; set; }
-        public List<Offer> Offers { get; set; }
+        public virtual ICollection<Offer> Offers { get; set; }
+        public Reference Reference { get; set; }
+        public virtual ICollection<CategoryTask> CategoryTask { get; set; }
         public int EmployerId { get; set; }
         public Employer Employer { get; set; }
 
         public Task()
         {
+            Offers = new List<Offer>();
+            CategoryTask = new List<CategoryTask>();
         }
     }
 }

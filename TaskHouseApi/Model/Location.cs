@@ -7,6 +7,7 @@ namespace TaskHouseApi.Model
         public string ZipCode { get; set; }
         public string PrimaryLine { get; set; }
         public string SecondaryLine { get; set; }
+        public int UserId { get; set; }
 
         public Location()
         {
