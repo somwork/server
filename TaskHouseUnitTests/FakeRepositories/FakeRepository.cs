@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeRepository<T> : IRepository<T> where T : BaseModel
     {
