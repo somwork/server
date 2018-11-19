@@ -8,6 +8,7 @@ namespace TaskHouseApi.Model
         public virtual ICollection<Reference> References { get; set; }
         public virtual ICollection<Education> Educations { get; set; }
         public virtual ICollection<Skill> Skills { get; set; }
+
         public Worker()
         {
             Offers = new List<Offer>();

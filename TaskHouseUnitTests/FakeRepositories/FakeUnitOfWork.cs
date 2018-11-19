@@ -39,7 +39,6 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             get
             {
-
                 if (this.workerRepository == null)
                 {
                     this.workerRepository = new FakeWorkerRepository();
@@ -63,7 +62,6 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             get
             {
-
                 if (this.locationRepository == null)
                 {
                     this.locationRepository = new FakeLocationRepository();
@@ -75,7 +73,6 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             get
             {
-
                 if (this.skillRepository == null)
                 {
                     this.skillRepository = new FakeSkillRepository();
@@ -87,7 +84,6 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             get
             {
-
                 if (this.taskRepository == null)
                 {
                     this.taskRepository = new FakeTaskRepository();
@@ -99,7 +95,6 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             get
             {
-
                 if (this.offerRepository == null)
                 {
                     this.offerRepository = new FakeOfferRepository();

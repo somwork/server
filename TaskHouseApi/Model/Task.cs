@@ -13,7 +13,6 @@ namespace TaskHouseApi.Model
         public virtual ICollection<Offer> Offers { get; set; }
         public Reference Reference { get; set; }
         public virtual ICollection<CategoryTask> CategoryTask { get; set; }
-
         public int EmployerId { get; set; }
         public Employer Employer { get; set; }
 
