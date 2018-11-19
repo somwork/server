@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Data;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 
-namespace TaskHouseUnitTests.FakeRepositorys
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeWorkerRepository : FakeUserRepository<Worker>, IWorkerRepository
     {

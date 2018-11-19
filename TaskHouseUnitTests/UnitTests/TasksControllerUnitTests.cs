@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using TaskHouseUnitTests.FakeRepositorys;
+using TaskHouseUnitTests.FakeRepositories;
 
 namespace TaskHouseUnitTests.UnitTests
 {

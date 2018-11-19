@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaskHouseApi.Service;
-using TaskHouseUnitTests.FakeRepositorys;
+using TaskHouseUnitTests.FakeRepositories;
 
 namespace TaskHouseUnitTests.UnitTests
 {

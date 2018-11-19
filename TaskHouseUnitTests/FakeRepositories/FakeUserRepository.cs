@@ -4,7 +4,7 @@ using TaskHouseApi.Model.ServiceModel;
 using System.Linq;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 
-namespace TaskHouseUnitTests.FakeRepositorys
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeUserRepository<U> : FakeRepository<U>, IUserRepository<U> where U : User
     {

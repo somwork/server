@@ -4,7 +4,7 @@ using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 using TaskHouseApi.Service;
 using Xunit;
-using TaskHouseUnitTests.FakeRepositorys;
+using TaskHouseUnitTests.FakeRepositories;
 
 namespace TaskHouseUnitTests.UnitTests
 {
