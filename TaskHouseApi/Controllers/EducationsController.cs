@@ -1,95 +1,91 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class SkillsController : Controller
+    public class EducationsController : Controller
     {
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public SkillsController(IUnitOfWork unitOfWork)
+        public EducationsController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        // GET: api/skills/
+        // GET: api/Education/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(unitOfWork.Skills.RetrieveAll());
+            return new ObjectResult(unitOfWork.Educations.RetrieveAll());
         }
 
-        // GET: api/skills/[id]
+        // GET: api/Education/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Skill s = unitOfWork.Skills.Retrieve(Id);
-            if (s == null)
+            Education l = unitOfWork.Educations.Retrieve(Id);
+            if (l == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            return new ObjectResult(s); // 200 ok
+            return new ObjectResult(l); // 200 ok
         }
 
-        // POST: api/skills
+        // POST: api/Education
         [HttpPost]
-        public IActionResult Create([FromBody]Skill skill)
+        public IActionResult Create([FromBody]Education education)
         {
-            if (skill == null)
+            if (education == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "CreateLocation: skill is null" });
+                return BadRequest(new { error = "Create education: education is null" });
             }
 
-            unitOfWork.Skills.Create(skill);
+            unitOfWork.Educations.Create(education);
             unitOfWork.Save();
 
-            return new ObjectResult(skill);
+            return new ObjectResult(education);
         }
 
-        // PUT: api/skills/[id]
+        // PUT: api/Education/[id]
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Skill s)
+        public IActionResult Update(int id, [FromBody] Education education)
         {
-            if (s == null)
+            if (education == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Skill existing = unitOfWork.Skills.Retrieve(id);
+            Education existing = unitOfWork.Educations.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            s.Id = id;
-            unitOfWork.Skills.Update(s);
+            education.Id = id;
+            unitOfWork.Educations.Update(education);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
-        // DELETE: api/skills/[id]
+        // DELETE: api/Education/[id]
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Skill existing = unitOfWork.Skills.Retrieve(Id);
+            Education existing = unitOfWork.Educations.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            unitOfWork.Skills.Delete(Id);
+            unitOfWork.Educations.Delete(Id);
             unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content

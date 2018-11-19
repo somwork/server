@@ -12,6 +12,10 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         ILocationRepository Locations { get; }
         ISkillRepository Skills { get; }
         ITaskRepository Tasks { get; }
+        IOfferRepository Offers { get; }
+        IReferenceRepository References { get; }
+        IEducationRepository Educations { get; }
+        ICategoryRepository Categorys { get; }
         int Save();
     }
 }

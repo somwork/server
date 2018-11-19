@@ -1,95 +1,91 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class SkillsController : Controller
+    public class OffersController : Controller
     {
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public SkillsController(IUnitOfWork unitOfWork)
+        public OffersController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        // GET: api/skills/
+        // GET: api/offers/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(unitOfWork.Skills.RetrieveAll());
+            return new ObjectResult(unitOfWork.Offers.RetrieveAll());
         }
 
-        // GET: api/skills/[id]
+        // GET: api/offers/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Skill s = unitOfWork.Skills.Retrieve(Id);
-            if (s == null)
+            Offer l = unitOfWork.Offers.Retrieve(Id);
+            if (l == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            return new ObjectResult(s); // 200 ok
+            return new ObjectResult(l); // 200 ok
         }
 
-        // POST: api/skills
+        // POST: api/offers
         [HttpPost]
-        public IActionResult Create([FromBody]Skill skill)
+        public IActionResult Create([FromBody]Offer offer)
         {
-            if (skill == null)
+            if (offer == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "CreateLocation: skill is null" });
+                return BadRequest(new { error = "Create offer: offer is null" });
             }
 
-            unitOfWork.Skills.Create(skill);
+            unitOfWork.Offers.Create(offer);
             unitOfWork.Save();
 
-            return new ObjectResult(skill);
+            return new ObjectResult(offer);
         }
 
-        // PUT: api/skills/[id]
+        // PUT: api/offers/[id]
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Skill s)
+        public IActionResult Update(int id, [FromBody] Offer offer)
         {
-            if (s == null)
+            if (offer == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Skill existing = unitOfWork.Skills.Retrieve(id);
+            Offer existing = unitOfWork.Offers.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            s.Id = id;
-            unitOfWork.Skills.Update(s);
+            offer.Id = id;
+            unitOfWork.Offers.Update(offer);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
-        // DELETE: api/skills/[id]
+        // DELETE: api/offers/[id]
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Skill existing = unitOfWork.Skills.Retrieve(Id);
+            Offer existing = unitOfWork.Offers.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            unitOfWork.Skills.Delete(Id);
+            unitOfWork.Offers.Delete(Id);
             unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content

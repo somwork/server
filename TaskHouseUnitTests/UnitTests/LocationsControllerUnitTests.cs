@@ -7,8 +7,9 @@ using TaskHouseApi.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using TaskHouseUnitTests.FakeRepositories;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class LocationsControllerUnitTests
     {
@@ -106,9 +107,10 @@ namespace TaskHouseUnitTests
                 Id = 1,
                 Country = "UpdatedCountry"
             };
+            int id = 1;
 
             //Act
-            var result = controller.Update(location);
+            var result = controller.Update(id, location);
             var resultAsObject = controller.Get(location.Id) as ObjectResult;
             var resultObject = resultAsObject.Value as Location;
 
@@ -123,9 +125,10 @@ namespace TaskHouseUnitTests
         {
             //Arrange
             Location location = null;
+            int id = 0;
 
             //Act
-            var result = controller.Update(location);
+            var result = controller.Update(id, location);
 
             //Assert
             Assert.IsType<BadRequestResult>(result);
@@ -142,9 +145,10 @@ namespace TaskHouseUnitTests
                 Id = 100,
                 Country = "UpdatedCountry"
             };
+            int id = 100;
 
             //Act
-            var result = controller.Update(location);
+            var result = controller.Update(id, location);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);

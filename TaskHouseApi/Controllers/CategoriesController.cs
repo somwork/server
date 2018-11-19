@@ -1,95 +1,91 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class SkillsController : Controller
+    public class CategoriesController : Controller
     {
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public SkillsController(IUnitOfWork unitOfWork)
+        public CategoriesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        // GET: api/skills/
+        // GET: api/category/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(unitOfWork.Skills.RetrieveAll());
+            return new ObjectResult(unitOfWork.Categorys.RetrieveAll());
         }
 
-        // GET: api/skills/[id]
+        // GET: api/category/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Skill s = unitOfWork.Skills.Retrieve(Id);
-            if (s == null)
+            Category l = unitOfWork.Categorys.Retrieve(Id);
+            if (l == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            return new ObjectResult(s); // 200 ok
+            return new ObjectResult(l); // 200 ok
         }
 
-        // POST: api/skills
+        // POST: api/category
         [HttpPost]
-        public IActionResult Create([FromBody]Skill skill)
+        public IActionResult Create([FromBody]Category category)
         {
-            if (skill == null)
+            if (category == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "CreateLocation: skill is null" });
+                return BadRequest(new { error = "Create category: category is null" });
             }
 
-            unitOfWork.Skills.Create(skill);
+            unitOfWork.Categorys.Create(category);
             unitOfWork.Save();
 
-            return new ObjectResult(skill);
+            return new ObjectResult(category);
         }
 
-        // PUT: api/skills/[id]
+        // PUT: api/category/[id]
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Skill s)
+        public IActionResult Update(int id, [FromBody] Category category)
         {
-            if (s == null)
+            if (category == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Skill existing = unitOfWork.Skills.Retrieve(id);
+            Category existing = unitOfWork.Categorys.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            s.Id = id;
-            unitOfWork.Skills.Update(s);
+            category.Id = id;
+            unitOfWork.Categorys.Update(category);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
-        // DELETE: api/skills/[id]
+        // DELETE: api/category/[id]
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Skill existing = unitOfWork.Skills.Retrieve(Id);
+            Category existing = unitOfWork.Categorys.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            unitOfWork.Skills.Delete(Id);
+            unitOfWork.Categorys.Delete(Id);
             unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content

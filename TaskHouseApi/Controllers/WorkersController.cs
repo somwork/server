@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
@@ -69,19 +70,20 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] Worker w)
+        public IActionResult Update(int id, [FromBody] Worker w)
         {
             if (w == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            if (!unitOfWork.Workers.isInDatabase(w.Id))
+            if (!unitOfWork.Workers.isInDatabase(id))
             {
                 return NotFound();
             }
 
-            unitOfWork.Workers.Update(w);
+            w.Id = id;
+            unitOfWork.Workers.UpdatePart(w, new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" });
             unitOfWork.Save();
             return new NoContentResult();
         }

@@ -5,7 +5,7 @@ using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeUnitOfWork : IUnitOfWork
     {
@@ -15,6 +15,10 @@ namespace TaskHouseUnitTests
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
+        private IOfferRepository offerRepository;
+        private IReferenceRepository referenceRepository;
+        private IEducationRepository educationRepository;
+        private ICategoryRepository categoryRepository;
 
         public IUserRepository<User> Users
         {
@@ -35,7 +39,6 @@ namespace TaskHouseUnitTests
         {
             get
             {
-
                 if (this.workerRepository == null)
                 {
                     this.workerRepository = new FakeWorkerRepository();
@@ -59,7 +62,6 @@ namespace TaskHouseUnitTests
         {
             get
             {
-
                 if (this.locationRepository == null)
                 {
                     this.locationRepository = new FakeLocationRepository();
@@ -71,7 +73,6 @@ namespace TaskHouseUnitTests
         {
             get
             {
-
                 if (this.skillRepository == null)
                 {
                     this.skillRepository = new FakeSkillRepository();
@@ -83,12 +84,58 @@ namespace TaskHouseUnitTests
         {
             get
             {
-
                 if (this.taskRepository == null)
                 {
                     this.taskRepository = new FakeTaskRepository();
                 }
                 return taskRepository;
+            }
+        }
+        public IOfferRepository Offers
+        {
+            get
+            {
+                if (this.offerRepository == null)
+                {
+                    this.offerRepository = new FakeOfferRepository();
+                }
+                return offerRepository;
+            }
+        }
+        public IReferenceRepository References
+        {
+            get
+            {
+
+                if (this.referenceRepository == null)
+                {
+                    this.referenceRepository = new FakeReferenceRepository();
+                }
+                return referenceRepository;
+            }
+        }
+        public IEducationRepository Educations
+        {
+            get
+            {
+
+                if (this.educationRepository == null)
+                {
+                    this.educationRepository = new FakeEducationRepository();
+                }
+                return educationRepository;
+            }
+        }
+        public ICategoryRepository Categorys
+        {
+            get
+            {
+
+                if (this.categoryRepository == null)
+                {
+                    this.categoryRepository = new FakeCategoryRepository();
+                }
+                return categoryRepository;
             }
         }
 

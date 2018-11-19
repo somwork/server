@@ -73,18 +73,19 @@ namespace TaskHouseApi.Controllers
 
         // PUT: api/employers/[id]
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] Employer e)
+        public IActionResult Update(int id, [FromBody] Employer e)
         {
             if (e == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            if (!unitOfWork.Employers.isInDatabase(e.Id))
+            if (!unitOfWork.Employers.isInDatabase(id))
             {
                 return NotFound();
             }
 
+            e.Id = id;
             unitOfWork.Employers.Update(e);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content

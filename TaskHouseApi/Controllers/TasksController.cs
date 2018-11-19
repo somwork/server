@@ -68,20 +68,21 @@ namespace TaskHouseApi.Controllers
         //PUT: api/tasks/[id]
         [HttpPut("{id}")]
 
-        public IActionResult Update([FromBody] Task t)
+        public IActionResult Update(int id, [FromBody] Task t)
         {
             if (t == null)
             {
                 return BadRequest(); //400 bad request
             }
 
-            Task existing = unitOfWork.Tasks.Retrieve(t.Id);
+            Task existing = unitOfWork.Tasks.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); //404 resource not found
             }
 
+            t.Id = id;
             unitOfWork.Tasks.Update(t);
             unitOfWork.Save();
             return new NoContentResult();  //204 no content

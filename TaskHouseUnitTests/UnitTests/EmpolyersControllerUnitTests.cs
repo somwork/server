@@ -9,8 +9,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaskHouseApi.Service;
+using TaskHouseUnitTests.FakeRepositories;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class EmpolyersControllerUnitTests
     {
@@ -164,7 +165,7 @@ namespace TaskHouseUnitTests
             int id = 1;
 
             //Act
-            var result = controller.Update(employer);
+            var result = controller.Update(id, employer);
             var updatedResultObject = controller.Get(id) as ObjectResult;
             var updatedEmployer = updatedResultObject.Value as Employer;
 
@@ -183,9 +184,10 @@ namespace TaskHouseUnitTests
                 Id = 10,
                 Email = "Email"
             };
+            int id = 10;
 
             //Act
-            var result = controller.Update(Employer);
+            var result = controller.Update(id, Employer);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
@@ -197,9 +199,10 @@ namespace TaskHouseUnitTests
         {
             //Arrange
             Employer employer = null;
+            int id = 0;
 
             //Act
-            var result = controller.Update(employer);
+            var result = controller.Update(id, employer);
 
             //Assert
             Assert.IsType<BadRequestResult>(result);

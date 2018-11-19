@@ -59,20 +59,21 @@ namespace TaskHouseApi.Controllers
 
         // PUT: api/locations/[id]
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] Location l)
+        public IActionResult Update(int id, [FromBody] Location l)
         {
             if (l == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Location existing = unitOfWork.Locations.Retrieve(l.Id);
+            Location existing = unitOfWork.Locations.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
+            l.Id = id;
             unitOfWork.Locations.Update(l);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content

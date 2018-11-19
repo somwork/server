@@ -1,95 +1,91 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class SkillsController : Controller
+    public class ReferencesController : Controller
     {
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public SkillsController(IUnitOfWork unitOfWork)
+        public ReferencesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        // GET: api/skills/
+        // GET: api/reference/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(unitOfWork.Skills.RetrieveAll());
+            return new ObjectResult(unitOfWork.References.RetrieveAll());
         }
 
-        // GET: api/skills/[id]
+        // GET: api/reference/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Skill s = unitOfWork.Skills.Retrieve(Id);
-            if (s == null)
+            Reference r = unitOfWork.References.Retrieve(Id);
+            if (r == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            return new ObjectResult(s); // 200 ok
+            return new ObjectResult(r); // 200 ok
         }
 
-        // POST: api/skills
+        // POST: api/reference
         [HttpPost]
-        public IActionResult Create([FromBody]Skill skill)
+        public IActionResult Create([FromBody]Reference reference)
         {
-            if (skill == null)
+            if (reference == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "CreateLocation: skill is null" });
+                return BadRequest(new { error = "Create reference: reference is null" });
             }
 
-            unitOfWork.Skills.Create(skill);
+            unitOfWork.References.Create(reference);
             unitOfWork.Save();
 
-            return new ObjectResult(skill);
+            return new ObjectResult(reference);
         }
 
-        // PUT: api/skills/[id]
+        // PUT: api/reference/[id]
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Skill s)
+        public IActionResult Update(int id, [FromBody] Reference reference)
         {
-            if (s == null)
+            if (reference == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Skill existing = unitOfWork.Skills.Retrieve(id);
+            Reference existing = unitOfWork.References.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            s.Id = id;
-            unitOfWork.Skills.Update(s);
+            reference.Id = id;
+            unitOfWork.References.Update(reference);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
-        // DELETE: api/skills/[id]
+        // DELETE: api/reference/[id]
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Skill existing = unitOfWork.Skills.Retrieve(Id);
+            Reference existing = unitOfWork.References.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            unitOfWork.Skills.Delete(Id);
+            unitOfWork.References.Delete(Id);
             unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content

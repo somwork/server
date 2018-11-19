@@ -1,7 +1,7 @@
 using TaskHouseApi.Service;
 using Xunit;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class PasswordServiceUnitTest
     {

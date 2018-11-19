@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaskHouseApi.Service;
+using TaskHouseUnitTests.FakeRepositories;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class WorkersControllerUnitTests
     {
@@ -102,7 +103,7 @@ namespace TaskHouseUnitTests
         {
             Worker worker = null;
 
-            var result = controller.Update(worker);
+            var result = controller.Update(0, worker);
 
             Assert.IsType<BadRequestResult>(result);
         }
@@ -143,7 +144,7 @@ namespace TaskHouseUnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            var Result = controller.Update(worker);
+            var Result = controller.Update(Id, worker);
             var resultAsObject = controller.Get(Id) as ObjectResult;
             var resultObject = resultAsObject.Value as Worker;
 
