@@ -5,7 +5,7 @@ using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeUnitOfWork : IUnitOfWork
     {
@@ -18,6 +18,7 @@ namespace TaskHouseUnitTests
         private IOfferRepository offerRepository;
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
+        private ICategoryRepository categoryRepository;
 
         public IUserRepository<User> Users
         {
@@ -128,6 +129,18 @@ namespace TaskHouseUnitTests
                     this.educationRepository = new FakeEducationRepository();
                 }
                 return educationRepository;
+            }
+        }
+        public ICategoryRepository Categorys
+        {
+            get
+            {
+
+                if (this.categoryRepository == null)
+                {
+                    this.categoryRepository = new FakeCategoryRepository();
+                }
+                return categoryRepository;
             }
         }
 

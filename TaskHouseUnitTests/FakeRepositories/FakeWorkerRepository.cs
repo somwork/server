@@ -1,63 +1,59 @@
-using Xunit;
-using TaskHouseApi.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
+using TaskHouseApi.Controllers;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using TaskHouseApi.Model.ServiceModel;
+using System.Data;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.FakeRepositories
 {
-    public class FakeEmployerRepository : FakeUserRepository<Employer>, IEmployerRepository
+    public class FakeWorkerRepository : FakeUserRepository<Worker>, IWorkerRepository
     {
-        public FakeEmployerRepository()
-        : base(new List<Employer>()
-            {
-                new Employer()
+        public FakeWorkerRepository()
+       : base(new List<Worker>()
+       {
+                new Worker()
                 {
-                    Id = 1,
-                    Username = "1234",
+                    Id = 4,
+                    Username = "w1",
                     Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                     Email = "test@test.com",
                     FirstName = "Bob1",
                     LastName = "Bobsen1",
                     Salt = "upYKQSsrlub5JAID61/6pA==",
-                    Discriminator = "Employer"
-
+                    Discriminator = "Worker"
                 },
-                new Employer()
+                new Worker()
                 {
-                    Id = 2,
-                    Username = "root",
+                    Id = 5,
+                    Username = "w2",
                     Password = "gCekoOdivUyOosjAz2wP9X+8TEEpe/LWJekDuvXV8bQ=", //root
                     Email = "test@test.com",
                     FirstName = "Bob2",
                     LastName = "Bobsen2",
                     Salt = "Ci1Zm+9HbvPCvVpBLcSFug==",
-                    Discriminator = "Employer"
+                    Discriminator = "Worker"
                 },
-                new Employer()
+                new Worker()
                 {
-                    Id = 3,
-                    Username = "hej",
+                    Id = 6,
+                    Username = "w3",
                     Password = "dpvq1pIWkY9SudflCKrW6tqCItErcBljM1GhNPWlUmg=", //hej
                     Email = "test@test.com",
                     FirstName = "Bob3",
                     LastName = "Bobsen3",
                     Salt = "U+cUJhQU56X+OCiGF9hb1g==",
-                    Discriminator = "Employer"
+                    Discriminator = "Worker"
                 }
-            }
-        )
+       }
+       )
         { }
         // public override IEnumerable<User> RetrieveAll()
         // {
-        //     return list.Where(w => w.Discriminator == nameof(Employer));
+        //     return list.Where(w => w.Discriminator == nameof(Worker));
         // }
     }
 }
-
-
