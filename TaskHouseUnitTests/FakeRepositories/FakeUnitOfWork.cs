@@ -18,6 +18,7 @@ namespace TaskHouseUnitTests.FakeRepositories
         private IOfferRepository offerRepository;
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
+        private ICategoryRepository categoryRepository;
 
         public IUserRepository<User> Users
         {
@@ -128,6 +129,18 @@ namespace TaskHouseUnitTests.FakeRepositories
                     this.educationRepository = new FakeEducationRepository();
                 }
                 return educationRepository;
+            }
+        }
+        public ICategoryRepository Categorys
+        {
+            get
+            {
+
+                if (this.categoryRepository == null)
+                {
+                    this.categoryRepository = new FakeCategoryRepository();
+                }
+                return categoryRepository;
             }
         }
 
