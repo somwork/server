@@ -100,7 +100,7 @@ namespace TaskHouseApi.Persistence.Repositories
 
                 /// If property is is a string
                 /// change the value
-                if (property.PropertyType == typeof(string))
+                if (property.PropertyType == typeof(string) || property.PropertyType == typeof(double) || property.PropertyType == typeof(int))
                 {
                     /// Marks the property as modified
                     context.Entry(baseModel).Property(property.Name).IsModified = true;
