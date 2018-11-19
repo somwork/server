@@ -66,11 +66,16 @@ namespace TaskHouseApi.Persistence.Repositories
             bool IsModified = false;
             foreach (PropertyInfo property in propertyInfos)
             {
+                var propType = property.GetType();
+
                 /// If the as ICollection or name is Id do nothing
-                if (property.GetValue(baseModel) is ICollection || property.Name == "Id")
+                if (propType is ICollection || property.Name == "Id" || nameOfPropertysToIgnore.Contains(property.Name))
                 {
                     continue;
                 }
+
+                /// Gets the property value
+                var propertyValue = property.GetValue(baseModel);
 
                 /// Attach basemodel
                 if (!IsModified)
@@ -78,9 +83,6 @@ namespace TaskHouseApi.Persistence.Repositories
                     dbSet.Attach(baseModel);
                     IsModified = true;
                 }
-
-                /// Gets the property value
-                var propertyValue = property.GetValue(baseModel);
 
                 /// If property name is in ignore
                 /// or is null

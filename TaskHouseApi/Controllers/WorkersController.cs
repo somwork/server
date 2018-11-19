@@ -83,7 +83,10 @@ namespace TaskHouseApi.Controllers
             }
 
             w.Id = id;
-            unitOfWork.Workers.UpdatePart(w, new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" });
+
+            var propertiesToIgnore = new string[] { "Password", "Salt", "RefreshTokens", "Discriminator", "Location", "Offers", "References", "Educations", "Skills" };
+
+            unitOfWork.Workers.UpdatePart(w, propertiesToIgnore);
             unitOfWork.Save();
             return new NoContentResult();
         }
