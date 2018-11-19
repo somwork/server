@@ -20,6 +20,10 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
+        private IOfferRepository offerRepository;
+        private IReferenceRepository referenceRepository;
+        private IEducationRepository educationRepository;
+        private ICategoryRepository categoryRepository;
 
         public IUserRepository<User> Users
         {
@@ -36,7 +40,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.workerRepository == null)
                 {
                     this.workerRepository = new WorkerRepository(context);
@@ -48,7 +51,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.employerRepository == null)
                 {
                     this.employerRepository = new EmployerRepository(context);
@@ -60,7 +62,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.locationRepository == null)
                 {
                     this.locationRepository = new LocationRepository(context);
@@ -72,7 +73,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.skillRepository == null)
                 {
                     this.skillRepository = new SkillRepository(context);
@@ -84,12 +84,58 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.taskRepository == null)
                 {
                     this.taskRepository = new TaskRepository(context);
                 }
                 return taskRepository;
+            }
+        }
+        public IOfferRepository Offers
+        {
+            get
+            {
+                if (this.offerRepository == null)
+                {
+                    this.offerRepository = new OfferRepository(context);
+                }
+                return offerRepository;
+            }
+        }
+        public IReferenceRepository References
+        {
+            get
+            {
+
+                if (this.referenceRepository == null)
+                {
+                    this.referenceRepository = new ReferenceRepository(context);
+                }
+                return referenceRepository;
+            }
+        }
+        public IEducationRepository Educations
+        {
+            get
+            {
+
+                if (this.educationRepository == null)
+                {
+                    this.educationRepository = new EducationRepository(context);
+                }
+                return educationRepository;
+            }
+        }
+        public ICategoryRepository Categorys
+        {
+            get
+            {
+
+                if (this.categoryRepository == null)
+                {
+                    this.categoryRepository = new CategoryRepository(context);
+                }
+                return categoryRepository;
             }
         }
 

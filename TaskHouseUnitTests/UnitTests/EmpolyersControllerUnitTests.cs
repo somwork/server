@@ -9,8 +9,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaskHouseApi.Service;
+using TaskHouseUnitTests.FakeRepositories;
 
-namespace TaskHouseUnitTests
+namespace TaskHouseUnitTests.UnitTests
 {
     public class EmpolyersControllerUnitTests
     {
