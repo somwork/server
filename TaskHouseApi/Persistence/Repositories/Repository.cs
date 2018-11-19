@@ -79,22 +79,15 @@ namespace TaskHouseApi.Persistence.Repositories
                     IsModified = true;
                 }
 
-                /// If property name is in ignore is don't change the value
-                if (nameOfPropertysToIgnore.Contains(property.Name))
-                {
-                    context.Entry(baseModel).Property(property.Name).IsModified = false;
-                    continue;
-                }
-
                 /// Gets the property value
                 var propertyValue = property.GetValue(baseModel);
 
-                /// If the value is null
-                if (propertyValue == null)
+                /// If property name is in ignore
+                /// or is null
+                /// don't change the value
+                if (nameOfPropertysToIgnore.Contains(property.Name) || propertyValue == null)
                 {
-                    /// ??????????
-                    /// SHOULD THE property be set to null ?
-                    /// ??????????
+                    context.Entry(baseModel).Property(property.Name).IsModified = false;
                     continue;
                 }
 
