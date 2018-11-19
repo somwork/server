@@ -66,10 +66,9 @@ namespace TaskHouseApi.Persistence.Repositories
             bool IsModified = false;
             foreach (PropertyInfo property in propertyInfos)
             {
-                var propType = property.GetType();
 
-                /// If the as ICollection or name is Id do nothing
-                if (propType is ICollection || property.Name == "Id" || nameOfPropertysToIgnore.Contains(property.Name))
+                /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing 
+                if (property.Name == "Id" || nameOfPropertysToIgnore.Contains(property.Name) || property.PropertyType == typeof(Reference))
                 {
                     continue;
                 }
@@ -89,12 +88,23 @@ namespace TaskHouseApi.Persistence.Repositories
                 /// don't change the value
                 if (nameOfPropertysToIgnore.Contains(property.Name) || propertyValue == null)
                 {
-                    context.Entry(baseModel).Property(property.Name).IsModified = false;
                     continue;
                 }
 
-                /// Marks the property as modified
-                context.Entry(baseModel).Property(property.Name).IsModified = true;
+                /// If property is a ICollection
+                /// don't change the value
+                if (property.PropertyType == typeof(ICollection))
+                {
+                    context.Entry(baseModel).Collection(property.Name).IsModified = false;
+                }
+
+                /// If property is is a string
+                /// change the value
+                if (property.PropertyType == typeof(string))
+                {
+                    /// Marks the property as modified
+                    context.Entry(baseModel).Property(property.Name).IsModified = true;
+                }
             }
         }
     }
