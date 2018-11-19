@@ -27,15 +27,10 @@ namespace TaskHouseApi.Persistence.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<User>()
-            // .
-
             modelBuilder.Entity<CategorySkill>().HasKey(sc => new { sc.CategoryId, sc.SkillId });
             modelBuilder.Entity<CategoryTask>().HasKey(sc => new { sc.CategoryId, sc.TaskId });
+
             modelBuilder.Entity<User>().ToTable("Users");
-
-
-            //Seed.SeedData(modelBuilder);
         }
     }
 }
