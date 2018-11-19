@@ -11,14 +11,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using TaskHouseApi.DatabaseContext;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.DatabaseContext;
+using TaskHouseApi.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TaskHouseApi.Service;
 using Microsoft.EntityFrameworkCore.Proxies;
-
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
+using TaskHouseApi.Model;
 
 namespace TaskHouseApi
 {
@@ -79,7 +81,7 @@ namespace TaskHouseApi
                             {
                                 context.Response.Headers.Add("Token-Expired", "true");
                             }
-                            return Task.CompletedTask;
+                            return System.Threading.Tasks.Task.CompletedTask;
                         }
                     };
                 });
@@ -87,12 +89,16 @@ namespace TaskHouseApi
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            //Repositorys
             services.AddScoped<IWorkerRepository, WorkerRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IEmployerRepository, EmployerRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserRepository<User>, UserRepository<User>>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

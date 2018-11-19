@@ -1,12 +1,16 @@
+using System.Collections.Generic;
+
 namespace TaskHouseApi.Model
 {
-    public class Skill
+    public class Skill : BaseModel
     {
-        public int Id { get; set; }
         public string Title { get; set; }
+        public int WorkerId { get; set; }
+        public virtual ICollection<CategorySkill> CategorySkill { get; set; }
 
         public Skill()
         {
+            CategorySkill = new List<CategorySkill>();
         }
     }
 }

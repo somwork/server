@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TaskHouseApi.Model;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
@@ -14,19 +16,19 @@ namespace TaskHouseApi.Controllers
     [Route("api/[controller]")]
     public class WorkersController : Controller
     {
-        private IWorkerRepository repo;
+        private IUnitOfWork unitOfWork;
         private IPasswordService passwordService;
 
-        public WorkersController(IWorkerRepository repo, IPasswordService passwordService)
+        public WorkersController(IUnitOfWork unitOfWork, IPasswordService passwordService)
         {
-            this.repo = repo;
+            this.unitOfWork = unitOfWork;
             this.passwordService = passwordService;
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Worker w = repo.Retrieve(Id) as Worker;
+            Worker w = unitOfWork.Workers.Retrieve(Id);
             if (w == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -37,7 +39,7 @@ namespace TaskHouseApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(repo.RetrieveAll());
+            return new ObjectResult(unitOfWork.Workers.RetrieveAll());
         }
 
         [AllowAnonymous]
@@ -49,7 +51,7 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
 
-            Worker existingWorker = (repo.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username) as Worker;
+            Worker existingWorker = (unitOfWork.Workers.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
             if (existingWorker != null)
             {
@@ -61,43 +63,42 @@ namespace TaskHouseApi.Controllers
             worker.Salt = hashResult.saltText;
             worker.Password = hashResult.saltechashedPassword;
 
-            Worker added = repo.Create(worker) as Worker;
+            unitOfWork.Workers.Create(worker);
+            unitOfWork.Save();
 
-            return new ObjectResult(added);
+            return new ObjectResult(worker);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] Worker w)
+        public IActionResult Update(int id, [FromBody] Worker w)
         {
             if (w == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            if (!repo.isInDatabase(w.Id))
+            if (!unitOfWork.Workers.isInDatabase(id))
             {
                 return NotFound();
             }
 
-            repo.Update(w);
+            w.Id = id;
+            unitOfWork.Workers.UpdatePart(w, new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" });
+            unitOfWork.Save();
             return new NoContentResult();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            var existing = repo.Retrieve(Id);
+            var existing = unitOfWork.Workers.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            bool deleted = repo.Delete(Id);
-
-            if (deleted == false)
-            {
-                return BadRequest();
-            }
+            unitOfWork.Workers.Delete(Id);
+            unitOfWork.Save();
 
             return new NoContentResult();
         }

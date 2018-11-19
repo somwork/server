@@ -11,7 +11,8 @@ using System.Security.Cryptography;
 using System.Text;
 using TaskHouseApi.Model;
 using TaskHouseApi.Model.ServiceModel;
-using TaskHouseApi.Repositories;
+using TaskHouseApi.Persistence.Repositories.Interfaces;
+using TaskHouseApi.Persistence.UnitOfWork;
 using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
@@ -22,13 +23,13 @@ namespace TaskHouseApi.Controllers
     {
         private ITokenService tokenService;
         private IAuthService authService;
-        private IUserRepository userRepository;
+        private IUnitOfWork unitOfWork;
 
-        public TokenController(ITokenService tokenService, IAuthService authService, IUserRepository userRepository)
+        public TokenController(ITokenService tokenService, IAuthService authService, IUnitOfWork unitOfWork)
         {
             this.tokenService = tokenService;
             this.authService = authService;
-            this.userRepository = userRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         [HttpPost]
@@ -57,11 +58,9 @@ namespace TaskHouseApi.Controllers
                 new RefreshToken { Token = refreshToken }
             );
 
-            var result = userRepository.Update(user);
-            if (result == null)
-            {
-                return StatusCode(500);
-            }
+            unitOfWork.Users.Update(user);
+            unitOfWork.Save();
+
 
             return new ObjectResult(new
             {
@@ -85,7 +84,7 @@ namespace TaskHouseApi.Controllers
             int Id;
             Int32.TryParse(principal.FindFirstValue(ClaimTypes.NameIdentifier), out Id);
 
-            User user = userRepository.Retrieve(Id);
+            User user = unitOfWork.Users.Retrieve(Id);
 
             // Checks that the user exists and has a refresh token
             if (user == null || user.RefreshTokens.Count() == 0)
@@ -114,7 +113,7 @@ namespace TaskHouseApi.Controllers
             var newRefreshToken = tokenService.GenerateRefreshToken();
 
             // Deletes the old refresh token from database
-            bool res = userRepository.DeleteRefrechToken(storedRefreshToken);
+            bool res = unitOfWork.Users.DeleteRefrechToken(storedRefreshToken);
             if (res == false)
             {
                 return StatusCode(500);
@@ -126,11 +125,8 @@ namespace TaskHouseApi.Controllers
                 new RefreshToken { Token = newRefreshToken }
             );
 
-            var result = userRepository.Update(user);
-            if (result == null)
-            {
-                return StatusCode(500);
-            }
+            unitOfWork.Users.Update(user);
+            unitOfWork.Save();
 
             return new ObjectResult(new
             {

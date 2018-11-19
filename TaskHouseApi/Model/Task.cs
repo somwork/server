@@ -1,21 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskHouseApi.Model
 {
-    public class Task
+    public class Task : BaseModel
     {
-        public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime Deadline { get; set; }
         public string Description { get; set; }
         public string Urgency { get; set; }
-
-        [ForeignKey("EmployerId")]
+        public virtual ICollection<Offer> Offers { get; set; }
+        public Reference Reference { get; set; }
+        public virtual ICollection<CategoryTask> CategoryTask { get; set; }
         public int EmployerId { get; set; }
+        public Employer Employer { get; set; }
 
         public Task()
         {
+            Offers = new List<Offer>();
+            CategoryTask = new List<CategoryTask>();
         }
     }
 }

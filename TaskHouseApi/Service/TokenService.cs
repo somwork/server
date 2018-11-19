@@ -30,7 +30,7 @@ namespace TaskHouseApi.Service
                 //config["Jwt:Issuer"],
                 audience: "Anyone",
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(2),
+                expires: DateTime.UtcNow.AddMinutes(15),
                 signingCredentials: creds
             );
 
@@ -92,7 +92,7 @@ namespace TaskHouseApi.Service
         }
 
         // Calculates datatime of expire time
-        private DateTime CalculateExpireTime(string milli) 
+        private DateTime CalculateExpireTime(string milli)
         {
             long ticks = long.Parse(milli + "000");
 
