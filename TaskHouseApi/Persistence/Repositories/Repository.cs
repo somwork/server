@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace TaskHouseApi.Persistence.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : BaseModel
+    public abstract class Repository<T> : IRepository<T> where T : BaseModel
     {
         protected internal readonly DbContext context;
         protected internal DbSet<T> dbSet;
@@ -55,7 +55,7 @@ namespace TaskHouseApi.Persistence.Repositories
             dbSet.Update(baseModel);
         }
 
-        public void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
+        public virtual void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
         {
             PropertyInfo[] propertyInfos = baseModel.GetType().GetProperties();
             if (propertyInfos.Count() == 0)
@@ -68,7 +68,11 @@ namespace TaskHouseApi.Persistence.Repositories
             {
 
                 /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing 
-                if (property.Name == "Id" || nameOfPropertysToIgnore.Contains(property.Name) || property.PropertyType == typeof(Reference))
+                if (
+                    property.Name == "Id" || 
+                    nameOfPropertysToIgnore.Contains(property.Name) || 
+                    property.PropertyType == typeof(Reference)
+                )
                 {
                     continue;
                 }
@@ -100,7 +104,10 @@ namespace TaskHouseApi.Persistence.Repositories
 
                 /// If property is is a string
                 /// change the value
-                if (property.PropertyType == typeof(string) || property.PropertyType == typeof(double) || property.PropertyType == typeof(int))
+                if (
+                    property.PropertyType == typeof(string) || 
+                    property.PropertyType.IsValueType
+                )
                 {
                     /// Marks the property as modified
                     context.Entry(baseModel).Property(property.Name).IsModified = true;

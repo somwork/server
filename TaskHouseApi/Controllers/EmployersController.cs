@@ -87,9 +87,7 @@ namespace TaskHouseApi.Controllers
 
             e.Id = id;
 
-            var propertiesToIgnore = new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" };
-
-            unitOfWork.Employers.UpdatePart(e, propertiesToIgnore);
+            unitOfWork.Employers.UpdatePart(e);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
