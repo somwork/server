@@ -47,6 +47,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "Create education: education is null" });
             }
 
+            if (!TryValidateModel(education))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             unitOfWork.Educations.Create(education);
             unitOfWork.Save();
 

@@ -52,6 +52,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateTask: task is null" }); //400 bad request
             }
 
+            if (!TryValidateModel(task))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             int currentUserId = Int32.Parse(HttpContext.User.Claims.SingleOrDefault
             (
                 c => c.Type == ClaimTypes.NameIdentifier).Value

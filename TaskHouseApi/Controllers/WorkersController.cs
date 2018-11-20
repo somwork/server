@@ -51,6 +51,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
 
+            if (!TryValidateModel(worker))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             Worker existingWorker = (unitOfWork.Workers.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
             if (existingWorker != null)

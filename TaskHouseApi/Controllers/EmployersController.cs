@@ -53,6 +53,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request
             }
 
+            if (!TryValidateModel(employer))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             Employer existingEmployer = (unitOfWork.Employers.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
 
             if (existingEmployer != null)

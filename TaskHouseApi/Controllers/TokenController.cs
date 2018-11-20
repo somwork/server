@@ -35,6 +35,11 @@ namespace TaskHouseApi.Controllers
         [HttpPost]
         public ActionResult Create([FromBody]LoginModel login)
         {
+            if (!TryValidateModel(login))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             // Check's if user is autherised
             User user = authService.Authenticate(login);
             if (user == null)

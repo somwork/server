@@ -47,6 +47,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "Create reference: reference is null" });
             }
 
+            if (!TryValidateModel(reference))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             unitOfWork.References.Create(reference);
             unitOfWork.Save();
 

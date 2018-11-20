@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -20,6 +23,25 @@ namespace TaskHouseUnitTests.UnitTests
         {
             unitOfWork = new FakeUnitOfWork();
             controller = new LocationsController(unitOfWork);
+        }
+
+        private LocationsController createContext(LocationsController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
+
+            //Returns the controller
+            return con;
         }
 
         //Test retrieve all in repository
@@ -69,13 +91,21 @@ namespace TaskHouseUnitTests.UnitTests
         //Test POST for creating new location
         public void LocationController_Create_ReturnsObject_WhenNewObject()
         {
+            controller = createContext(controller);
             //Arrange new ObjectResult
-            var location = new Location();
-            location.Country = "Contry100";
+            var location = new Location()
+            {
+                Id = 4,
+                Country = "Country4",
+                City = "City4",
+                ZipCode = "ZipCode4",
+                PrimaryLine = "PrimaryLine4",
+                SecondaryLine = "SecondaryLine4",
+            };
 
             //Act
             var result = controller.Create(location);
-            var resultAsObject = controller.Create(location) as ObjectResult;
+            var resultAsObject = result as ObjectResult;
             var resultObject = resultAsObject.Value as Location;
 
             //Assert

@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using TaskHouseApi.Model;
 using System.Linq;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -18,6 +21,25 @@ namespace TaskHouseUnitTests.UnitTests
         {
             unitOfWork = new FakeUnitOfWork();
             controller = new OffersController(unitOfWork);
+        }
+
+        private OffersController createContext(OffersController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
+
+            //Returns the controller
+            return con;
         }
 
         //Test retrieve all in repository
@@ -67,13 +89,21 @@ namespace TaskHouseUnitTests.UnitTests
         //Test POST for creating new offer
         public void OfferController_Create_ReturnsObject_WhenNewObject()
         {
+            controller = createContext(controller);
             //Arrange new ObjectResult
-            var offer = new Offer();
-            offer.Accepted = true;
+            var offer = new Offer()
+            {
+                Id = 4,
+                Accepted = false,
+                Price = 213.2M,
+                Currency = "DKK",
+                WorkerId = 4,
+                TaskId = 1
+            };
 
             //Act
             var result = controller.Create(offer);
-            var resultAsObject = controller.Create(offer) as ObjectResult;
+            var resultAsObject = result as ObjectResult;
             var resultObject = resultAsObject.Value as Offer;
 
             //Assert
