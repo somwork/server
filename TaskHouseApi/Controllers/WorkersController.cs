@@ -62,11 +62,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "Model not valid" });
             }
 
-            Worker existingWorker = (unitOfWork.Workers.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
+            User existingUser = (unitOfWork.Users.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
-            if (existingWorker != null)
+            if (existingUser != null)
             {
-                return BadRequest(new { error = "Username in worker" }); // 400 Bad request
+                return BadRequest(new { error = "Username is in use" }); // 400 Bad request
             }
 
             var hashResult = passwordService.GenerateNewPassword(worker);
