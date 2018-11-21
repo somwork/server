@@ -15,11 +15,6 @@ namespace TaskHouseApi.Persistence.Repositories
 
         public UserRepository(PostgresContext db) : base(db) { }
 
-        /*
-        *
-        *
-        * LOKE AT THIS
-         */
         public bool DeleteRefrechToken(RefreshToken refreshToken)
         {
             postgresContext.Remove(refreshToken);

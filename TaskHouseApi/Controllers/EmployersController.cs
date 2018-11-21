@@ -46,12 +46,15 @@ namespace TaskHouseApi.Controllers
         // POST: api/employers
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Create([FromBody]Employer employer)
+        public IActionResult Create(string password, [FromBody]Employer employer)
         {
             if (employer == null)
             {
                 return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request
             }
+
+            employer.Password = password;
+            ModelState.Clear();
 
             if (!TryValidateModel(employer))
             {

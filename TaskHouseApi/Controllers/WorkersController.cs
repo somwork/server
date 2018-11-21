@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpGet("{id}")]
+        //[JsonNoNull]
         public IActionResult Get(int Id)
         {
             Worker w = unitOfWork.Workers.Retrieve(Id);
@@ -33,6 +35,7 @@ namespace TaskHouseApi.Controllers
             {
                 return NotFound(); // 404 Resource not found
             }
+
             return new ObjectResult(w);
         }
 
@@ -44,12 +47,15 @@ namespace TaskHouseApi.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Create([FromBody]Worker worker)
+        public IActionResult Create(string password, [FromBody]Worker worker)
         {
             if (worker == null)
             {
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
+
+            worker.Password = password;
+            ModelState.Clear();
 
             if (!TryValidateModel(worker))
             {

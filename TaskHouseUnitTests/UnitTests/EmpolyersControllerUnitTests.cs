@@ -102,7 +102,7 @@ namespace TaskHouseUnitTests.UnitTests
             Employer employer = null;
 
             //Act
-            var result = controller.Create(employer);
+            var result = controller.Create(null, employer);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -127,7 +127,7 @@ namespace TaskHouseUnitTests.UnitTests
             };
 
             //Act
-            var result = controller.Create(employer);
+            var result = controller.Create(employer.Password, employer);
             var createdResultObject = result as ObjectResult;
             var createdEmployer = createdResultObject.Value as Employer;
 

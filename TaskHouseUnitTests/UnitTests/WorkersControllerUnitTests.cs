@@ -94,7 +94,7 @@ namespace TaskHouseUnitTests.UnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            var result = controller.Create(TestWorker);
+            var result = controller.Create(TestWorker.Password, TestWorker);
             var resultObjectResult = result as ObjectResult;
             var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
 
@@ -107,7 +107,7 @@ namespace TaskHouseUnitTests.UnitTests
         {
             Worker worker = null;
 
-            var result = controller.Create(worker);
+            var result = controller.Create(null, worker);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }
