@@ -9,5 +9,6 @@ namespace TaskHouseApi.Persistence.Repositories.Interfaces
         bool isInDatabase(int Id);
 
         bool DeleteRefrechToken(RefreshToken refreshToken);
+        void UpdatePart(U baseModel);
     }
 }

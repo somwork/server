@@ -86,7 +86,8 @@ namespace TaskHouseApi.Controllers
             }
 
             e.Id = id;
-            unitOfWork.Employers.Update(e);
+
+            unitOfWork.Employers.UpdatePart(e);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
