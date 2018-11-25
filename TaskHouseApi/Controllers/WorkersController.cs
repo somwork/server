@@ -94,7 +94,8 @@ namespace TaskHouseApi.Controllers
             }
 
             w.Id = id;
-            unitOfWork.Workers.UpdatePart(w, new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" });
+
+            unitOfWork.Workers.UpdatePart(w);
             unitOfWork.Save();
             return new NoContentResult();
         }
