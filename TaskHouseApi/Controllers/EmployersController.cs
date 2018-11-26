@@ -61,11 +61,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "Model not valid" });
             }
 
-            Employer existingEmployer = (unitOfWork.Employers.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
+            User existingUser = (unitOfWork.Users.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
 
-            if (existingEmployer != null)
+            if (existingUser != null)
             {
-                return BadRequest(new { error = "Username in use" });
+                return BadRequest(new { error = "Username is in use" });
             }
 
             var hashResult = passwordService.GenerateNewPassword(employer);
@@ -94,7 +94,8 @@ namespace TaskHouseApi.Controllers
             }
 
             e.Id = id;
-            unitOfWork.Employers.Update(e);
+
+            unitOfWork.Employers.UpdatePart(e);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }

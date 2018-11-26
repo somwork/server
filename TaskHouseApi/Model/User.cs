@@ -32,10 +32,13 @@ namespace TaskHouseApi.Model
         public string Discriminator { get; set; }
         [JsonIgnore]
         public Location Location { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Message> Messages { get; set; }
 
         public User()
         {
             RefreshTokens = new List<RefreshToken>();
+            Messages = new List<Message>();
         }
     }
 }

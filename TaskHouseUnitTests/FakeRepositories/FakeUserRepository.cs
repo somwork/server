@@ -18,6 +18,12 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             return list.Any(u => u.Id == Id);
         }
+
+        public void UpdatePart(U baseModel)
+        {
+            var nameOfPropertysToIgnore = new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" };
+            UpdatePart(baseModel, nameOfPropertysToIgnore);
+        }
     }
 }
 

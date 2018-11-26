@@ -240,5 +240,42 @@ namespace TaskHouseUnitTests.UnitTests
             Assert.IsType<BadRequestResult>(result);
             //Inconsistencies across tests in whether it returns BadRequestResult or BadRequestObjectResult
         }
+
+        [Fact]
+        public void EmployersController_Update_ReturnsVoidUpdatePart_withValidIdAndValidEmployer()
+        {
+            int Id = 1;
+            Employer update = new Employer()
+            {
+                Id = 10,
+                Username = "Tusernamedasdasg",
+                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=111", //1234
+                Email = "test@test.com",
+                FirstName = "Bob7",
+                LastName = null
+            };
+            Employer updatedEmployer = new Employer()
+            {
+                Id = 1,
+                Username = "Tusernamedasdasg",
+                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
+                Email = "test@test.com",
+                FirstName = "Bob7",
+                LastName = "Bobsen1",
+                Salt = "upYKQSsrlub5JAID61/6pA==",
+                Discriminator = "Employer"
+
+            };
+
+            var result = controller.Update(Id, update);
+            var resultAsObject = controller.Get(Id) as ObjectResult;
+            var resultObject = resultAsObject.Value as Employer;
+
+            Assert.Equal(updatedEmployer.Username, resultObject.Username);
+            Assert.NotEqual(update.Password, resultObject.Password);
+            Assert.Equal(updatedEmployer.FirstName, resultObject.FirstName);
+            Assert.NotNull(resultObject.LastName);
+            Assert.NotNull(resultObject.Salt);
+        }
     }
 }
