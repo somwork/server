@@ -27,11 +27,14 @@ namespace TaskHouseApi.Model
         public int EmployerId { get; set; }
         [JsonIgnore]
         public Employer Employer { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Message> Messages { get; set; }
 
         public Task()
         {
             Offers = new List<Offer>();
             CategoryTask = new List<CategoryTask>();
+            Messages = new List<Message>();
         }
     }
 }

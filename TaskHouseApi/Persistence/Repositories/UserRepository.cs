@@ -15,6 +15,18 @@ namespace TaskHouseApi.Persistence.Repositories
 
         public UserRepository(PostgresContext db) : base(db) { }
 
+
+        public override void UpdatePart(U baseModel, string[] nameOfPropertysToIgnore)
+        {   
+            base.UpdatePart(baseModel, nameOfPropertysToIgnore);
+        }
+
+        public void UpdatePart(U baseModel)
+        {
+            var nameOfPropertysToIgnore = new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" };
+            UpdatePart(baseModel, nameOfPropertysToIgnore);
+        }
+
         public bool DeleteRefrechToken(RefreshToken refreshToken)
         {
             postgresContext.Remove(refreshToken);
