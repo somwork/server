@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace TaskHouseApi.Model
 {
     public class BaseModel

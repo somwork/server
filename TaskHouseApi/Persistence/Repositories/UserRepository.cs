@@ -26,11 +26,6 @@ namespace TaskHouseApi.Persistence.Repositories
             UpdatePart(baseModel, nameOfPropertysToIgnore);
         }
 
-        /*
-        *
-        *
-        * LOOK AT THIS
-         */
         public bool DeleteRefrechToken(RefreshToken refreshToken)
         {
             postgresContext.Remove(refreshToken);

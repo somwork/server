@@ -10,6 +10,9 @@ using System.Diagnostics;
 using System.Linq;
 using TaskHouseApi.Service;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -23,6 +26,25 @@ namespace TaskHouseUnitTests.UnitTests
         {
             unitOfWork = new FakeUnitOfWork();
             controller = new EmployersController(unitOfWork, passwordService);
+        }
+
+        private EmployersController createContext(EmployersController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
+
+            //Returns the controller
+            return con;
         }
 
         /// Test Get all
@@ -80,7 +102,7 @@ namespace TaskHouseUnitTests.UnitTests
             Employer employer = null;
 
             //Act
-            var result = controller.Create(employer);
+            var result = controller.Create(null, employer);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -90,12 +112,22 @@ namespace TaskHouseUnitTests.UnitTests
         [Fact]
         public void EmpolyeresController_Create_ReturnsObjectResultContainingCreatedEmpolyer_WhenGivenValidEmpolyer()
         {
+            controller = createContext(controller);
             //Arrange
-            Employer employer = new Employer();
-            employer.LastName = "TestEmpolyer";
+            Employer employer = new Employer()
+            {
+                Id = 7,
+                Username = "7777",
+                Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
+                Email = "test@test.com",
+                FirstName = "Bob1",
+                LastName = "Bobsen1",
+                Salt = "upYKQSsrlub5JAID61/6pA==",
+                Discriminator = "Employer"
+            };
 
             //Act
-            var result = controller.Create(employer);
+            var result = controller.Create(employer.Password, employer);
             var createdResultObject = result as ObjectResult;
             var createdEmployer = createdResultObject.Value as Employer;
 

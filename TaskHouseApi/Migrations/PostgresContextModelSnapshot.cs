@@ -24,7 +24,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Currency");
+                    b.Property<string>("Currency")
+                        .IsRequired();
 
                     b.Property<decimal>("From");
 
@@ -40,9 +41,11 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -84,7 +87,8 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<DateTime>("Start");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<int>("WorkerId");
 
@@ -100,17 +104,22 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .IsRequired();
 
-                    b.Property<string>("Country");
+                    b.Property<string>("Country")
+                        .IsRequired();
 
-                    b.Property<string>("PrimaryLine");
+                    b.Property<string>("PrimaryLine")
+                        .IsRequired();
 
-                    b.Property<string>("SecondaryLine");
+                    b.Property<string>("SecondaryLine")
+                        .IsRequired();
 
                     b.Property<int>("UserId");
 
-                    b.Property<string>("ZipCode");
+                    b.Property<string>("ZipCode")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -127,9 +136,18 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<DateTime>("SendAt");
 
-                    b.Property<string>("Text");
+                    b.Property<int>("TaskId");
+
+                    b.Property<string>("Text")
+                        .IsRequired();
+
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Messages");
                 });
@@ -141,7 +159,8 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<bool>("Accepted");
 
-                    b.Property<string>("Currency");
+                    b.Property<string>("Currency")
+                        .IsRequired();
 
                     b.Property<decimal>("Price");
 
@@ -165,7 +184,8 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<int>("Rating");
 
-                    b.Property<string>("Statement");
+                    b.Property<string>("Statement")
+                        .IsRequired();
 
                     b.Property<int>("TaskId");
 
@@ -186,7 +206,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Token");
+                    b.Property<string>("Token")
+                        .IsRequired();
 
                     b.Property<int>("UserId");
 
@@ -202,7 +223,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<int>("WorkerId");
 
@@ -220,13 +242,18 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<DateTime>("Deadline");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
                     b.Property<int>("EmployerId");
 
                     b.Property<DateTime>("Start");
 
-                    b.Property<string>("Urgency");
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<string>("Urgency")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -243,17 +270,23 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(60);
 
                     b.Property<string>("Salt");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Username")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -321,6 +354,19 @@ namespace TaskHouseApi.Migrations
                     b.HasOne("TaskHouseApi.Model.User")
                         .WithOne("Location")
                         .HasForeignKey("TaskHouseApi.Model.Location", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Message", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Task", "Task")
+                        .WithMany("Messages")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskHouseApi.Model.User", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

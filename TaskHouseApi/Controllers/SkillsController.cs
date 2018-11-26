@@ -51,6 +51,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "CreateLocation: skill is null" });
             }
 
+            if (!TryValidateModel(skill))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             unitOfWork.Skills.Create(skill);
             unitOfWork.Save();
 

@@ -47,6 +47,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "Create category: category is null" });
             }
 
+            if (!TryValidateModel(category))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             unitOfWork.Categorys.Create(category);
             unitOfWork.Save();
 

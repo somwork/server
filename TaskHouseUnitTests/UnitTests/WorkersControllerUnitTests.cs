@@ -9,6 +9,9 @@ using System.Diagnostics;
 using System.Linq;
 using TaskHouseApi.Service;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -22,6 +25,25 @@ namespace TaskHouseUnitTests.UnitTests
         {
             unitOfWork = new FakeUnitOfWork();
             controller = new WorkersController(unitOfWork, passwordService);
+        }
+
+        private WorkersController createContext(WorkersController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
+
+            //Returns the controller
+            return con;
         }
 
         [Fact]
@@ -60,6 +82,7 @@ namespace TaskHouseUnitTests.UnitTests
         [Fact]
         public void WorkerController_Create_ReturnsObjectResult_withValidWorker()
         {
+            controller = createContext(controller);
             Worker TestWorker = new Worker()
             {
                 Id = 5,
@@ -71,7 +94,7 @@ namespace TaskHouseUnitTests.UnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            var result = controller.Create(TestWorker);
+            var result = controller.Create(TestWorker.Password, TestWorker);
             var resultObjectResult = result as ObjectResult;
             var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
 
@@ -84,7 +107,7 @@ namespace TaskHouseUnitTests.UnitTests
         {
             Worker worker = null;
 
-            var result = controller.Create(worker);
+            var result = controller.Create(null, worker);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }

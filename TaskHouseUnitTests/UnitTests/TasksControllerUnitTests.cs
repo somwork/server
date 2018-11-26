@@ -10,6 +10,8 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -28,7 +30,7 @@ namespace TaskHouseUnitTests.UnitTests
         ///and adds a User with two claims:
         ///1: NameIdentifier, the user Id
         ///2: Role, the user role/type
-        private TasksController login(TasksController con)
+        private TasksController createContext(TasksController con)
         {
             con.ControllerContext = new ControllerContext();
             //Creates a new HttpContext
@@ -41,6 +43,15 @@ namespace TaskHouseUnitTests.UnitTests
                 //Adds a claim for role, user role/tupe
                 new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Employer")
             }));
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
 
             //Returns the controller
             return con;
@@ -96,7 +107,7 @@ namespace TaskHouseUnitTests.UnitTests
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
 
-            controller = login(controller);
+            controller = createContext(controller);
 
             task.Description = "TestTask";
 
@@ -117,7 +128,7 @@ namespace TaskHouseUnitTests.UnitTests
             //Arrange
             TaskHouseApi.Model.Task task = null;
 
-            controller = login(controller);
+            controller = createContext(controller);
 
             //Act
             var result = controller.Create(task);

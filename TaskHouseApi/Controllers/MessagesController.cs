@@ -1,38 +1,34 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class LocationsController : Controller
+    public class MessagesController : Controller
     {
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public LocationsController(IUnitOfWork unitOfWork)
+        public MessagesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        // GET: api/locations/
+        // GET: api/message/
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(unitOfWork.Locations.RetrieveAll());
+            return new ObjectResult(unitOfWork.Messages.RetrieveAll());
         }
 
-        // GET: api/locations/[id]
+        // GET: api/message/[id]
         [HttpGet("{id}")]
         public IActionResult Get(int Id)
         {
-            Location l = unitOfWork.Locations.Retrieve(Id);
+            Message l = unitOfWork.Messages.Retrieve(Id);
             if (l == null)
             {
                 return NotFound(); // 404 Resource not found
@@ -41,60 +37,60 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(l); // 200 ok
         }
 
-        // POST: api/locations
+        // POST: api/message
         [HttpPost]
-        public IActionResult Create([FromBody]Location location)
+        public IActionResult Create([FromBody]Message message)
         {
-            if (location == null)
+            if (message == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "CreateLocation: location is null" });
+                return BadRequest(new { error = "Create message: message is null" });
             }
 
-            if (!TryValidateModel(location))
+            if (!TryValidateModel(message))
             {
                 return BadRequest(new { error = "Model not valid" });
             }
 
-            unitOfWork.Locations.Create(location);
+            unitOfWork.Messages.Create(message);
             unitOfWork.Save();
 
-            return new ObjectResult(location);
+            return new ObjectResult(message);
         }
 
-        // PUT: api/locations/[id]
+        // PUT: api/message/[id]
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Location l)
+        public IActionResult Update(int id, [FromBody] Message message)
         {
-            if (l == null)
+            if (message == null)
             {
                 return BadRequest(); // 400 Bad request
             }
 
-            Location existing = unitOfWork.Locations.Retrieve(id);
+            Message existing = unitOfWork.Messages.Retrieve(id);
 
             if (existing == null)
             {
                 return NotFound(); // 404 resource not found
             }
 
-            l.Id = id;
-            unitOfWork.Locations.Update(l);
+            message.Id = id;
+            unitOfWork.Messages.Update(message);
             unitOfWork.Save();
             return new NoContentResult(); // 204 No content
         }
 
-        // DELETE: api/locations/[id]
+        // DELETE: api/message/[id]
         [HttpDelete("{id}")]
         public IActionResult Delete(int Id)
         {
-            Location existing = unitOfWork.Locations.Retrieve(Id);
+            Message existing = unitOfWork.Messages.Retrieve(Id);
             if (existing == null)
             {
                 return NotFound(); // 404 Resource not found
             }
 
-            unitOfWork.Locations.Delete(Id);
+            unitOfWork.Messages.Delete(Id);
             unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content
