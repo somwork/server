@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace TaskHouseApi.Controllers
         }
 
         [HttpGet("{id}")]
+        //[JsonNoNull]
         public IActionResult Get(int Id)
         {
             Worker w = unitOfWork.Workers.Retrieve(Id);
@@ -33,6 +35,7 @@ namespace TaskHouseApi.Controllers
             {
                 return NotFound(); // 404 Resource not found
             }
+
             return new ObjectResult(w);
         }
 
@@ -44,23 +47,26 @@ namespace TaskHouseApi.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Create([FromBody]Worker worker)
+        public IActionResult Create(string password, [FromBody]Worker worker)
         {
             if (worker == null)
             {
                 return BadRequest(new { error = "CreateWorker: worker is null" }); // 400 Bad request
             }
 
+            worker.Password = password;
+            ModelState.Clear();
+
             if (!TryValidateModel(worker))
             {
                 return BadRequest(new { error = "Model not valid" });
             }
 
-            Worker existingWorker = (unitOfWork.Workers.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
+            User existingUser = (unitOfWork.Users.RetrieveAll()).SingleOrDefault(w => w.Username == worker.Username);
 
-            if (existingWorker != null)
+            if (existingUser != null)
             {
-                return BadRequest(new { error = "Username in worker" }); // 400 Bad request
+                return BadRequest(new { error = "Username is in use" }); // 400 Bad request
             }
 
             var hashResult = passwordService.GenerateNewPassword(worker);
@@ -88,7 +94,8 @@ namespace TaskHouseApi.Controllers
             }
 
             w.Id = id;
-            unitOfWork.Workers.UpdatePart(w, new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" });
+
+            unitOfWork.Workers.UpdatePart(w);
             unitOfWork.Save();
             return new NoContentResult();
         }

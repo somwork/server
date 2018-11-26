@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace TaskHouseApi.Persistence.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : BaseModel
+    public abstract class Repository<T> : IRepository<T> where T : BaseModel
     {
         protected internal readonly DbContext context;
         protected internal DbSet<T> dbSet;
@@ -55,7 +55,7 @@ namespace TaskHouseApi.Persistence.Repositories
             dbSet.Update(baseModel);
         }
 
-        public void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
+        public virtual void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
         {
             PropertyInfo[] propertyInfos = baseModel.GetType().GetProperties();
             if (propertyInfos.Count() == 0)
@@ -66,11 +66,19 @@ namespace TaskHouseApi.Persistence.Repositories
             bool IsModified = false;
             foreach (PropertyInfo property in propertyInfos)
             {
-                /// If the as ICollection or name is Id do nothing
-                if (property.GetValue(baseModel) is ICollection || property.Name == "Id")
+
+                /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing 
+                if (
+                    property.Name == "Id" || 
+                    nameOfPropertysToIgnore.Contains(property.Name) || 
+                    property.PropertyType == typeof(Reference)
+                )
                 {
                     continue;
                 }
+
+                /// Gets the property value
+                var propertyValue = property.GetValue(baseModel);
 
                 /// Attach basemodel
                 if (!IsModified)
@@ -79,20 +87,31 @@ namespace TaskHouseApi.Persistence.Repositories
                     IsModified = true;
                 }
 
-                /// Gets the property value
-                var propertyValue = property.GetValue(baseModel);
-
                 /// If property name is in ignore
                 /// or is null
                 /// don't change the value
                 if (nameOfPropertysToIgnore.Contains(property.Name) || propertyValue == null)
                 {
-                    context.Entry(baseModel).Property(property.Name).IsModified = false;
                     continue;
                 }
 
-                /// Marks the property as modified
-                context.Entry(baseModel).Property(property.Name).IsModified = true;
+                /// If property is a ICollection
+                /// don't change the value
+                if (property.PropertyType == typeof(ICollection))
+                {
+                    context.Entry(baseModel).Collection(property.Name).IsModified = false;
+                }
+
+                /// If property is is a string
+                /// change the value
+                if (
+                    property.PropertyType == typeof(string) || 
+                    property.PropertyType.IsValueType
+                )
+                {
+                    /// Marks the property as modified
+                    context.Entry(baseModel).Property(property.Name).IsModified = true;
+                }
             }
         }
     }
