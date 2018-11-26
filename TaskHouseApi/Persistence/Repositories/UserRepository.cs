@@ -15,7 +15,6 @@ namespace TaskHouseApi.Persistence.Repositories
 
         public UserRepository(PostgresContext db) : base(db) { }
 
-
         public override void UpdatePart(U baseModel, string[] nameOfPropertysToIgnore)
         {   
             base.UpdatePart(baseModel, nameOfPropertysToIgnore);
