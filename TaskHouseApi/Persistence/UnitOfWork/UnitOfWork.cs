@@ -143,7 +143,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.currencyRepository == null)
                 {
                     this.currencyRepository = new CurrencyRepository(context);

@@ -2,7 +2,6 @@ using System;
 using Xunit;
 using TaskHouseApi.Controllers;
 using TaskHouseApi.Model;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using TaskHouseUnitTests.FakeRepositories;

@@ -144,7 +144,6 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             get
             {
-
                 if (this.currencyRepository == null)
                 {
                     this.currencyRepository = new FakeCurrencyRepository();

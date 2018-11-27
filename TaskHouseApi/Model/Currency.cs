@@ -5,7 +5,6 @@ namespace TaskHouseApi.Model
 {
     public class Currency : BaseModel
     {
-
         [JsonProperty("success")]
         public bool Success { get; set; }
 
@@ -24,14 +23,5 @@ namespace TaskHouseApi.Model
         public Currency()
         {
         }
-    }
-
-    public partial class Rates : BaseModel
-    {
-        [JsonProperty("USD")]
-        public double Usd { get; set; }
-
-        [JsonProperty("DKK")]
-        public double Dkk { get; set; }
     }
 }

@@ -32,7 +32,6 @@ namespace TaskHouseApi.Model
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-
                 HttpResponseMessage response = await client.GetAsync(urlParameters);
                 string res = await client.GetStringAsync(URL + urlParameters);
 
