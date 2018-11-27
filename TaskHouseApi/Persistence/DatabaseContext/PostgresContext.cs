@@ -21,6 +21,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
         public DbSet<Reference> References { get; set; }
         public DbSet<CategorySkill> CategorySkill { get; set; }
         public DbSet<CategoryTask> CategoryTask { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
 
         public PostgresContext(DbContextOptions options)
             : base(options) { }

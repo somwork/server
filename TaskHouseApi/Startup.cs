@@ -99,6 +99,7 @@ namespace TaskHouseApi
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IEmployerRepository, EmployerRepository>();
             services.AddScoped<IUserRepository<User>, UserRepository<User>>();
+            services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

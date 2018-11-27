@@ -10,7 +10,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181118002228_initial")]
+    [Migration("20181126123906_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,28 @@ namespace TaskHouseApi.Migrations
                     b.HasIndex("TaskId");
 
                     b.ToTable("CategoryTask");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Base");
+
+                    b.Property<DateTimeOffset>("Date");
+
+                    b.Property<int?>("RatesId");
+
+                    b.Property<bool>("Success");
+
+                    b.Property<long>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RatesId");
+
+                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Education", b =>
@@ -158,6 +180,20 @@ namespace TaskHouseApi.Migrations
                     b.HasIndex("WorkerId");
 
                     b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Rates", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Dkk");
+
+                    b.Property<double>("Usd");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Reference", b =>
@@ -308,6 +344,13 @@ namespace TaskHouseApi.Migrations
                         .WithMany("CategoryTask")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Currency", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Rates", "Rates")
+                        .WithMany()
+                        .HasForeignKey("RatesId");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Education", b =>

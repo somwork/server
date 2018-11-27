@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace TaskHouseApi.Model
@@ -27,7 +26,7 @@ namespace TaskHouseApi.Model
         }
     }
 
-    public partial class Rates
+    public partial class Rates : BaseModel
     {
         [JsonProperty("USD")]
         public double Usd { get; set; }

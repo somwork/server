@@ -52,6 +52,20 @@ namespace TaskHouseApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Rates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Usd = table.Column<double>(nullable: false),
+                    Dkk = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -68,6 +82,29 @@ namespace TaskHouseApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Currencies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Success = table.Column<bool>(nullable: false),
+                    Timestamp = table.Column<long>(nullable: false),
+                    Base = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTimeOffset>(nullable: false),
+                    RatesId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Currencies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Currencies_Rates_RatesId",
+                        column: x => x.RatesId,
+                        principalTable: "Rates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -295,6 +332,11 @@ namespace TaskHouseApi.Migrations
                 column: "TaskId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Currencies_RatesId",
+                table: "Currencies",
+                column: "RatesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Educations_WorkerId",
                 table: "Educations",
                 column: "WorkerId");
@@ -354,6 +396,9 @@ namespace TaskHouseApi.Migrations
                 name: "CategoryTask");
 
             migrationBuilder.DropTable(
+                name: "Currencies");
+
+            migrationBuilder.DropTable(
                 name: "Educations");
 
             migrationBuilder.DropTable(
@@ -376,6 +421,9 @@ namespace TaskHouseApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Rates");
 
             migrationBuilder.DropTable(
                 name: "Tasks");
