@@ -345,6 +345,16 @@ namespace TaskHouseApi.Migrations
                     b.HasDiscriminator().HasValue("Employer");
                 });
 
+            modelBuilder.Entity("TaskHouseApi.Model.QualityAssurance", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("QualityAssurance");
+
+                    b.HasDiscriminator().HasValue("QualityAssurance");
+                });
+
             modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
                 {
                     b.HasBaseType("TaskHouseApi.Model.User");

@@ -10,7 +10,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181127095922_initial")]
+    [Migration("20181127105013_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,6 +345,16 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Employer");
 
                     b.HasDiscriminator().HasValue("Employer");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.QualityAssurance", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("QualityAssurance");
+
+                    b.HasDiscriminator().HasValue("QualityAssurance");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
