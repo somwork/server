@@ -19,6 +19,7 @@ namespace TaskHouseUnitTests.FakeRepositories
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
         private ICategoryRepository categoryRepository;
+        private ICurrencyRepository currencyRepository;
         private IMessageRepository messageRepository;
 
         public IUserRepository<User> Users
@@ -140,6 +141,18 @@ namespace TaskHouseUnitTests.FakeRepositories
             }
         }
 
+        public ICurrencyRepository Currencies
+        {
+            get
+            {
+                if (this.currencyRepository == null)
+                {
+                    this.currencyRepository = new FakeCurrencyRepository();
+                }
+                return currencyRepository;
+            }
+        }
+
         public IMessageRepository Messages
         {
             get
@@ -155,12 +168,12 @@ namespace TaskHouseUnitTests.FakeRepositories
 
         public void Dispose()
         {
-            // NOOT NEEDED IN TEST
+            // NOT NEEDED IN TEST
         }
 
         public int Save()
         {
-            // NOOT NEEDED IN TEST
+            // NOT NEEDED IN TEST
             return 0;
         }
     }

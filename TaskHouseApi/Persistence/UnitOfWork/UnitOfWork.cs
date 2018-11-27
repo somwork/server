@@ -24,6 +24,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
         private ICategoryRepository categoryRepository;
+        private ICurrencyRepository currencyRepository;
         private IMessageRepository messageRepository;
 
         public IUserRepository<User> Users
@@ -137,6 +138,17 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                     this.categoryRepository = new CategoryRepository(context);
                 }
                 return categoryRepository;
+            }
+        }
+        public ICurrencyRepository Currencies
+        {
+            get
+            {
+                if (this.currencyRepository == null)
+                {
+                    this.currencyRepository = new CurrencyRepository(context);
+                }
+                return currencyRepository;
             }
         }
 
