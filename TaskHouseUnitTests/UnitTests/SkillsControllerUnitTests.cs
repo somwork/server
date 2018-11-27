@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -20,6 +23,25 @@ namespace TaskHouseUnitTests.UnitTests
         {
             unitOfWork = new FakeUnitOfWork();
             controller = new SkillsController(unitOfWork);
+        }
+
+        private SkillsController createContext(SkillsController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
+
+            //Returns the controller
+            return con;
         }
 
         ///Test Get all
@@ -71,9 +93,13 @@ namespace TaskHouseUnitTests.UnitTests
         [Fact]
         public void SkillsController_Create_ReturnsObjectResultContainingCreatedSkill_WhenGivenValidSkill()
         {
+            controller = createContext(controller);
             //Arrange
-            Skill skill = new Skill();
-            skill.Title = "TestSkill";
+            Skill skill = new Skill()
+            {
+                Id = 1,
+                Title = "Skill1"
+            };
 
             //Act
             var result = controller.Create(skill);

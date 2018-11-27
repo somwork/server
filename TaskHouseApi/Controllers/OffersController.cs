@@ -47,6 +47,11 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(new { error = "Create offer: offer is null" });
             }
 
+            if (!TryValidateModel(offer))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
             unitOfWork.Offers.Create(offer);
             unitOfWork.Save();
 

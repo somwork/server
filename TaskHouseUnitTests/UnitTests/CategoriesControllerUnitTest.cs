@@ -7,6 +7,9 @@ using TaskHouseApi.Model;
 using System.Linq;
 using System;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -19,6 +22,25 @@ namespace TaskHouseUnitTests.UnitTests
         {
             unitOfWork = new FakeUnitOfWork();
             controller = new CategoriesController(unitOfWork);
+        }
+
+        private CategoriesController createContext(CategoriesController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
+
+            //Returns the controller
+            return con;
         }
 
         //Test retrieve all in repository
@@ -68,13 +90,14 @@ namespace TaskHouseUnitTests.UnitTests
         //Test POST for creating new category
         public void CategoriesController_Create_ReturnsObject_WhenNewObject()
         {
+            controller = createContext(controller);
             //Arrange new ObjectResult
             var category = new Category();
             category.Title = "Title";
 
             //Act
             var result = controller.Create(category);
-            var resultAsObject = controller.Create(category) as ObjectResult;
+            var resultAsObject = result as ObjectResult;
             var resultObject = resultAsObject.Value as Category;
 
             //Assert

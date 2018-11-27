@@ -7,6 +7,9 @@ using TaskHouseApi.Model;
 using System.Linq;
 using System;
 using TaskHouseUnitTests.FakeRepositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -19,6 +22,25 @@ namespace TaskHouseUnitTests.UnitTests
         {
             unitOfWork = new FakeUnitOfWork();
             controller = new EducationsController(unitOfWork);
+        }
+
+        private EducationsController createContext(EducationsController con)
+        {
+            con.ControllerContext = new ControllerContext();
+            //Creates a new HttpContext
+            con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            con.ObjectValidator = new DefaultObjectValidator
+            (
+                new DefaultModelMetadataProvider
+                (
+                    new DefaultCompositeMetadataDetailsProvider(Enumerable.Empty<IMetadataDetailsProvider>())
+                ),
+                new List<Microsoft.AspNetCore.Mvc.ModelBinding.Validation.IModelValidatorProvider>()
+            );
+
+            //Returns the controller
+            return con;
         }
 
         //Test retrieve all in repository
@@ -68,13 +90,20 @@ namespace TaskHouseUnitTests.UnitTests
         //Test POST for creating new education
         public void EducationsController_Create_ReturnsObject_WhenNewObject()
         {
+            controller = createContext(controller);
             //Arrange new ObjectResult
-            var education = new Education();
-            education.Title = "Title";
+            var education = new Education()
+            {
+                Id = 1,
+                Title = "edu1",
+                Start = new DateTime(2018, 3, 3),
+                End = new DateTime(2019, 3, 3),
+                WorkerId = 4
+            };
 
             //Act
             var result = controller.Create(education);
-            var resultAsObject = controller.Create(education) as ObjectResult;
+            var resultAsObject = result as ObjectResult;
             var resultObject = resultAsObject.Value as Education;
 
             //Assert

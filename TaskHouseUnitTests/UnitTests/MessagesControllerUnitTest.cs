@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using TaskHouseApi.Model;
 using System.Linq;
+using System;
 using TaskHouseUnitTests.FakeRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Internal;
@@ -12,18 +13,18 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
-    public class OffersControllerUnitTests
+    public class MessagesControllerUnitTests
     {
         IUnitOfWork unitOfWork;
-        OffersController controller;
+        MessagesController controller;
 
-        public OffersControllerUnitTests()
+        public MessagesControllerUnitTests()
         {
             unitOfWork = new FakeUnitOfWork();
-            controller = new OffersController(unitOfWork);
+            controller = new MessagesController(unitOfWork);
         }
 
-        private OffersController createContext(OffersController con)
+        private MessagesController createContext(MessagesController con)
         {
             con.ControllerContext = new ControllerContext();
             //Creates a new HttpContext
@@ -44,11 +45,11 @@ namespace TaskHouseUnitTests.UnitTests
 
         //Test retrieve all in repository
         [Fact]
-        public void OffersController_Get_ReturnAllElementsInRepo_WhenGivenNoParameters()
+        public void MessagesController_Get_ReturnAllElementsInRepo_WhenGivenNoParameters()
         {
             var result = controller.Get();
             var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as IEnumerable<Offer>;
+            var resultObject = resultObjectResult.Value as IEnumerable<Message>;
 
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(3, resultObject.Count());
@@ -56,111 +57,109 @@ namespace TaskHouseUnitTests.UnitTests
 
         [Fact]
         //Test GET with id
-        public void OffersController_Get_ReturnObject_WhenIdIsValid()
+        public void MessagesController_Get_ReturnObject_WhenIdIsValid()
         {
-            //Arrange id for offer object
-            int offerId = 1;
+            //Arrange id for message object
+            int messageId = 1;
 
             //Act
-            var result = controller.Get(offerId);
-            var resultAsObject = controller.Get(offerId) as ObjectResult;
-            var resultObject = resultAsObject.Value as Offer;
+            var result = controller.Get(messageId);
+            var resultAsObject = controller.Get(messageId) as ObjectResult;
+            var resultObject = resultAsObject.Value as Message;
 
             //Assert - Checks if the returned object is the same type and then checks id
             Assert.IsType<ObjectResult>(result);
-            Assert.Equal(offerId, resultObject.Id);
+            Assert.Equal(messageId, resultObject.Id);
         }
 
         [Fact]
         // Test GET with invalid ID
-        public void OfferController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        public void MessagesController_Get_ReturnsNotFound_WhenGivenInvalidId()
         {
             //Arrange id for location object
-            int offerId = 403;
+            int messageId = 403;
 
             //Act
-            var result = controller.Get(offerId) as NotFoundResult;
+            var result = controller.Get(messageId) as NotFoundResult;
 
             //Assert
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        //Test POST for creating new offer
-        public void OfferController_Create_ReturnsObject_WhenNewObject()
+        //Test POST for creating new message
+        public void MessagesController_Create_ReturnsObject_WhenNewObject()
         {
             controller = createContext(controller);
             //Arrange new ObjectResult
-            var offer = new Offer()
+            var message = new Message()
             {
                 Id = 4,
-                Accepted = false,
-                Price = 213.2M,
-                Currency = "DKK",
-                WorkerId = 4,
+                Text = "text",
+                SendAt = new DateTime(2018, 3, 3),
+                UserId = 1,
                 TaskId = 1
             };
 
             //Act
-            var result = controller.Create(offer);
+            var result = controller.Create(message);
             var resultAsObject = result as ObjectResult;
-            var resultObject = resultAsObject.Value as Offer;
+            var resultObject = resultAsObject.Value as Message;
 
             //Assert
             Assert.IsType<ObjectResult>(result);
-            Assert.Equal(offer.Accepted, resultObject.Accepted);
+            Assert.Equal(message.Text, resultObject.Text);
         }
 
         [Fact]
-        //Test POST for creating new offer that is null
-        public void OfferController_Create_ReturnsBadRequest_WhenObjectIsNull()
+        //Test POST for creating new message that is null
+        public void MessagesController_Create_ReturnsBadRequest_WhenObjectIsNull()
         {
             //Arrange new ObjectResult
-            Offer offer = null;
+            Message message = null;
 
             //Act
-            var result = controller.Create(offer);
+            var result = controller.Create(message);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
-        // Test PUT for update offer
-        public void OfferController_Update_ReturnsNoContentResultAndCreatedbject_WhenParametersAreValid()
+        // Test PUT for update message
+        public void MessagesController_Update_ReturnsNoContentResultAndCreatedbject_WhenParametersAreValid()
         {
             //Arrange
-            Offer offer = new Offer()
+            Message message = new Message()
             {
                 Id = 1,
-                Accepted = false,
-                Price = 213.2M,
-                Currency = "DKK",
-                WorkerId = 4,
+                Text = "text",
+                SendAt = new DateTime(2018, 3, 3),
+                UserId = 1,
                 TaskId = 1
             };
             int id = 1;
 
             //Act
-            var result = controller.Update(id, offer);
-            var resultAsObject = controller.Get(offer.Id) as ObjectResult;
-            var resultObject = resultAsObject.Value as Offer;
+            var result = controller.Update(id, message);
+            var resultAsObject = controller.Get(message.Id) as ObjectResult;
+            var resultObject = resultAsObject.Value as Message;
 
             //Assert
             Assert.IsType<NoContentResult>(result);
-            Assert.Equal(offer.Accepted, resultObject.Accepted);
+            Assert.Equal(message.Text, resultObject.Text);
         }
 
-        ///Test put with invalid Id and null Offer object
+        ///Test put with invalid Id and null message object
         [Fact]
-        public void OfferController_Update_ReturnsBadRequestResult_WhenOfferIsNull()
+        public void MessagesController_Update_ReturnsBadRequestResult_WhenMessageIsNull()
         {
             //Arrange
-            Offer offer = null;
+            Message message = null;
             int id = 0;
 
             //Act
-            var result = controller.Update(id, offer);
+            var result = controller.Update(id, message);
 
             //Assert
             Assert.IsType<BadRequestResult>(result);
@@ -168,31 +167,30 @@ namespace TaskHouseUnitTests.UnitTests
         }
 
         [Fact]
-        // Test PUT for update Offer when Id is invalid
-        public void OfferController_Update_ReturnsBadRequest_WhenIdIsInvalid()
+        // Test PUT for update message when Id is invalid
+        public void MessagesController_Update_ReturnsBadRequest_WhenIdIsInvalid()
         {
             //Arrange
-            Offer offer = new Offer()
+            Message message = new Message()
             {
-                Id = 1,
-                Accepted = false,
-                Price = 213.2M,
-                Currency = "DKK",
-                WorkerId = 4,
+                Id = 4,
+                Text = "text",
+                SendAt = new DateTime(2018, 3, 3),
+                UserId = 1,
                 TaskId = 1
             };
             int id = 100;
 
             //Act
-            var result = controller.Update(id, offer);
+            var result = controller.Update(id, message);
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
-        // Test DELETE for Offer
-        public void OfferController_Delete_ReturnsNoContentResult_WhenDeleted()
+        // Test DELETE for message
+        public void MessagesController_Delete_ReturnsNoContentResult_WhenDeleted()
         {
             //Arrange
             int Id = 1;
@@ -207,8 +205,8 @@ namespace TaskHouseUnitTests.UnitTests
         }
 
         [Fact]
-        //Test DELETE for invalid Id for Offer
-        public void OfferController_Delete_ReturnsNotFoundResult_WhenIdInvalid()
+        //Test DELETE for invalid Id for message
+        public void MessagesController_Delete_ReturnsNotFoundResult_WhenIdInvalid()
         {
             //Arrange
             int Id = 100;

@@ -15,8 +15,15 @@ namespace TaskHouseApi.Persistence.Repositories
 
         public UserRepository(PostgresContext db) : base(db) { }
 
+        public override U Retrieve(int Id)
+        {
+            return dbSet.Where(t => t.Id == Id)
+                .Include(u => u.RefreshTokens)
+                .SingleOrDefault();
+        }
+
         public override void UpdatePart(U baseModel, string[] nameOfPropertysToIgnore)
-        {   
+        {
             base.UpdatePart(baseModel, nameOfPropertysToIgnore);
         }
 
@@ -26,11 +33,6 @@ namespace TaskHouseApi.Persistence.Repositories
             UpdatePart(baseModel, nameOfPropertysToIgnore);
         }
 
-        /*
-        *
-        *
-        * LOOK AT THIS
-         */
         public bool DeleteRefrechToken(RefreshToken refreshToken)
         {
             postgresContext.Remove(refreshToken);

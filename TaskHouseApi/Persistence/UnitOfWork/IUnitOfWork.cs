@@ -17,6 +17,8 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         IEducationRepository Educations { get; }
         ICategoryRepository Categorys { get; }
         ICurrencyRepository Currencies { get; }
+        IMessageRepository Messages { get; }
+
         int Save();
     }
 }

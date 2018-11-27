@@ -46,18 +46,26 @@ namespace TaskHouseApi.Controllers
         // POST: api/employers
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Create([FromBody]Employer employer)
+        public IActionResult Create(string password, [FromBody]Employer employer)
         {
             if (employer == null)
             {
                 return BadRequest(new { error = "CreateEmployer: empolyer is null" }); // 400 Bad request
             }
 
-            Employer existingEmployer = (unitOfWork.Employers.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
+            employer.Password = password;
+            ModelState.Clear();
 
-            if (existingEmployer != null)
+            if (!TryValidateModel(employer))
             {
-                return BadRequest(new { error = "Username in use" });
+                return BadRequest(new { error = "Model not valid" });
+            }
+
+            User existingUser = (unitOfWork.Users.RetrieveAll()).SingleOrDefault(e => e.Username == employer.Username);
+
+            if (existingUser != null)
+            {
+                return BadRequest(new { error = "Username is in use" });
             }
 
             var hashResult = passwordService.GenerateNewPassword(employer);
