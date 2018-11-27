@@ -181,6 +181,8 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<bool>("Accepted");
 
+                    b.Property<int>("Complexity");
+
                     b.Property<string>("Currency")
                         .IsRequired();
 
@@ -188,11 +190,9 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<int>("TaskId");
 
+                    b.Property<int>("TotalHours");
+
                     b.Property<int>("WorkerId");
-
-                    b.Property<int>("complexity");
-
-                    b.Property<int>("totalHours");
 
                     b.HasKey("Id");
 
