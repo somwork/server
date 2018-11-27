@@ -20,7 +20,7 @@ namespace TaskHouseApi.Persistence.Repositories
             this.dbSet = context.Set<T>();
         }
 
-        public T Retrieve(int Id)
+        public virtual T Retrieve(int Id)
         {
             return dbSet.Where(t => t.Id == Id).SingleOrDefault();
         }
@@ -67,10 +67,10 @@ namespace TaskHouseApi.Persistence.Repositories
             foreach (PropertyInfo property in propertyInfos)
             {
 
-                /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing 
+                /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing
                 if (
-                    property.Name == "Id" || 
-                    nameOfPropertysToIgnore.Contains(property.Name) || 
+                    property.Name == "Id" ||
+                    nameOfPropertysToIgnore.Contains(property.Name) ||
                     property.PropertyType == typeof(Reference)
                 )
                 {
@@ -105,7 +105,7 @@ namespace TaskHouseApi.Persistence.Repositories
                 /// If property is is a string
                 /// change the value
                 if (
-                    property.PropertyType == typeof(string) || 
+                    property.PropertyType == typeof(string) ||
                     property.PropertyType.IsValueType
                 )
                 {
