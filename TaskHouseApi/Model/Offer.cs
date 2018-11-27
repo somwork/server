@@ -10,9 +10,9 @@ namespace TaskHouseApi.Model
         [Required]
         public decimal Price { get; set; }
         [Required]
-        public int totalHours { get; set; }
-         [Required]
-        public int complexity { get; set; }
+        public int TotalHours { get; set; }
+        [Required]
+        public int Complexity { get; set; }
         [Required]
         public string Currency { get; set; }
         [Required]
