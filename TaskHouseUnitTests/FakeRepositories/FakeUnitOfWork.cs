@@ -21,6 +21,7 @@ namespace TaskHouseUnitTests.FakeRepositories
         private ICategoryRepository categoryRepository;
         private ICurrencyRepository currencyRepository;
         private IMessageRepository messageRepository;
+        private IBudgetRepository budgetRepository;
 
         public IUserRepository<User> Users
         {
@@ -163,6 +164,18 @@ namespace TaskHouseUnitTests.FakeRepositories
                     this.messageRepository = new FakeMessageRepository();
                 }
                 return messageRepository;
+            }
+        }
+
+        public IBudgetRepository Budgets
+        {
+            get
+            {
+                if (this.budgetRepository == null)
+                {
+                    this.budgetRepository = new FakeBudgetRepository();
+                }
+                return budgetRepository;
             }
         }
 
