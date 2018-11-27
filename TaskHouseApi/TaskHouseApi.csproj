@@ -22,5 +22,7 @@
 
   <ItemGroup>
     <Compile Remove="DatabaseContext\IDatabaseContext.cs" />
+    <Compile Remove="Migrations\20181127063410_updated_offer.Designer.cs" />
+    <Compile Remove="Migrations\20181127063410_updated_offer.cs" />
   </ItemGroup>
 </Project>

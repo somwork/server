@@ -287,6 +287,8 @@ namespace TaskHouseApi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Accepted = table.Column<bool>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
+                    TotalHours = table.Column<int>(nullable: false),
+                    Complexity = table.Column<int>(nullable: false),
                     Currency = table.Column<string>(nullable: false),
                     WorkerId = table.Column<int>(nullable: false),
                     TaskId = table.Column<int>(nullable: false)
