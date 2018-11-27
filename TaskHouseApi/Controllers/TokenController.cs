@@ -118,11 +118,7 @@ namespace TaskHouseApi.Controllers
             var newRefreshToken = tokenService.GenerateRefreshToken();
 
             // Deletes the old refresh token from database
-            bool res = unitOfWork.Users.DeleteRefrechToken(storedRefreshToken);
-            if (res == false)
-            {
-                return StatusCode(500);
-            }
+            unitOfWork.Users.DeleteRefrechToken(storedRefreshToken);
 
             // Add the new refresh token to user
             user.RefreshTokens.Add
