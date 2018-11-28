@@ -40,9 +40,5 @@ namespace TaskHouseApi.Persistence.Repositories
             return affected != 1;
         }
 
-        public bool isInDatabase(int Id)
-        {
-            return postgresContext.Users.Any(o => o.Id == Id);
-        }
     }
 }

@@ -94,7 +94,6 @@ namespace TaskHouseApi.Controllers
             }
 
             w.Id = id;
-
             unitOfWork.Workers.UpdatePart(w);
             unitOfWork.Save();
             return new NoContentResult();

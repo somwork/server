@@ -55,6 +55,11 @@ namespace TaskHouseApi.Persistence.Repositories
             dbSet.Update(baseModel);
         }
 
+        public bool isInDatabase(int Id)
+        {
+            return dbSet.Any(o => o.Id == Id);
+        }
+
         public virtual void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
         {
             PropertyInfo[] propertyInfos = baseModel.GetType().GetProperties();

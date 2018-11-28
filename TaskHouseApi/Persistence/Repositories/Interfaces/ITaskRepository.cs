@@ -7,6 +7,6 @@ namespace TaskHouseApi.Persistence.Repositories.Interfaces
 {
     public interface ITaskRepository : IRepository<Task>
     {
-        //Custom functionality to be added
+        void UpdatePart(Task basemodel);
     }
 }

@@ -15,5 +15,16 @@ namespace TaskHouseApi.Persistence.Repositories
         protected internal PostgresContext postgresContext { get { return context as PostgresContext; } }
 
         public TaskRepository(PostgresContext db) : base(db) { }
+
+        public override void UpdatePart(Task baseModel, string[] nameOfPropertysToIgnore)
+        {
+            base.UpdatePart(baseModel, nameOfPropertysToIgnore);
+        }
+
+        public void UpdatePart(Task baseModel)
+        {
+            var nameOfPropertysToIgnore = new string[] { "employerId" };
+            UpdatePart(baseModel, nameOfPropertysToIgnore);
+        }
     }
 }

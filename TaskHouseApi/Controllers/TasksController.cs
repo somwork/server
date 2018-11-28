@@ -80,15 +80,13 @@ namespace TaskHouseApi.Controllers
                 return BadRequest(); //400 bad request
             }
 
-            Task existing = unitOfWork.Tasks.Retrieve(id);
-
-            if (existing == null)
+            if (!unitOfWork.Tasks.isInDatabase(id))
             {
-                return NotFound(); //404 resource not found
+                return NotFound();
             }
 
             t.Id = id;
-            unitOfWork.Tasks.Update(t);
+            unitOfWork.Tasks.UpdatePart(t);
             unitOfWork.Save();
             return new NoContentResult();  //204 no content
         }

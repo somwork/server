@@ -14,6 +14,7 @@ namespace TaskHouseApi.Persistence.Repositories.Interfaces
         void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore);
 
         void Delete(T baseModel);
-        void Delete(int id);
+        void Delete(int Id);
+        bool isInDatabase(int Id);
     }
 }
