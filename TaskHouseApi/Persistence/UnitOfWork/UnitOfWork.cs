@@ -26,6 +26,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ICategoryRepository categoryRepository;
         private ICurrencyRepository currencyRepository;
         private IMessageRepository messageRepository;
+        private IBudgetRepository budgetRepository;
 
         public IUserRepository<User> Users
         {
@@ -162,6 +163,19 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                     this.messageRepository = new MessageRepository(context);
                 }
                 return messageRepository;
+            }
+        }
+
+        public IBudgetRepository Budgets
+        {
+            get
+            {
+
+                if (this.budgetRepository == null)
+                {
+                    this.budgetRepository = new BudgetRepository(context);
+                }
+                return budgetRepository;
             }
         }
 
