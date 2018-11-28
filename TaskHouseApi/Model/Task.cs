@@ -21,6 +21,8 @@ namespace TaskHouseApi.Model
         [JsonIgnore]
         public virtual ICollection<Offer> Offers { get; set; }
         [JsonIgnore]
+        public virtual ICollection<Estimate> Estimates {get; set;}
+        [JsonIgnore]
         public virtual Reference Reference { get; set; }
         [JsonIgnore]
         public virtual ICollection<CategoryTask> CategoryTask { get; set; }
@@ -29,12 +31,27 @@ namespace TaskHouseApi.Model
         public Employer Employer { get; set; }
         [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
+        public decimal AverageEstimate {get; set;}
 
         public Task()
         {
             Offers = new List<Offer>();
             CategoryTask = new List<CategoryTask>();
             Messages = new List<Message>();
+            Estimates = new List<Estimate>();
+        }
+
+
+        public void CalculateAverageEstimate()
+        {
+            decimal SummedEstimate = 0.0M;
+
+            foreach(Estimate e in Estimates)
+            {
+                SummedEstimate += e.PriceEstimate;
+            }
+
+            this.AverageEstimate = SummedEstimate / Estimates.Count;
         }
     }
 }
