@@ -9,13 +9,14 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         IUserRepository<User> Users { get; }
         IWorkerRepository Workers { get; }
         IEmployerRepository Employers { get; }
+        IQualityAssuranceRepository QualityAssurances { get; }
         ILocationRepository Locations { get; }
         ISkillRepository Skills { get; }
         ITaskRepository Tasks { get; }
         IOfferRepository Offers { get; }
         IReferenceRepository References { get; }
         IEducationRepository Educations { get; }
-        ICategoryRepository Categorys { get; }
+        ICategoryRepository Categories { get; }
         ICurrencyRepository Currencies { get; }
         IMessageRepository Messages { get; }
 

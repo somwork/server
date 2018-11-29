@@ -25,7 +25,6 @@ namespace TaskHouseApi.Controllers
             this.passwordService = passwordService;
         }
 
-
         [NonAction]
         public override IActionResult Create([FromBody] Worker baseModel)
         {

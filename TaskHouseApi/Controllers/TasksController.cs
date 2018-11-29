@@ -23,22 +23,13 @@ namespace TaskHouseApi.Controllers
         [HttpPost]
         public override IActionResult Create([FromBody] Task task)
         {
-            if (task == null)
+            var createResult = CreateBasicCheck(task);
+            if (createResult != null)
             {
-                return BadRequest(new { error = "CreateTask: task is null" }); //400 bad request
+                return createResult;
             }
 
-            if (!TryValidateModel(task))
-            {
-                return BadRequest(new { error = "Model not valid" });
-            }
-
-            int currentUserId = Int32.Parse(HttpContext.User.Claims.SingleOrDefault
-            (
-                c => c.Type == ClaimTypes.NameIdentifier).Value
-            );
-
-            task.EmployerId = currentUserId;
+            task.EmployerId = GetCurrentUserId();
 
             unitOfWork.Tasks.Create(task);
             unitOfWork.Save();

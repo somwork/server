@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.UnitOfWork;
@@ -31,18 +34,29 @@ namespace TaskHouseApi.Controllers.CRUDController
             return new ObjectResult(t); // 200 ok
         }
 
-        [HttpPost]
-        public virtual IActionResult Create([FromBody] T baseModel)
+        public IActionResult CreateBasicCheck(T baseModel)
         {
             if (baseModel == null)
             {
                 // 400 Bad request
-                return BadRequest(new { error = "Create baseModel: baseModel is null" });
+                return BadRequest(new { error = "Create: Model is null" });
             }
 
             if (!TryValidateModel(baseModel))
             {
                 return BadRequest(new { error = "Model not valid" });
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        public virtual IActionResult Create([FromBody] T baseModel)
+        {
+            var createResult = CreateBasicCheck(baseModel);
+            if (createResult != null)
+            {
+                return createResult;
             }
 
             unitOfWork.Repository<T>().Create(baseModel);
@@ -67,6 +81,7 @@ namespace TaskHouseApi.Controllers.CRUDController
             baseModel.Id = id;
             unitOfWork.Repository<T>().UpdatePart(baseModel);
             unitOfWork.Save();
+
             return new NoContentResult(); // 204 No content
         }
 
@@ -83,6 +98,14 @@ namespace TaskHouseApi.Controllers.CRUDController
             unitOfWork.Save();
 
             return new NoContentResult(); // 204 No content
+        }
+
+        public int GetCurrentUserId()
+        {
+            return Int32.Parse(HttpContext.User.Claims.SingleOrDefault
+            (
+                c => c.Type == ClaimTypes.NameIdentifier).Value
+            );
         }
     }
 }

@@ -11,6 +11,7 @@ using TaskHouseUnitTests.FakeRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using System.Security.Claims;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -30,6 +31,14 @@ namespace TaskHouseUnitTests.UnitTests
             con.ControllerContext = new ControllerContext();
             //Creates a new HttpContext
             con.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            //Adds a User with claim to the current context
+            con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
+                //Adds a claim for nameIdentifier, user Id
+                new Claim(ClaimTypes.NameIdentifier, "4"),
+                //Adds a claim for role, user role/tupe
+                new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Worker")
+            }));
 
             con.ObjectValidator = new DefaultObjectValidator
             (
