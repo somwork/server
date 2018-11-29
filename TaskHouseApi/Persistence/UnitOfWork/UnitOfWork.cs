@@ -47,6 +47,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
             if (basemodelType == typeof(Category)) { return ((IRepository<T>)Categories); }
             if (basemodelType == typeof(Currency)) { return ((IRepository<T>)Currencies); }
             if (basemodelType == typeof(Message)) { return ((IRepository<T>)Messages); }
+            if (basemodelType == typeof(Budget)) { return ((IRepository<T>)Budgets); }
 
             return null;
         }
@@ -204,7 +205,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.budgetRepository == null)
                 {
                     this.budgetRepository = new BudgetRepository(context);
