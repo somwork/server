@@ -7,7 +7,7 @@ using TaskHouseApi.Persistence.UnitOfWork;
 
 namespace TaskHouseApi.Controllers.CRUDController
 {
-    public class CRUDController<T> : Controller, ICRUDController<T> where T : BaseModel
+    public abstract class CRUDController<T> : Controller, ICRUDController<T> where T : BaseModel
     {
         protected internal IUnitOfWork unitOfWork;
 
