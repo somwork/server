@@ -20,5 +20,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         IMessageRepository Messages { get; }
 
         int Save();
+
+        IRepository<T> Repository<T>() where T : BaseModel;
     }
 }

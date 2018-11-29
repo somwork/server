@@ -8,14 +8,17 @@ namespace TaskHouseApi.Model
     {
         [Required]
         public string Title { get; set; }
-        [Required]
-        public int WorkerId { get; set; }
+        // [Required]
+        // public int WorkerId { get; set; }
+        // [JsonIgnore]
+        // public Worker Worker { get; set; }
         [JsonIgnore]
         public virtual ICollection<CategorySkill> CategorySkill { get; set; }
 
         public Skill()
         {
             CategorySkill = new List<CategorySkill>();
+            nameOfPropertysToIgnore = new string[] { "WorkerId" };
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskHouseApi.Controllers.CRUDController;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
@@ -11,36 +12,19 @@ namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class EmployersController : Controller
+    public class EmployersController : CRUDController<Employer>
     {
         private IPasswordService passwordService;
 
-        private IUnitOfWork unitOfWork;
-
-        // constructor injects registered repository
-        public EmployersController(IUnitOfWork unitOfWork, IPasswordService passwordService)
+        public EmployersController(IUnitOfWork unitOfWork, IPasswordService passwordService) : base(unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
             this.passwordService = passwordService;
         }
 
-        // GET: api/employers/[id]
-        [HttpGet("{id}")]
-        public IActionResult Get(int Id)
+        [NonAction]
+        public override IActionResult Create([FromBody] Employer baseModel)
         {
-            Employer u = unitOfWork.Employers.Retrieve(Id);
-            if (u == null)
-            {
-                return NotFound(); // 404 Resource not found
-            }
-            return new ObjectResult(u); // 200 OK
-        }
-
-        // GET: api/empolyers/
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return new ObjectResult(unitOfWork.Employers.RetrieveAll());
+            return BadRequest();
         }
 
         // POST: api/employers
@@ -77,43 +61,6 @@ namespace TaskHouseApi.Controllers
             unitOfWork.Save();
 
             return new ObjectResult(employer);
-        }
-
-        // PUT: api/employers/[id]
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Employer e)
-        {
-            if (e == null)
-            {
-                return BadRequest(); // 400 Bad request
-            }
-
-            if (!unitOfWork.Employers.isInDatabase(id))
-            {
-                return NotFound();
-            }
-
-            e.Id = id;
-
-            unitOfWork.Employers.UpdatePart(e);
-            unitOfWork.Save();
-            return new NoContentResult(); // 204 No content
-        }
-
-        // DELETE: api/employers/[id]
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int Id)
-        {
-            var existing = unitOfWork.Employers.Retrieve(Id);
-            if (existing == null)
-            {
-                return NotFound(); // 404 Resource not found
-            }
-
-            unitOfWork.Employers.Delete(Id);
-            unitOfWork.Save();
-
-            return new NoContentResult(); // 204 No content
         }
     }
 }

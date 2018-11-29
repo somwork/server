@@ -266,7 +266,7 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<int>("WorkerId");
+                    b.Property<int?>("WorkerId");
 
                     b.HasKey("Id");
 
@@ -465,8 +465,7 @@ namespace TaskHouseApi.Migrations
                 {
                     b.HasOne("TaskHouseApi.Model.Worker")
                         .WithMany("Skills")
-                        .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WorkerId");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Task", b =>

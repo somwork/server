@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using TaskHouseApi.Controllers.CRUDController;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.UnitOfWork;
@@ -15,34 +16,20 @@ namespace TaskHouseApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class WorkersController : Controller
+    public class WorkersController : CRUDController<Worker>
     {
-        private IUnitOfWork unitOfWork;
         private IPasswordService passwordService;
 
-        public WorkersController(IUnitOfWork unitOfWork, IPasswordService passwordService)
+        public WorkersController(IUnitOfWork unitOfWork, IPasswordService passwordService) : base(unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
             this.passwordService = passwordService;
         }
 
-        [HttpGet("{id}")]
-        //[JsonNoNull]
-        public IActionResult Get(int Id)
-        {
-            Worker w = unitOfWork.Workers.Retrieve(Id);
-            if (w == null)
-            {
-                return NotFound(); // 404 Resource not found
-            }
 
-            return new ObjectResult(w);
-        }
-
-        [HttpGet]
-        public IActionResult Get()
+        [NonAction]
+        public override IActionResult Create([FromBody] Worker baseModel)
         {
-            return new ObjectResult(unitOfWork.Workers.RetrieveAll());
+            return BadRequest();
         }
 
         [AllowAnonymous]
@@ -78,41 +65,6 @@ namespace TaskHouseApi.Controllers
             unitOfWork.Save();
 
             return new ObjectResult(worker);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Worker w)
-        {
-            if (w == null)
-            {
-                return BadRequest(); // 400 Bad request
-            }
-
-            if (!unitOfWork.Workers.isInDatabase(id))
-            {
-                return NotFound();
-            }
-
-            w.Id = id;
-
-            unitOfWork.Workers.UpdatePart(w);
-            unitOfWork.Save();
-            return new NoContentResult();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int Id)
-        {
-            var existing = unitOfWork.Workers.Retrieve(Id);
-            if (existing == null)
-            {
-                return NotFound(); // 404 Resource not found
-            }
-
-            unitOfWork.Workers.Delete(Id);
-            unitOfWork.Save();
-
-            return new NoContentResult();
         }
     }
 }

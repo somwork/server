@@ -22,27 +22,11 @@ namespace TaskHouseApi.Persistence.Repositories
                 .SingleOrDefault();
         }
 
-        public override void UpdatePart(U baseModel, string[] nameOfPropertysToIgnore)
-        {
-            base.UpdatePart(baseModel, nameOfPropertysToIgnore);
-        }
-
-        public void UpdatePart(U baseModel)
-        {
-            var nameOfPropertysToIgnore = new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" };
-            UpdatePart(baseModel, nameOfPropertysToIgnore);
-        }
-
         public bool DeleteRefrechToken(RefreshToken refreshToken)
         {
             postgresContext.Remove(refreshToken);
             int affected = postgresContext.SaveChanges();
             return affected != 1;
-        }
-
-        public bool isInDatabase(int Id)
-        {
-            return postgresContext.Users.Any(o => o.Id == Id);
         }
     }
 }

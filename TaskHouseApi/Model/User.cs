@@ -39,6 +39,7 @@ namespace TaskHouseApi.Model
         {
             RefreshTokens = new List<RefreshToken>();
             Messages = new List<Message>();
+            nameOfPropertysToIgnore = new string[] { "Password", "Salt", "RefreshTokens", "Discriminator" };
         }
     }
 }

@@ -55,7 +55,7 @@ namespace TaskHouseApi.Persistence.Repositories
             dbSet.Update(baseModel);
         }
 
-        public virtual void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
+        public virtual void UpdatePart(T baseModel)
         {
             PropertyInfo[] propertyInfos = baseModel.GetType().GetProperties();
             if (propertyInfos.Count() == 0)
@@ -66,12 +66,25 @@ namespace TaskHouseApi.Persistence.Repositories
             bool IsModified = false;
             foreach (PropertyInfo property in propertyInfos)
             {
+                /// If property is a ICollection
+                /// don't change the value
+                if (property.PropertyType == typeof(ICollection))
+                {
+                    context.Entry(baseModel).Collection(property.Name).IsModified = false;
+                }
+
+                if (property.PropertyType == typeof(Reference))
+                {
+                    context.Entry(baseModel).Reference(property.Name).IsModified = false;
+                }
 
                 /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing
                 if (
                     property.Name == "Id" ||
-                    nameOfPropertysToIgnore.Contains(property.Name) ||
-                    property.PropertyType == typeof(Reference)
+                    (
+                        baseModel.nameOfPropertysToIgnore != null &&
+                        baseModel.nameOfPropertysToIgnore.Contains(property.Name)
+                    )
                 )
                 {
                     continue;
@@ -90,17 +103,27 @@ namespace TaskHouseApi.Persistence.Repositories
                 /// If property name is in ignore
                 /// or is null
                 /// don't change the value
-                if (nameOfPropertysToIgnore.Contains(property.Name) || propertyValue == null)
+                if (
+                    (
+                        baseModel.nameOfPropertysToIgnore != null &&
+                        baseModel.nameOfPropertysToIgnore.Contains(property.Name)
+                    ) ||
+                    propertyValue == null)
                 {
                     continue;
                 }
 
                 /// If property is a ICollection
                 /// don't change the value
-                if (property.PropertyType == typeof(ICollection))
-                {
-                    context.Entry(baseModel).Collection(property.Name).IsModified = false;
-                }
+                // if (property.PropertyType == typeof(ICollection))
+                // {
+                //     context.Entry(baseModel).Collection(property.Name).IsModified = false;
+                // }
+
+                // if (property.PropertyType == typeof(Reference))
+                // {
+                //     context.Entry(baseModel).Reference(property.Name).IsModified = false;
+                // }
 
                 /// If property is is a string
                 /// change the value
@@ -113,6 +136,11 @@ namespace TaskHouseApi.Persistence.Repositories
                     context.Entry(baseModel).Property(property.Name).IsModified = true;
                 }
             }
+        }
+
+        public bool isInDatabase(int Id)
+        {
+            return dbSet.Any(o => o.Id == Id);
         }
     }
 }

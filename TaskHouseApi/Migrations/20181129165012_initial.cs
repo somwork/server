@@ -166,7 +166,7 @@ namespace TaskHouseApi.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Title = table.Column<string>(nullable: false),
-                    WorkerId = table.Column<int>(nullable: false)
+                    WorkerId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -176,7 +176,7 @@ namespace TaskHouseApi.Migrations
                         column: x => x.WorkerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
