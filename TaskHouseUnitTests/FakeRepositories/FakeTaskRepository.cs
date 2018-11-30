@@ -37,6 +37,11 @@ namespace TaskHouseUnitTests.FakeRepositories
             }
             )
         { }
+
+        public IEnumerable<Task> GetTasksForEmployer(int Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

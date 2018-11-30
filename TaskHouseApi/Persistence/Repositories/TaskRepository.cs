@@ -15,5 +15,10 @@ namespace TaskHouseApi.Persistence.Repositories
         protected internal PostgresContext postgresContext { get { return context as PostgresContext; } }
 
         public TaskRepository(PostgresContext db) : base(db) { }
+
+        public IEnumerable<Task> GetTasksForEmployer(int Id)
+        {
+            return dbSet.Where(e => e.EmployerId == Id).ToList();
+        }
     }
 }
