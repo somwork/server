@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using TaskHouseApi.Model;
-using TaskHouseApi.Persistence.Repositories.Interfaces;
 using System.Security.Claims;
 using TaskHouseApi.Persistence.UnitOfWork;
 
@@ -35,7 +33,7 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(t); //200 ok
         }
 
-        //GET: api/tasks
+        //GET: api/tasks/
         [HttpGet]
         public IActionResult Get()
         {
@@ -107,6 +105,66 @@ namespace TaskHouseApi.Controllers
             unitOfWork.Save();
 
             return new NoContentResult(); //204 No content
+        }
+
+        // POST: api/tasks/[id]
+        [Authorize(Roles = "TaskHouseApi.Model.Worker")]
+        [HttpPost("{id}/estimate")]
+        public IActionResult Create(int Id, [FromBody] Estimate estimate)
+        {
+            //Get the given task from the id parameter
+            Task task = unitOfWork.Tasks.Retrieve(Id);
+
+            //if the task doesn't exist return badrequest
+            if (task == null)
+            {
+                return BadRequest(new { error = "Task doesn't exist" }); //400 bad request
+            }
+
+            // Add the estimates for the specific task id to the collection of estimates
+            task.Estimates = unitOfWork.Estimates.RetrieveAllEstimatesForSpecificTaskId(Id).ToList();
+
+            //if the collection consists of 0 estimates then the average estimate should be set to 0
+            if(task.Estimates.Count == 0)
+            {
+                task.AverageEstimate = 0;
+            }
+
+            //if the estimate from the body is null return bad request
+            if (estimate == null)
+            {
+                return BadRequest(new { error = "CreateEstimate: estimate is null" }); //400 bad request
+            }
+
+            if (!TryValidateModel(estimate))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
+            int currentUserId = Int32.Parse(HttpContext.User.Claims.SingleOrDefault
+            (
+                c => c.Type == ClaimTypes.NameIdentifier).Value
+            );
+
+            //add the current estimate to the collection because it is not saved in the database yet
+            task.Estimates.Add(estimate);
+
+            //calculate the average estimate and set the average estimate for the given task
+            task.AverageEstimate = task.CalculateAverageEstimate();
+
+            estimate.WorkerId = currentUserId;
+            estimate.TaskId = task.Id;
+
+            //update the given tasks average estimate
+            unitOfWork.Tasks.Update(task);
+
+            //create estimate in the tabel Estimates in the database
+            unitOfWork.Estimates.Create(estimate);
+
+            //save the changes in the database
+            unitOfWork.Save();
+
+            return new ObjectResult(estimate); //200 ok
         }
     }
 }
