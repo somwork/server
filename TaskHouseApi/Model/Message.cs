@@ -13,11 +13,9 @@ namespace TaskHouseApi.Model
         [JsonIgnore]
         public int UserId { get; set; }
         [JsonIgnore]
-        public User User { get; set; }
+        public string Name { get; set; }
         [JsonIgnore]
         public int TaskId { get; set; }
-        [JsonIgnore]
-        public Task Task { get; set; }
 
         public Message()
         {
