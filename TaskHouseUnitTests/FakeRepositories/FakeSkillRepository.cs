@@ -31,6 +31,11 @@ namespace TaskHouseUnitTests.FakeRepositories
             }
             )
         { }
+
+        public IEnumerable<Skill> GetSkillsForWorker(int Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
