@@ -15,7 +15,7 @@ namespace TaskHouseApi.Model
         public string Base { get; set; }
 
         [JsonProperty("date")]
-        public DateTimeOffset Date { get; set; }
+        public DateTime Date { get; set; }
 
         [JsonProperty("rates")]
         public Rates Rates { get; set; }

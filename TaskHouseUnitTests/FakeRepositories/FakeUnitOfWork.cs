@@ -16,7 +16,7 @@ namespace TaskHouseUnitTests.FakeRepositories
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
-        private IOfferRepository offerRepository;
+        private IEstimateRepository estimateRepository;
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
         private ICategoryRepository categoryRepository;
@@ -106,15 +106,15 @@ namespace TaskHouseUnitTests.FakeRepositories
                 return taskRepository;
             }
         }
-        public IOfferRepository Offers
+        public IEstimateRepository Estimates
         {
             get
             {
-                if (this.offerRepository == null)
+                if (this.estimateRepository == null)
                 {
-                    this.offerRepository = new FakeOfferRepository();
+                    this.estimateRepository = new FakeEstimateRepository();
                 }
-                return offerRepository;
+                return estimateRepository;
             }
         }
         public IReferenceRepository References
@@ -213,7 +213,7 @@ namespace TaskHouseUnitTests.FakeRepositories
             if (basemodelType == typeof(Location)) { return ((IRepository<T>)Locations); }
             if (basemodelType == typeof(Skill)) { return ((IRepository<T>)Skills); }
             if (basemodelType == typeof(Task)) { return ((IRepository<T>)Tasks); }
-            if (basemodelType == typeof(Offer)) { return ((IRepository<T>)Offers); }
+            if (basemodelType == typeof(Estimate)) { return ((IRepository<T>)Estimates); }
             if (basemodelType == typeof(Reference)) { return ((IRepository<T>)References); }
             if (basemodelType == typeof(Education)) { return ((IRepository<T>)Educations); }
             if (basemodelType == typeof(Category)) { return ((IRepository<T>)Categories); }

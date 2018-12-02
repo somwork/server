@@ -6,7 +6,7 @@ namespace TaskHouseApi.Model
     public class Worker : User
     {
         [JsonIgnore]
-        public virtual ICollection<Offer> Offers { get; set; }
+        public virtual ICollection<Estimate> Estimates { get; set; }
         [JsonIgnore]
         public virtual ICollection<Reference> References { get; set; }
         [JsonIgnore]
@@ -16,7 +16,7 @@ namespace TaskHouseApi.Model
 
         public Worker()
         {
-            Offers = new List<Offer>();
+            Estimates = new List<Estimate>();
             References = new List<Reference>();
             Educations = new List<Education>();
             Skills = new List<Skill>();

@@ -6,6 +6,7 @@ using System.Linq;
 using TaskHouseApi.Persistence.DatabaseContext;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskHouseApi.Persistence.Repositories
 {
@@ -19,6 +20,13 @@ namespace TaskHouseApi.Persistence.Repositories
         public IEnumerable<Task> GetTasksForEmployer(int Id)
         {
             return dbSet.Where(e => e.EmployerId == Id).ToList();
+        }
+
+        public override Task Retrieve(int Id)
+        {
+            return dbSet.Where(t => t.Id == Id)
+                .SingleOrDefault();
+
         }
     }
 }
