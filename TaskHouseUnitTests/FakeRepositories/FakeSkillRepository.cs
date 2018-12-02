@@ -16,17 +16,20 @@ namespace TaskHouseUnitTests.FakeRepositories
                 new Skill()
                 {
                     Id = 1,
-                    Title = "Skill1"
+                    Title = "Skill1",
+                    WorkerId = 4
                 },
                 new Skill()
                 {
                     Id = 2,
-                    Title = "Skill2"
+                    Title = "Skill2",
+                    WorkerId = 4
                 },
                 new Skill()
                 {
                     Id = 3,
-                    Title = "Skill3"
+                    Title = "Skill3",
+                    WorkerId = 5
                 }
             }
             )
@@ -34,7 +37,7 @@ namespace TaskHouseUnitTests.FakeRepositories
 
         public IEnumerable<Skill> GetSkillsForWorker(int Id)
         {
-            throw new NotImplementedException();
+            return list.Where(w => w.WorkerId == Id).ToList();
         }
     }
 }

@@ -277,5 +277,29 @@ namespace TaskHouseUnitTests.UnitTests
             Assert.NotNull(resultObject.LastName);
             Assert.NotNull(resultObject.Salt);
         }
+
+        [Fact]
+        public void EmployersController_GetTasksForEmployer_ReturnsObjectResult_WhenGivenIdForWorkerWithTasks()
+        {
+            int Id = 1;
+            var result = controller.GetTasksForEmployer(Id);
+            var resultObjectResult = result as ObjectResult;
+            var resultObject = resultObjectResult.Value as IEnumerable<Task>;
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(3, resultObject.Count());
+        }
+
+        [Fact]
+        public void EmployersController_GetTasksForEmployer_ReturnsObjectResult_WhenGivenIdForWorkerWithNoTasks()
+        {
+            int Id = 3;
+            var result = controller.GetTasksForEmployer(Id);
+            var resultObjectResult = result as ObjectResult;
+            var resultObject = resultObjectResult.Value as IEnumerable<Task>;
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(0, resultObject.Count());
+        }
     }
 }

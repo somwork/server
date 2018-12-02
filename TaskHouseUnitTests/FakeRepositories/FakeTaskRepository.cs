@@ -17,22 +17,26 @@ namespace TaskHouseUnitTests.FakeRepositories
                 new TaskHouseApi.Model.Task()
                 {
                     Id = 1,
-                    Description = "Task1"
+                    Description = "Task1",
+                    EmployerId = 1
                 },
                 new TaskHouseApi.Model.Task()
                 {
                     Id = 2,
-                    Description = "Task2"
+                    Description = "Task2",
+                    EmployerId = 1
                 },
                 new TaskHouseApi.Model.Task()
                 {
                     Id = 3,
-                    Description = "Task3"
+                    Description = "Task3",
+                    EmployerId = 1
                 },
                 new TaskHouseApi.Model.Task()
                 {
                     Id = 4,
-                    Description = "Task4"
+                    Description = "Task4",
+                    EmployerId = 2
                 },
             }
             )
@@ -40,7 +44,7 @@ namespace TaskHouseUnitTests.FakeRepositories
 
         public IEnumerable<Task> GetTasksForEmployer(int Id)
         {
-            throw new NotImplementedException();
+            return list.Where(e => e.EmployerId == Id).ToList();
         }
     }
 }
