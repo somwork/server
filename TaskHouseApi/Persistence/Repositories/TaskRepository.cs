@@ -17,10 +17,9 @@ namespace TaskHouseApi.Persistence.Repositories
 
         public TaskRepository(PostgresContext db) : base(db) { }
 
-        public override Task Retrieve(int Id)
+        public IEnumerable<Task> GetTasksForEmployer(int Id)
         {
-            return dbSet.Where(t => t.Id == Id)
-                .SingleOrDefault();
+            return dbSet.Where(e => e.EmployerId == Id).ToList();
         }
     }
 }

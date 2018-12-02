@@ -210,5 +210,29 @@ namespace TaskHouseUnitTests.UnitTests
             Assert.NotNull(resultObject.LastName);
             Assert.NotNull(resultObject.Salt);
         }
+
+        [Fact]
+        public void WorkerController_GetSkillsForWorker_ReturnsObjectResult_WhenGivenIdForWorkerWithSkills()
+        {
+            int Id = 4;
+            var result = controller.GetSkillsForWorker(Id);
+            var resultObjectResult = result as ObjectResult;
+            var resultObject = resultObjectResult.Value as IEnumerable<Skill>;
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(2, resultObject.Count());
+        }
+
+        [Fact]
+        public void WorkerController_GetSkillsForWorker_ReturnsObjectResult_WhenGivenIdForWorkerWithNoSkills()
+        {
+            int Id = 6;
+            var result = controller.GetSkillsForWorker(Id);
+            var resultObjectResult = result as ObjectResult;
+            var resultObject = resultObjectResult.Value as IEnumerable<Skill>;
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(0, resultObject.Count());
+        }
     }
 }

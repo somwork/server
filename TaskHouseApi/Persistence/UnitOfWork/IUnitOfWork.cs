@@ -22,6 +22,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         IBudgetRepository Budgets { get; }
 
         int Save();
+
         IRepository<T> Repository<T>() where T : BaseModel;
     }
 }

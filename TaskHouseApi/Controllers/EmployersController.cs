@@ -15,5 +15,11 @@ namespace TaskHouseApi.Controllers
     public class EmployersController : UserController<Employer>
     {
         public EmployersController(IUnitOfWork unitOfWork, IPasswordService passwordService) : base(unitOfWork, passwordService) { }
+
+        [HttpGet("{id}/tasks")]
+        public IActionResult GetTasksForEmployer(int Id)
+        {
+            return new ObjectResult(unitOfWork.Tasks.GetTasksForEmployer(Id));
+        }
     }
 }
