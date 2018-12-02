@@ -39,7 +39,7 @@ namespace TaskHouseApi.Controllers
         //DELETE: api/estimates/[id]
         [Authorize(Roles = "TaskHouseApi.Model.Worker")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteEstimate(int id)
+        public IActionResult Delete(int id)
         {
             Estimate estimate = unitOfWork.Estimates.Retrieve(id);
 

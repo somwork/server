@@ -15,7 +15,7 @@ namespace TaskHouseUnitTests.FakeRepositories
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
-        private IOfferRepository offerRepository;
+        private IEstimateRepository estimateRepository;
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
         private ICategoryRepository categoryRepository;
@@ -93,15 +93,15 @@ namespace TaskHouseUnitTests.FakeRepositories
                 return taskRepository;
             }
         }
-        public IOfferRepository Offers
+        public IEstimateRepository Estimates
         {
             get
             {
-                if (this.offerRepository == null)
+                if (this.estimateRepository == null)
                 {
-                    this.offerRepository = new FakeOfferRepository();
+                    this.estimateRepository = new FakeEstimateRepository();
                 }
-                return offerRepository;
+                return estimateRepository;
             }
         }
         public IReferenceRepository References
