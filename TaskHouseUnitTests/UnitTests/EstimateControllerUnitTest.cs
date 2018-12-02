@@ -54,8 +54,9 @@ namespace TaskHouseUnitTests.UnitTests
             Assert.Equal(4, resultObject.Count());
         }
 
+
         [Fact]
-        //Test GET with id
+        //Test GET with  valid id
         public void EstimatesController_Get_ReturnObject_WhenIdIsValid()
         {
             //Arrange id for offer object
@@ -88,7 +89,7 @@ namespace TaskHouseUnitTests.UnitTests
 
 
         [Fact]
-        // Test DELETE for Offer
+        // Delete test with valid params
         public void EstimatesController_Delete_ReturnsNoContentResult_WhenDeleted()
         {
             //Arrange
@@ -104,7 +105,7 @@ namespace TaskHouseUnitTests.UnitTests
         }
 
         [Fact]
-        //Test DELETE for invalid Id for Offer
+        ///Delete with invalid ID
         public void EstimatesController_Delete_ReturnsNotFoundResult_WhenIdInvalid()
         {
             //Arrange
