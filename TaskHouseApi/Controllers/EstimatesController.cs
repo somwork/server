@@ -26,9 +26,9 @@ namespace TaskHouseApi.Controllers
 
         //GET: api/estimates/id
         [HttpGet("{id}")]
-        public IActionResult Get(int Id)
+        public IActionResult Get(int id)
         {
-            Estimate e = unitOfWork.Estimates.Retrieve(Id);
+            Estimate e = unitOfWork.Estimates.Retrieve(id);
             if (e == null)
             {
                 return NotFound(); //404 resource not found

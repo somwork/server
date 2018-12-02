@@ -305,10 +305,8 @@ namespace TaskHouseUnitTests.UnitTests
             //Act
             var result = controller.Create(taskId, e);
 
-
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
-
         }
 
         ///Test creation of estimate through Task controller
@@ -327,13 +325,12 @@ namespace TaskHouseUnitTests.UnitTests
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
-
         }
 
         ///Test creation of estimate through Task controller
         ///Invalid task id
         [Fact]
-        public void TasksController_Estimate_Create_AverageEstimateForTaskIszero_WhenGEstimateListIsEmpty()
+        public void TasksController_Estimate_Create_AverageEstimateForTaskIszero_WhenEstimateListIsEmpty()
         {
             //arrange
             int taskId = 1;
@@ -342,7 +339,6 @@ namespace TaskHouseUnitTests.UnitTests
             var result = controller.Get(taskId);
             var resultAsObject = controller.Get(taskId) as ObjectResult;
             var resultObject = resultAsObject.Value as TaskHouseApi.Model.Task;
-
 
             //Assert
             Assert.Equal(resultObject.AverageEstimate, 0);

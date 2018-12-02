@@ -54,7 +54,6 @@ namespace TaskHouseUnitTests.UnitTests
             Assert.Equal(4, resultObject.Count());
         }
 
-
         [Fact]
         //Test GET with  valid id
         public void EstimatesController_Get_ReturnObject_WhenIdIsValid()
@@ -86,8 +85,6 @@ namespace TaskHouseUnitTests.UnitTests
             Assert.Equal(404, result.StatusCode);
         }
 
-
-
         [Fact]
         // Delete test with valid params
         public void EstimatesController_Delete_ReturnsNoContentResult_WhenDeleted()
@@ -116,7 +113,6 @@ namespace TaskHouseUnitTests.UnitTests
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
-
         }
     }
 }

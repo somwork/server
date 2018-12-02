@@ -19,12 +19,8 @@ namespace TaskHouseApi.Model
         public int WorkerId { get; set; }
         [Required]
         public int TaskId { get; set; }
-        public decimal PriceEstimate { get; set; }
 
-        public Estimate()
-        {
-
-        }
+        public Estimate(){}
 
         public Estimate(int TotalHours, int Complexity, decimal HourlyWage, decimal Urgency)
         {
@@ -32,11 +28,9 @@ namespace TaskHouseApi.Model
             this.Complexity = Complexity;
             this.HourlyWage = HourlyWage;
             this.Urgency = Urgency;
-
-            this.PriceEstimate = Calculate();
         }
 
-        public decimal Calculate()
+        public decimal CalculateAverageEstimate()
         {
             return TotalHours * HourlyWage * Complexity * Urgency;
         }

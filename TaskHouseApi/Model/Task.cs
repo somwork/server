@@ -18,7 +18,7 @@ namespace TaskHouseApi.Model
         [Required]
         public string Urgency { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Estimate> Estimates {get; set;}
+        public virtual ICollection<Estimate> Estimates { get; set; }
         [JsonIgnore]
         public virtual Reference Reference { get; set; }
         [JsonIgnore]
@@ -28,7 +28,9 @@ namespace TaskHouseApi.Model
         public Employer Employer { get; set; }
         [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
-        public decimal AverageEstimate { get; set;
+        public decimal AverageEstimate
+        {
+            get; set;
         }
 
         public Task()
@@ -42,17 +44,17 @@ namespace TaskHouseApi.Model
         {
             decimal SummedEstimate = 0.0M;
 
-            if (Estimates.Count > 0)
+            if (Estimates.Count <= 0)
             {
-                foreach (Estimate e in Estimates)
-                {
-                    SummedEstimate += e.PriceEstimate;
-                }
-
-                return SummedEstimate / Estimates.Count;
+                return 0;
             }
 
-            return 0;
+            foreach (Estimate e in Estimates)
+            {
+                SummedEstimate += e.CalculateAverageEstimate();
+            }
+
+            return SummedEstimate / Estimates.Count;
         }
     }
 }

@@ -7,6 +7,5 @@ namespace TaskHouseApi.Persistence.Repositories.Interfaces
     {
         //Custom functionality to be added
         IEnumerable<Estimate> RetrieveAllEstimatesForSpecificTaskId(int Id);
-
     }
 }
