@@ -18,6 +18,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         ICategoryRepository Categorys { get; }
         ICurrencyRepository Currencies { get; }
         IMessageRepository Messages { get; }
+        IBudgetRepository Budgets { get; }
 
         int Save();
     }
