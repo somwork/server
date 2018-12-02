@@ -3,19 +3,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.UnitOfWork;
+using TaskHouseApi.Service;
 
 namespace TaskHouseApi.Controllers
 {
     [Route("api/[controller]")]
     public class CurrenciesController : Controller
     {
-        private CurrencyRESTService service = new CurrencyRESTService();
+        private ICurrencyRESTService service;
         private IUnitOfWork unitOfWork;
 
         // constructor injects registered repository
-        public CurrenciesController(IUnitOfWork unitOfWork)
+        public CurrenciesController(IUnitOfWork unitOfWork, ICurrencyRESTService service)
         {
             this.unitOfWork = unitOfWork;
+            this.service = service;
         }
 
         // GET: api/Currencies/
@@ -33,7 +35,7 @@ namespace TaskHouseApi.Controllers
 
             if (exists != null)
             {
-                return new ObjectResult(c); 
+                return new ObjectResult(c);
             }
 
             unitOfWork.Currencies.Create(c);

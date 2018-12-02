@@ -13,7 +13,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         ILocationRepository Locations { get; }
         ISkillRepository Skills { get; }
         ITaskRepository Tasks { get; }
-        IOfferRepository Offers { get; }
+        IEstimateRepository Estimates { get; }
         IReferenceRepository References { get; }
         IEducationRepository Educations { get; }
         ICategoryRepository Categories { get; }
@@ -22,7 +22,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         IBudgetRepository Budgets { get; }
 
         int Save();
-
         IRepository<T> Repository<T>() where T : BaseModel;
     }
 }

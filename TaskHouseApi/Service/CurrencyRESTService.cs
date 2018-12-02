@@ -5,10 +5,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using TaskHouseApi.Model;
 
-namespace TaskHouseApi.Model
+namespace TaskHouseApi.Service
 {
-    public class CurrencyRESTService
+    public class CurrencyRESTService : ICurrencyRESTService
     {
         private const string URL = "http://data.fixer.io/api/";
         private const string endpoint = "latest";
@@ -19,9 +20,7 @@ namespace TaskHouseApi.Model
         private string urlParameters = endpoint + "?access_key=" + accesskey + currencySymbols;
         private string singleCurrencyParameter = endpoint + "?access_key=" + accesskey + "&symbols=" + currencySymbol + "&format=1";
 
-        public CurrencyRESTService()
-        {
-        }
+        public CurrencyRESTService() { }
 
         //Get all currencies with their given properties
         public async Task<Currency> GetCurrenciesAsync()

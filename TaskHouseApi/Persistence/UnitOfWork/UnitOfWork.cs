@@ -22,7 +22,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
-        private IOfferRepository offerRepository;
+        private IEstimateRepository estimateRepository;
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
         private ICategoryRepository categoryRepository;
@@ -41,7 +41,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
             if (basemodelType == typeof(Location)) { return ((IRepository<T>)Locations); }
             if (basemodelType == typeof(Skill)) { return ((IRepository<T>)Skills); }
             if (basemodelType == typeof(Task)) { return ((IRepository<T>)Tasks); }
-            if (basemodelType == typeof(Offer)) { return ((IRepository<T>)Offers); }
+            if (basemodelType == typeof(Estimate)) { return ((IRepository<T>)Estimates); }
             if (basemodelType == typeof(Reference)) { return ((IRepository<T>)References); }
             if (basemodelType == typeof(Education)) { return ((IRepository<T>)Educations); }
             if (basemodelType == typeof(Category)) { return ((IRepository<T>)Categories); }
@@ -129,15 +129,15 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                 return taskRepository;
             }
         }
-        public IOfferRepository Offers
+        public IEstimateRepository Estimates
         {
             get
             {
-                if (this.offerRepository == null)
+                if (this.estimateRepository == null)
                 {
-                    this.offerRepository = new OfferRepository(context);
+                    this.estimateRepository = new EstimateRepository(context);
                 }
-                return offerRepository;
+                return estimateRepository;
             }
         }
         public IReferenceRepository References

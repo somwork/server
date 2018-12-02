@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using TaskHouseUnitTests.FakeRepositories;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Newtonsoft.Json;
 
 namespace TaskHouseUnitTests.UnitTests
 {
@@ -30,7 +31,7 @@ namespace TaskHouseUnitTests.UnitTests
         ///and adds a User with two claims:
         ///1: NameIdentifier, the user Id
         ///2: Role, the user role/type
-        private TasksController createContext(TasksController con)
+        private TasksController createContext(TasksController con, String userType)
         {
             con.ControllerContext = new ControllerContext();
             //Creates a new HttpContext
@@ -41,8 +42,9 @@ namespace TaskHouseUnitTests.UnitTests
                 //Adds a claim for nameIdentifier, user Id
                 new Claim(ClaimTypes.NameIdentifier, "1"),
                 //Adds a claim for role, user role/tupe
-                new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Employer")
+                new Claim(ClaimTypes.Role, "TaskHouseApi.Model." + userType)
             }));
+
 
             con.ObjectValidator = new DefaultObjectValidator
             (
@@ -107,7 +109,7 @@ namespace TaskHouseUnitTests.UnitTests
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
 
-            controller = createContext(controller);
+            controller = createContext(controller, "Employer");
 
             task.Description = "TestTask";
 
@@ -128,7 +130,7 @@ namespace TaskHouseUnitTests.UnitTests
             //Arrange
             TaskHouseApi.Model.Task task = null;
 
-            controller = createContext(controller);
+            controller = createContext(controller, "Employer");
 
             //Act
             var result = controller.Create(task);
@@ -237,6 +239,96 @@ namespace TaskHouseUnitTests.UnitTests
 
             //Assert
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        ///Test creation of estimate through Task controller
+        ///All data valid
+        [Fact]
+        public void TasksController_Estimate_Create_ReturnsObjectResultWithCorrectObject_WhenIdAndEstimateAreValid()
+        {
+            //Arrange
+            controller = createContext(controller, "worker");
+            Estimate e = new Estimate()
+            {
+                Id = 5,
+                TotalHours = 10,
+                Complexity = 1,
+                HourlyWage = 110M,
+                Urgency = 1M,
+                TaskId = 1,
+            };
+
+            int taskId = 1;
+
+            //Act
+            var result = controller.CreateEstimate(taskId, e);
+            var objectResult = result as ObjectResult;
+            var createdEstimate = objectResult.Value as Estimate;
+
+            //Assert
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal(createdEstimate.Id, e.Id);
+            Assert.Equal(createdEstimate.TaskId, e.TaskId);
+        }
+
+        ///Test creation of estimate through Task controller
+        ///Invalid task id
+        [Fact]
+        public void TasksController_Estimate_Create_ReturnsBadRequest_WhenGivenInvalidTaskIdAndValidEstimate()
+        {
+            //Arrange
+            controller = createContext(controller, "worker");
+            Estimate e = new Estimate()
+            {
+                Id = 5,
+                TotalHours = 10,
+                Complexity = 1,
+                HourlyWage = 110M,
+                Urgency = 1M,
+            };
+
+            int taskId = 500;
+
+            //Act
+            var result = controller.CreateEstimate(taskId, e);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        ///Test creation of estimate through Task controller
+        ///Null estimate
+        [Fact]
+        public void TasksController_Estimate_Create_ReturnsBadRequest_WhenGivenNullEsitmate()
+        {
+            //Arrange
+            controller = createContext(controller, "Worker");
+            Estimate e = null;
+
+            int taskId = 1;
+
+            //Act
+            var result = controller.CreateEstimate(taskId, e);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        ///Test creation of estimate through Task controller
+        ///Invalid task id
+        [Fact]
+        public void TasksController_Estimate_Create_AverageEstimateForTaskIszero_WhenEstimateListIsEmpty()
+        {
+            //arrange
+            int taskId = 1;
+
+            //Act
+            var result = controller.Get(taskId);
+            var resultAsObject = controller.Get(taskId) as ObjectResult;
+            var resultObject = resultAsObject.Value as TaskHouseApi.Model.Task;
+
+            //Assert
+            Assert.Equal(0, resultObject.AverageEstimate);
         }
     }
 }
