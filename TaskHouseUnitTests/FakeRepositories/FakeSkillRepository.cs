@@ -34,7 +34,7 @@ namespace TaskHouseUnitTests.FakeRepositories
 
         public IEnumerable<Skill> GetSkillsForWorker(int Id)
         {
-            throw new NotImplementedException();
+            return list.Where(w => w.WorkerId == Id).ToList();
         }
     }
 }
