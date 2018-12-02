@@ -37,27 +37,14 @@ namespace TaskHouseUnitTests.UnitTests
             //Creates a new HttpContext
             con.ControllerContext.HttpContext = new DefaultHttpContext();
 
-            if (userType.Equals("employer"))
-            {
                 //Adds a User with claim to the current context
                 con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
                 //Adds a claim for nameIdentifier, user Id
                 new Claim(ClaimTypes.NameIdentifier, "1"),
                 //Adds a claim for role, user role/tupe
-                new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Employer")
+                new Claim(ClaimTypes.Role, "TaskHouseApi.Model." + userType)
             }));
-            }
 
-            if (userType.Equals("worker"))
-            {
-                //Adds a User with claim to the current context
-                con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
-                //Adds a claim for nameIdentifier, user Id
-                new Claim(ClaimTypes.NameIdentifier, "1"),
-                //Adds a claim for role, user role/tupe
-                new Claim(ClaimTypes.Role, "TaskHouseApi.Model.Worker")
-            }));
-            }
 
             con.ObjectValidator = new DefaultObjectValidator
             (
@@ -122,7 +109,7 @@ namespace TaskHouseUnitTests.UnitTests
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
 
-            controller = createContext(controller, "employer");
+            controller = createContext(controller, "Employer");
 
             task.Description = "TestTask";
 
@@ -143,7 +130,7 @@ namespace TaskHouseUnitTests.UnitTests
             //Arrange
             TaskHouseApi.Model.Task task = null;
 
-            controller = createContext(controller, "employer");
+            controller = createContext(controller, "Employer");
 
             //Act
             var result = controller.Create(task);
@@ -315,7 +302,7 @@ namespace TaskHouseUnitTests.UnitTests
         public void TasksController_Estimate_Create_ReturnsBadRequest_WhenGivenNullEsitmate()
         {
             //Arrange
-            controller = createContext(controller, "worker");
+            controller = createContext(controller, "Worker");
             Estimate e = null;
 
             int taskId = 1;
