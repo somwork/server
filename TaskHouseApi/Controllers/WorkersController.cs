@@ -19,5 +19,11 @@ namespace TaskHouseApi.Controllers
     public class WorkersController : UserController<Worker>
     {
         public WorkersController(IUnitOfWork unitOfWork, IPasswordService passwordService) : base(unitOfWork, passwordService) { }
+
+        [HttpGet("{id}/skills")]
+        public IActionResult GetSkillsForWorker(int Id)
+        {
+            return new ObjectResult(unitOfWork.Skills.GetSkillsForWorker(Id));
+        }
     }
 }

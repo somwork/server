@@ -28,7 +28,6 @@ namespace TaskHouseApi.Model
         public string Salt { get; set; }
         [JsonIgnore]
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
-        [JsonIgnore]
         public string Discriminator { get; set; }
         [JsonIgnore]
         public Location Location { get; set; }
