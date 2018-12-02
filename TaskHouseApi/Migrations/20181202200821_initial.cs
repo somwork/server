@@ -79,7 +79,7 @@ namespace TaskHouseApi.Migrations
                     Success = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<long>(nullable: false),
                     Base = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTimeOffset>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     RatesId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -166,7 +166,7 @@ namespace TaskHouseApi.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Title = table.Column<string>(nullable: false),
-                    WorkerId = table.Column<int>(nullable: true)
+                    WorkerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,7 +176,7 @@ namespace TaskHouseApi.Migrations
                         column: x => x.WorkerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,7 +190,8 @@ namespace TaskHouseApi.Migrations
                     Deadline = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     Urgency = table.Column<string>(nullable: false),
-                    EmployerId = table.Column<int>(nullable: false)
+                    EmployerId = table.Column<int>(nullable: false),
+                    AverageEstimate = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,6 +253,37 @@ namespace TaskHouseApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Estimates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    TotalHours = table.Column<int>(nullable: false),
+                    Complexity = table.Column<int>(nullable: false),
+                    HourlyWage = table.Column<decimal>(nullable: false),
+                    Accepted = table.Column<bool>(nullable: false),
+                    Urgency = table.Column<decimal>(nullable: false),
+                    WorkerId = table.Column<int>(nullable: false),
+                    TaskId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Estimates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Estimates_Tasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Estimates_Users_WorkerId",
+                        column: x => x.WorkerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -274,37 +306,6 @@ namespace TaskHouseApi.Migrations
                     table.ForeignKey(
                         name: "FK_Messages_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Offers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Accepted = table.Column<bool>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
-                    TotalHours = table.Column<int>(nullable: false),
-                    Complexity = table.Column<int>(nullable: false),
-                    Currency = table.Column<string>(nullable: false),
-                    WorkerId = table.Column<int>(nullable: false),
-                    TaskId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Offers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Offers_Tasks_TaskId",
-                        column: x => x.TaskId,
-                        principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Offers_Users_WorkerId",
-                        column: x => x.WorkerId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -359,6 +360,16 @@ namespace TaskHouseApi.Migrations
                 column: "WorkerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Estimates_TaskId",
+                table: "Estimates",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Estimates_WorkerId",
+                table: "Estimates",
+                column: "WorkerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Locations_UserId",
                 table: "Locations",
                 column: "UserId",
@@ -373,16 +384,6 @@ namespace TaskHouseApi.Migrations
                 name: "IX_Messages_UserId",
                 table: "Messages",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Offers_TaskId",
-                table: "Offers",
-                column: "TaskId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Offers_WorkerId",
-                table: "Offers",
-                column: "WorkerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_References_TaskId",
@@ -429,13 +430,13 @@ namespace TaskHouseApi.Migrations
                 name: "Educations");
 
             migrationBuilder.DropTable(
+                name: "Estimates");
+
+            migrationBuilder.DropTable(
                 name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Messages");
-
-            migrationBuilder.DropTable(
-                name: "Offers");
 
             migrationBuilder.DropTable(
                 name: "References");
