@@ -6,6 +6,7 @@ using System.Linq;
 using TaskHouseApi.Persistence.DatabaseContext;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskHouseApi.Persistence.Repositories
 {
@@ -15,5 +16,11 @@ namespace TaskHouseApi.Persistence.Repositories
         protected internal PostgresContext postgresContext { get { return context as PostgresContext; } }
 
         public TaskRepository(PostgresContext db) : base(db) { }
+
+        public override Task Retrieve(int Id)
+        {
+            return dbSet.Where(t => t.Id == Id)
+                .SingleOrDefault();
+        }
     }
 }
