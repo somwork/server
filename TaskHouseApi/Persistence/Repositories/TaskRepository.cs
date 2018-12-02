@@ -21,12 +21,5 @@ namespace TaskHouseApi.Persistence.Repositories
         {
             return dbSet.Where(e => e.EmployerId == Id).ToList();
         }
-
-        public override Task Retrieve(int Id)
-        {
-            return dbSet.Where(t => t.Id == Id)
-                .SingleOrDefault();
-
-        }
     }
 }
