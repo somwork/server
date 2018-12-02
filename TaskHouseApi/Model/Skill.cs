@@ -16,7 +16,6 @@ namespace TaskHouseApi.Model
         public Skill()
         {
             CategorySkill = new List<CategorySkill>();
-            nameOfPropertysToIgnore = new string[] { "WorkerId" };
         }
     }
 }
