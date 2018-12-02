@@ -17,7 +17,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Skill> Skills { get; set; }
-        public DbSet<Offer> Offers { get; set; }
+        public DbSet<Estimate> Estimates { get; set; }
         public DbSet<Reference> References { get; set; }
         public DbSet<CategorySkill> CategorySkill { get; set; }
         public DbSet<CategoryTask> CategoryTask { get; set; }

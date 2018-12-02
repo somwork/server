@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace TaskHouseApi.Model
@@ -19,7 +18,7 @@ namespace TaskHouseApi.Model
         [Required]
         public string Urgency { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Offer> Offers { get; set; }
+        public virtual ICollection<Estimate> Estimates { get; set; }
         [JsonIgnore]
         public virtual Reference Reference { get; set; }
         [JsonIgnore]
@@ -29,12 +28,33 @@ namespace TaskHouseApi.Model
         public Employer Employer { get; set; }
         [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
+        public decimal AverageEstimate
+        {
+            get; set;
+        }
 
         public Task()
         {
-            Offers = new List<Offer>();
             CategoryTask = new List<CategoryTask>();
             Messages = new List<Message>();
+            Estimates = new List<Estimate>();
+        }
+
+        public decimal CalculateAverageEstimate()
+        {
+            decimal SummedEstimate = 0.0M;
+
+            if (Estimates.Count <= 0)
+            {
+                return 0;
+            }
+
+            foreach (Estimate e in Estimates)
+            {
+                SummedEstimate += e.CalculateAverageEstimate();
+            }
+
+            return SummedEstimate / Estimates.Count;
         }
     }
 }

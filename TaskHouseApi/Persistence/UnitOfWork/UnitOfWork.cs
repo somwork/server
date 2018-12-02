@@ -20,7 +20,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
-        private IOfferRepository offerRepository;
+        private IEstimateRepository estimateRepository;
         private IReferenceRepository referenceRepository;
         private IEducationRepository educationRepository;
         private ICategoryRepository categoryRepository;
@@ -94,15 +94,15 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                 return taskRepository;
             }
         }
-        public IOfferRepository Offers
+        public IEstimateRepository Estimates
         {
             get
             {
-                if (this.offerRepository == null)
+                if (this.estimateRepository == null)
                 {
-                    this.offerRepository = new OfferRepository(context);
+                    this.estimateRepository = new EstimateRepository(context);
                 }
-                return offerRepository;
+                return estimateRepository;
             }
         }
         public IReferenceRepository References
