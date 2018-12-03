@@ -66,18 +66,6 @@ namespace TaskHouseApi.Persistence.Repositories
             bool IsModified = false;
             foreach (PropertyInfo property in propertyInfos)
             {
-                /// If property is a ICollection
-                /// don't change the value
-                if (property.PropertyType == typeof(ICollection))
-                {
-                    context.Entry(baseModel).Collection(property.Name).IsModified = false;
-                }
-
-                if (property.PropertyType == typeof(Reference))
-                {
-                    context.Entry(baseModel).Reference(property.Name).IsModified = false;
-                }
-
                 /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing
                 if (
                     property.Name.Equals("Id") ||
@@ -100,6 +88,18 @@ namespace TaskHouseApi.Persistence.Repositories
                     IsModified = true;
                 }
 
+                if (property.Name.Contains("Id"))
+                {
+                    if (propertyValue == null || (int)propertyValue == 0)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        context.Entry(baseModel).Property(property.Name).IsModified = true;
+                    }
+                }
+
                 /// If property name is in ignore
                 /// or is null
                 /// don't change the value
@@ -115,15 +115,15 @@ namespace TaskHouseApi.Persistence.Repositories
 
                 /// If property is a ICollection
                 /// don't change the value
-                // if (property.PropertyType == typeof(ICollection))
-                // {
-                //     context.Entry(baseModel).Collection(property.Name).IsModified = false;
-                // }
+                if (property.PropertyType == typeof(ICollection))
+                {
+                    context.Entry(baseModel).Collection(property.Name).IsModified = false;
+                }
 
-                // if (property.PropertyType == typeof(Reference))
-                // {
-                //     context.Entry(baseModel).Reference(property.Name).IsModified = false;
-                // }
+                if (property.PropertyType == typeof(Reference))
+                {
+                    context.Entry(baseModel).Reference(property.Name).IsModified = false;
+                }
 
                 /// If property is is a string
                 /// change the value

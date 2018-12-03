@@ -18,7 +18,7 @@ namespace TaskHouseApi.Model
         [Required]
         public string Urgency { get; set; }
         [Required]
-        public int budgetId { get; set; }
+        public int BudgetId { get; set; }
         [JsonIgnore]
         public virtual ICollection<Estimate> Estimates { get; set; }
         [JsonIgnore]

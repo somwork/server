@@ -281,6 +281,8 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<decimal>("AverageEstimate");
 
+                    b.Property<int>("BudgetId");
+
                     b.Property<DateTime>("Deadline");
 
                     b.Property<string>("Description")
@@ -295,8 +297,6 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Urgency")
                         .IsRequired();
-
-                    b.Property<int>("budgetId");
 
                     b.HasKey("Id");
 
