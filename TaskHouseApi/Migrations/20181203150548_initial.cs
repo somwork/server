@@ -292,6 +292,8 @@ namespace TaskHouseApi.Migrations
                     Text = table.Column<string>(nullable: false),
                     SendAt = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
                     TaskId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

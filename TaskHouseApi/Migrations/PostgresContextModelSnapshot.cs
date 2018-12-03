@@ -184,6 +184,12 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
                     b.Property<DateTime>("SendAt");
 
                     b.Property<int>("TaskId");
@@ -430,12 +436,12 @@ namespace TaskHouseApi.Migrations
 
             modelBuilder.Entity("TaskHouseApi.Model.Message", b =>
                 {
-                    b.HasOne("TaskHouseApi.Model.Task", "Task")
+                    b.HasOne("TaskHouseApi.Model.Task")
                         .WithMany("Messages")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TaskHouseApi.Model.User", "User")
+                    b.HasOne("TaskHouseApi.Model.User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
