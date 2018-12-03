@@ -29,12 +29,9 @@ namespace TaskHouseApi.Model
         [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
         public decimal AverageEstimate { get; set; }
-
         [NotMapped]
         public IDictionary<string, decimal> UrgencyFactorMap { get; set; }
-
         [Required]
-        [NotMapped]
         public string UrgencyString { get; set; }
 
         public Task()
