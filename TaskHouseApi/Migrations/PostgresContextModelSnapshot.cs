@@ -293,7 +293,9 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<string>("Urgency")
+                    b.Property<decimal>("Urgency");
+
+                    b.Property<string>("UrgencyString")
                         .IsRequired();
 
                     b.HasKey("Id");

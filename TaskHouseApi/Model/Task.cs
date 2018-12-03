@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace TaskHouseApi.Model
@@ -29,18 +30,11 @@ namespace TaskHouseApi.Model
         public virtual ICollection<Message> Messages { get; set; }
         public decimal AverageEstimate { get; set; }
 
+        [NotMapped]
         public IDictionary<string, decimal> UrgencyFactorMap { get; set; }
 
         [Required]
-        public string UrgencyString {
-            get {
-                return this.UrgencyString;
-            }
-            set {
-                this.UrgencyString = value;
-                this.Urgency = UrgencyFactorMap[value];
-            }
-        }
+        public string UrgencyString { get; set; }
 
         public Task()
         {
@@ -68,6 +62,12 @@ namespace TaskHouseApi.Model
             }
 
             return SummedEstimate / Estimates.Count;
+        }
+
+        public void MapUrgencyFactor()
+        {
+            this.Urgency = UrgencyFactorMap[this.UrgencyString];
+
         }
     }
 }

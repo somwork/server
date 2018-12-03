@@ -29,6 +29,8 @@ namespace TaskHouseApi.Controllers
 
             task.EmployerId = GetCurrentUserId();
 
+            task.MapUrgencyFactor();
+
             unitOfWork.Tasks.Create(task);
             unitOfWork.Save();
 
