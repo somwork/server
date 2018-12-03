@@ -108,6 +108,7 @@ namespace TaskHouseUnitTests.UnitTests
         {
             //Arrange
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task();
+            task.UrgencyString = "norush";
 
             controller = createContext(controller, "Employer");
 

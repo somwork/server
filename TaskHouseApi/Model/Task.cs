@@ -65,7 +65,6 @@ namespace TaskHouseApi.Model
         public void MapUrgencyFactor()
         {
             this.Urgency = UrgencyFactorMap[this.UrgencyString];
-
         }
     }
 }
