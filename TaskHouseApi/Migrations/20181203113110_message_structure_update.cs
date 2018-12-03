@@ -2,17 +2,17 @@
 
 namespace TaskHouseApi.Migrations
 {
-    public partial class added_last_name : Migration
+    public partial class message_structure_update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Name",
-                table: "Messages",
-                newName: "LastName");
-
             migrationBuilder.AddColumn<string>(
                 name: "FirstName",
+                table: "Messages",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
                 table: "Messages",
                 nullable: true);
         }
@@ -23,10 +23,9 @@ namespace TaskHouseApi.Migrations
                 name: "FirstName",
                 table: "Messages");
 
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "LastName",
-                table: "Messages",
-                newName: "Name");
+                table: "Messages");
         }
     }
 }

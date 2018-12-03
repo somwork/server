@@ -10,8 +10,8 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181130113222_added_last_name")]
-    partial class added_last_name
+    [Migration("20181203113110_message_structure_update")]
+    partial class message_structure_update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -87,7 +87,7 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Base");
 
-                    b.Property<DateTimeOffset>("Date");
+                    b.Property<DateTime>("Date");
 
                     b.Property<int?>("RatesId");
 
@@ -121,6 +121,34 @@ namespace TaskHouseApi.Migrations
                     b.HasIndex("WorkerId");
 
                     b.ToTable("Educations");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.Estimate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Accepted");
+
+                    b.Property<int>("Complexity");
+
+                    b.Property<decimal>("HourlyWage");
+
+                    b.Property<int>("TaskId");
+
+                    b.Property<int>("TotalHours");
+
+                    b.Property<decimal>("Urgency");
+
+                    b.Property<int>("WorkerId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("Estimates");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Location", b =>
@@ -178,35 +206,6 @@ namespace TaskHouseApi.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("TaskHouseApi.Model.Offer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Accepted");
-
-                    b.Property<int>("Complexity");
-
-                    b.Property<string>("Currency")
-                        .IsRequired();
-
-                    b.Property<decimal>("Price");
-
-                    b.Property<int>("TaskId");
-
-                    b.Property<int>("TotalHours");
-
-                    b.Property<int>("WorkerId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.HasIndex("WorkerId");
-
-                    b.ToTable("Offers");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Rates", b =>
@@ -286,6 +285,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<decimal>("AverageEstimate");
+
                     b.Property<DateTime>("Deadline");
 
                     b.Property<string>("Description")
@@ -351,6 +352,16 @@ namespace TaskHouseApi.Migrations
                     b.HasDiscriminator().HasValue("Employer");
                 });
 
+            modelBuilder.Entity("TaskHouseApi.Model.QualityAssurance", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("QualityAssurance");
+
+                    b.HasDiscriminator().HasValue("QualityAssurance");
+                });
+
             modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>
                 {
                     b.HasBaseType("TaskHouseApi.Model.User");
@@ -402,6 +413,19 @@ namespace TaskHouseApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("TaskHouseApi.Model.Estimate", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Task")
+                        .WithMany("Estimates")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskHouseApi.Model.Worker")
+                        .WithMany("Estimates")
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("TaskHouseApi.Model.Location", b =>
                 {
                     b.HasOne("TaskHouseApi.Model.User")
@@ -420,19 +444,6 @@ namespace TaskHouseApi.Migrations
                     b.HasOne("TaskHouseApi.Model.User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TaskHouseApi.Model.Offer", b =>
-                {
-                    b.HasOne("TaskHouseApi.Model.Task")
-                        .WithMany("Offers")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TaskHouseApi.Model.Worker")
-                        .WithMany("Offers")
-                        .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
