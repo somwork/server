@@ -16,7 +16,7 @@ namespace TaskHouseApi.Model
         public DateTime Deadline { get; set; }
         [Required]
         public string Description { get; set; }
-        public decimal Urgency { get; set; }
+        public double Urgency { get; set; }
         [JsonIgnore]
         public virtual ICollection<Estimate> Estimates { get; set; }
         [JsonIgnore]
@@ -28,9 +28,9 @@ namespace TaskHouseApi.Model
         public Employer Employer { get; set; }
         [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
-        public decimal AverageEstimate { get; set; }
+        public double AverageEstimate { get; set; }
         [NotMapped]
-        public IDictionary<string, decimal> UrgencyFactorMap { get; set; }
+        public IDictionary<string, double> UrgencyFactorMap { get; set; }
         [Required]
         public string UrgencyString { get; set; }
 
@@ -39,15 +39,15 @@ namespace TaskHouseApi.Model
             CategoryTask = new List<CategoryTask>();
             Messages = new List<Message>();
             Estimates = new List<Estimate>();
-            UrgencyFactorMap = new Dictionary<string, decimal>();
-            UrgencyFactorMap.Add("norush", 1.2M);
-            UrgencyFactorMap.Add("urgent", 1.4M);
-            UrgencyFactorMap.Add("asap", 1.5M);
+            UrgencyFactorMap = new Dictionary<string, double>();
+            UrgencyFactorMap.Add("norush", 1.2);
+            UrgencyFactorMap.Add("urgent", 1.4);
+            UrgencyFactorMap.Add("asap", 1.5);
         }
 
-        public decimal CalculateAverageEstimate()
+        public double CalculateAverageEstimate()
         {
-            decimal SummedEstimate = 0.0M;
+            double SummedEstimate = 0.0;
 
             if (Estimates.Count <= 0)
             {

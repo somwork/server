@@ -189,9 +189,10 @@ namespace TaskHouseApi.Migrations
                     Start = table.Column<DateTime>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: false),
-                    Urgency = table.Column<string>(nullable: false),
+                    Urgency = table.Column<double>(nullable: false),
                     EmployerId = table.Column<int>(nullable: false),
-                    AverageEstimate = table.Column<decimal>(nullable: false)
+                    AverageEstimate = table.Column<double>(nullable: false),
+                    UrgencyString = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -259,10 +260,10 @@ namespace TaskHouseApi.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     TotalHours = table.Column<int>(nullable: false),
-                    Complexity = table.Column<int>(nullable: false),
-                    HourlyWage = table.Column<decimal>(nullable: false),
+                    Complexity = table.Column<double>(nullable: false),
+                    HourlyWage = table.Column<double>(nullable: false),
                     Accepted = table.Column<bool>(nullable: false),
-                    Urgency = table.Column<decimal>(nullable: false),
+                    Urgency = table.Column<double>(nullable: false),
                     WorkerId = table.Column<int>(nullable: false),
                     TaskId = table.Column<int>(nullable: false)
                 },

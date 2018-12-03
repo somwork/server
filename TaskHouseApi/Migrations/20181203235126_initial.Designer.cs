@@ -10,8 +10,8 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181203154037_Initial")]
-    partial class Initial
+    [Migration("20181203235126_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,15 +130,15 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<bool>("Accepted");
 
-                    b.Property<int>("Complexity");
+                    b.Property<double>("Complexity");
 
-                    b.Property<decimal>("HourlyWage");
+                    b.Property<double>("HourlyWage");
 
                     b.Property<int>("TaskId");
 
                     b.Property<int>("TotalHours");
 
-                    b.Property<decimal>("Urgency");
+                    b.Property<double>("Urgency");
 
                     b.Property<int>("WorkerId");
 
@@ -185,6 +185,12 @@ namespace TaskHouseApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<DateTime>("SendAt");
 
@@ -281,7 +287,7 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("AverageEstimate");
+                    b.Property<double>("AverageEstimate");
 
                     b.Property<DateTime>("Deadline");
 
@@ -295,7 +301,7 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<decimal>("Urgency");
+                    b.Property<double>("Urgency");
 
                     b.Property<string>("UrgencyString")
                         .IsRequired();
@@ -434,12 +440,12 @@ namespace TaskHouseApi.Migrations
 
             modelBuilder.Entity("TaskHouseApi.Model.Message", b =>
                 {
-                    b.HasOne("TaskHouseApi.Model.Task", "Task")
+                    b.HasOne("TaskHouseApi.Model.Task")
                         .WithMany("Messages")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TaskHouseApi.Model.User", "User")
+                    b.HasOne("TaskHouseApi.Model.User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

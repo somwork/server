@@ -254,8 +254,8 @@ namespace TaskHouseUnitTests.UnitTests
                 Id = 5,
                 TotalHours = 10,
                 Complexity = 1,
-                HourlyWage = 110M,
-                Urgency = 1M,
+                HourlyWage = 110,
+                Urgency = 1,
                 TaskId = 1,
             };
 
@@ -284,8 +284,8 @@ namespace TaskHouseUnitTests.UnitTests
                 Id = 5,
                 TotalHours = 10,
                 Complexity = 1,
-                HourlyWage = 110M,
-                Urgency = 1M,
+                HourlyWage = 110,
+                Urgency = 1,
             };
 
             int taskId = 500;

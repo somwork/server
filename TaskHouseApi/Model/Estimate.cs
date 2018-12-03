@@ -9,12 +9,12 @@ namespace TaskHouseApi.Model
         [Required]
         public int TotalHours { get; set; }
         [Required]
-        public int Complexity { get; set; }
+        public double Complexity { get; set; }
         [Required]
-        public decimal HourlyWage { get; set; }
+        public double HourlyWage { get; set; }
         public bool Accepted { get; set; } = false;
         [Required]
-        public decimal Urgency { get; set; }
+        public double Urgency { get; set; }
         [Required]
         public int WorkerId { get; set; }
         [Required]
@@ -22,7 +22,7 @@ namespace TaskHouseApi.Model
 
         public Estimate(){}
 
-        public Estimate(int TotalHours, int Complexity, decimal HourlyWage, decimal Urgency)
+        public Estimate(int TotalHours, double Complexity, double HourlyWage, double Urgency)
         {
             this.TotalHours = TotalHours;
             this.Complexity = Complexity;
@@ -30,7 +30,7 @@ namespace TaskHouseApi.Model
             this.Urgency = Urgency;
         }
 
-        public decimal CalculateEstimate()
+        public double CalculateEstimate()
         {
             return TotalHours * HourlyWage * Complexity * Urgency;
         }

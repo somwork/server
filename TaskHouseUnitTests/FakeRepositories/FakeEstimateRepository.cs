@@ -19,8 +19,8 @@ namespace TaskHouseUnitTests.FakeRepositories
                         Id = 1,
                         TotalHours = 10,
                         Complexity = 1,
-                        HourlyWage = 110m,
-                        Urgency = 1.2m,
+                        HourlyWage = 110,
+                        Urgency = 1.2,
                         TaskId = 2,
                     },
                     new Estimate()
@@ -28,8 +28,8 @@ namespace TaskHouseUnitTests.FakeRepositories
                         Id = 2,
                         TotalHours = 10,
                         Complexity = 1,
-                        HourlyWage = 110m,
-                        Urgency = 1.5m,
+                        HourlyWage = 110,
+                        Urgency = 1.5,
                         TaskId = 2,
                     },
                     new Estimate()
@@ -37,8 +37,8 @@ namespace TaskHouseUnitTests.FakeRepositories
                         Id = 3,
                         TotalHours = 10,
                         Complexity = 1,
-                        HourlyWage = 110m,
-                        Urgency = 1.1m,
+                        HourlyWage = 110,
+                        Urgency = 1.1,
                         TaskId = 1,
                     },
                     new Estimate()
@@ -46,8 +46,8 @@ namespace TaskHouseUnitTests.FakeRepositories
                         Id = 4,
                         TotalHours = 10,
                         Complexity = 1,
-                        HourlyWage = 110m,
-                        Urgency = 1.8m,
+                        HourlyWage = 110,
+                        Urgency = 1.8,
                         TaskId = 1,
                     },
                 }
