@@ -30,7 +30,7 @@ namespace TaskHouseApi.Model
             this.Urgency = Urgency;
         }
 
-        public decimal CalculateAverageEstimate()
+        public decimal CalculateEstimate()
         {
             return TotalHours * HourlyWage * Complexity * Urgency;
         }
