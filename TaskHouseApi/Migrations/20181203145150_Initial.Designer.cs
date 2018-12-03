@@ -10,7 +10,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181203140710_Initial")]
+    [Migration("20181203145150_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -296,9 +296,6 @@ namespace TaskHouseApi.Migrations
                         .IsRequired();
 
                     b.Property<decimal>("Urgency");
-
-                    b.Property<string>("UrgencyString")
-                        .IsRequired();
 
                     b.HasKey("Id");
 

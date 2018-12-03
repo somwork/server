@@ -34,6 +34,7 @@ namespace TaskHouseApi.Model
         public IDictionary<string, decimal> UrgencyFactorMap { get; set; }
 
         [Required]
+        [NotMapped]
         public string UrgencyString { get; set; }
 
         public Task()

@@ -295,9 +295,6 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<decimal>("Urgency");
 
-                    b.Property<string>("UrgencyString")
-                        .IsRequired();
-
                     b.HasKey("Id");
 
                     b.HasIndex("EmployerId");
