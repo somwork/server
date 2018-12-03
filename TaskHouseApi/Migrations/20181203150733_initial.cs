@@ -190,6 +190,7 @@ namespace TaskHouseApi.Migrations
                     Deadline = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     Urgency = table.Column<string>(nullable: false),
+                    budgetId = table.Column<int>(nullable: false),
                     EmployerId = table.Column<int>(nullable: false),
                     AverageEstimate = table.Column<decimal>(nullable: false)
                 },

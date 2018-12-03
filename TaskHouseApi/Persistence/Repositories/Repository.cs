@@ -80,7 +80,7 @@ namespace TaskHouseApi.Persistence.Repositories
 
                 /// If the name is Id or the propertyname should be ignored or the type of a Reference do nothing
                 if (
-                    property.Name.Contains("Id") ||
+                    property.Name.Equals("Id") ||
                     (
                         baseModel.nameOfPropertysToIgnore != null &&
                         baseModel.nameOfPropertysToIgnore.Contains(property.Name)
