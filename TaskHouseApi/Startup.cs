@@ -89,6 +89,7 @@ namespace TaskHouseApi
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICurrencyRESTService, CurrencyRESTService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -100,7 +101,7 @@ namespace TaskHouseApi
             services.AddScoped<IEmployerRepository, EmployerRepository>();
             services.AddScoped<IUserRepository<User>, UserRepository<User>>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
-            services.AddScoped<IEstimateRepository, EstimateRepository>(); 
+            services.AddScoped<IEstimateRepository, EstimateRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

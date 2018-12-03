@@ -32,6 +32,11 @@ namespace TaskHouseUnitTests.FakeRepositories
             list.Remove(temp);
         }
 
+        public bool isInDatabase(int Id)
+        {
+            return list.Any(o => o.Id == Id);
+        }
+
         public T Retrieve(int Id)
         {
             return list.Where(t => t.Id == Id).SingleOrDefault();
@@ -50,7 +55,7 @@ namespace TaskHouseUnitTests.FakeRepositories
             list[index] = baseModel;
         }
 
-        public void UpdatePart(T baseModel, string[] nameOfPropertysToIgnore)
+        public void UpdatePart(T baseModel)
         {
             T oldModel = Retrieve(baseModel.Id);
             int index = list.IndexOf(oldModel);
@@ -68,12 +73,17 @@ namespace TaskHouseUnitTests.FakeRepositories
                 {
                     continue;
                 }
-                
-                 /// Gets the property value
+
+                /// Gets the property value
                 var propertyValue = property.GetValue(baseModel);
 
                 /// If property name is in ignore is don't change the value
-                if (nameOfPropertysToIgnore.Contains(property.Name) || propertyValue == null)
+                if (
+                        (
+                            baseModel.nameOfPropertysToIgnore != null &&
+                            baseModel.nameOfPropertysToIgnore.Contains(property.Name)
+                        ) ||
+                        propertyValue == null)
                 {
                     continue;
                 }

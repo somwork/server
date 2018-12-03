@@ -15,19 +15,19 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace TaskHouseUnitTests.UnitTests
 {
-    public class WorkersControllerUnitTests
+    public class QualityAssurancesControllerUnitTests
     {
         IUnitOfWork unitOfWork;
-        WorkersController controller;
+        QualityAssurancesController controller;
         IPasswordService passwordService = new PasswordService();
 
-        public WorkersControllerUnitTests()
+        public QualityAssurancesControllerUnitTests()
         {
             unitOfWork = new FakeUnitOfWork();
-            controller = new WorkersController(unitOfWork, passwordService);
+            controller = new QualityAssurancesController(unitOfWork, passwordService);
         }
 
-        private WorkersController createContext(WorkersController con)
+        private QualityAssurancesController createContext(QualityAssurancesController con)
         {
             con.ControllerContext = new ControllerContext();
             //Creates a new HttpContext
@@ -47,29 +47,29 @@ namespace TaskHouseUnitTests.UnitTests
         }
 
         [Fact]
-        public void WorkerController_Get_ReturnsObjectResult_WhenGivenValidId()
+        public void QualityAssurancesController_Get_ReturnsObjectResult_WhenGivenValidId()
         {
-            int Id = 4;
+            int Id = 9;
             var result = controller.Get(Id);
             var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as Worker;
+            var resultObject = resultObjectResult.Value as QualityAssurance;
 
             Assert.IsType<ObjectResult>(result);
             Assert.Equal(Id, resultObject.Id);
         }
 
         [Fact]
-        public void WorkerController_Get_ReturnsNotFound_WhenGivenInvalidId()
+        public void QualityAssurancesController_Get_ReturnsNotFound_WhenGivenInvalidId()
         {
-            int WorkerId = 5000;
+            int QualityAssuranceId = 5000;
 
-            var result = controller.Get(WorkerId) as NotFoundResult;
+            var result = controller.Get(QualityAssuranceId) as NotFoundResult;
 
             Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
-        public void WorkerController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters()
+        public void QualityAssurancesController_Get_ReturnsAllElementsInRepo_WhenGivenNoParameters()
         {
             var result = controller.Get();
             var resultObjectResult = result as ObjectResult;
@@ -80,12 +80,12 @@ namespace TaskHouseUnitTests.UnitTests
         }
 
         [Fact]
-        public void WorkerController_Create_ReturnsObjectResult_withValidWorker()
+        public void QualityAssurancesController_Create_ReturnsObjectResult_withValidQualityAssurance()
         {
             controller = createContext(controller);
-            Worker TestWorker = new Worker()
+            QualityAssurance TestQualityAssurance = new QualityAssurance()
             {
-                Id = 5,
+                Id = 9,
                 Username = "Tusername",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=",//1234
                 Email = "test@test.com",
@@ -94,47 +94,47 @@ namespace TaskHouseUnitTests.UnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
 
-            var result = controller.Create(TestWorker.Password, TestWorker);
+            var result = controller.Create(TestQualityAssurance.Password, TestQualityAssurance);
             var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
+            var resultObject = resultObjectResult.Value as QualityAssurance;
 
             Assert.IsType<ObjectResult>(result);
-            Assert.Equal(TestWorker.Id, resultObject.Id);
+            Assert.Equal(TestQualityAssurance.Id, resultObject.Id);
         }
 
         [Fact]
-        public void WorkerController_Create_ReturnsBadRequest_WhenGivenNullWorker()
+        public void QualityAssurancesController_Create_ReturnsBadRequest_WhenGivenNullQualityAssurance()
         {
-            Worker worker = null;
+            QualityAssurance QualityAssurance = null;
 
-            var result = controller.Create(null, worker);
+            var result = controller.Create(null, QualityAssurance);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
-        public void WorkerController_Delete_ReturnsNoContentResult_WhenIdIsValid()
+        public void QualityAssurancesController_Delete_ReturnsNoContentResult_WhenIdIsValid()
         {
-            int Id = 4;
+            int Id = 7;
             var result = controller.Delete(Id);
 
             Assert.IsType<NoContentResult>(result);
         }
 
         [Fact]
-        public void WorkerController_Update_ReturnsBadRequestResult_WhenWorkerIsNull()
+        public void QualityAssurancesController_Update_ReturnsBadRequestResult_WhenQualityAssuranceIsNull()
         {
-            Worker worker = null;
+            QualityAssurance QualityAssurance = null;
 
-            var result = controller.Update(0, worker);
+            var result = controller.Update(0, QualityAssurance);
 
             Assert.IsType<BadRequestResult>(result);
         }
 
         [Fact]
-        public void WorkerController_Delete_ActuallyDeletes_WhenIdIsValid()
+        public void QualityAssurancesController_Delete_ActuallyDeletes_WhenIdIsValid()
         {
-            var Id = 1;
+            var Id = 7;
 
             controller.Delete(Id);
             var result = controller.Get(Id);
@@ -143,7 +143,7 @@ namespace TaskHouseUnitTests.UnitTests
         }
 
         [Fact]
-        public void WorkerController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
+        public void QualityAssurancesController_Delete_ReturnsNotFoundResult_WhenIdIsInvalid()
         {
             int id = 2500;
 
@@ -153,33 +153,34 @@ namespace TaskHouseUnitTests.UnitTests
         }
 
         [Fact]
-        public void WorkerController_Update_ReturnsObjectResult_withValidIdAndValidWorker()
+        public void QualityAssurancesController_Update_ReturnsObjectResult_withValidIdAndValidQualityAssurance()
         {
-            int Id = 4;
-            Worker worker = new Worker()
+            int Id = 8;
+            QualityAssurance QualityAssurance = new QualityAssurance()
             {
-                Id = 4,
-                Username = "Tusernamedasdasg",
+                Id = 7,
+                Username = "QA",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                 Email = "test@test.com",
-                FirstName = "Bob7",
-                LastName = "Bobsen6",
-                Salt = "upYKQSsrlub5JAID61/6pA=="
+                FirstName = "Bob1",
+                LastName = "Bobsen1",
+                Salt = "upYKQSsrlub5JAID61/6pA==",
+                Discriminator = "QualityAssurance"
             };
 
-            var Result = controller.Update(Id, worker);
+            var Result = controller.Update(Id, QualityAssurance);
             var resultAsObject = controller.Get(Id) as ObjectResult;
-            var resultObject = resultAsObject.Value as Worker;
+            var resultObject = resultAsObject.Value as QualityAssurance;
 
             Assert.IsType<NoContentResult>(Result);
-            Assert.Equal(worker.Username, resultObject.Username);
+            Assert.Equal(QualityAssurance.Username, resultObject.Username);
         }
 
         [Fact]
-        public void WorkerController_Update_ReturnsVoidUpdatePart_withValidIdAndValidWorker()
+        public void QualityAssurancesController_Update_ReturnsVoidUpdatePart_withValidIdAndValidQualityAssurance()
         {
-            int Id = 4;
-            Worker update = new Worker()
+            int Id = 7;
+            QualityAssurance update = new QualityAssurance()
             {
                 Id = 10,
                 Username = "Tusernamedasdasg",
@@ -188,51 +189,27 @@ namespace TaskHouseUnitTests.UnitTests
                 FirstName = "Bob7",
                 LastName = null
             };
-            Worker updatedWorker = new Worker()
+            QualityAssurance updatedQualityAssurance = new QualityAssurance()
             {
-                Id = 4,
+                Id = 7,
                 Username = "Tusernamedasdasg",
                 Password = "+z490sXHo5u0qsSaxbBqEk9KsJtGqNhD8I8mVBdDJls=", //1234
                 Email = "test@test.com",
                 FirstName = "Bob7",
-                LastName = "Bobsen6",
+                LastName = "Bobsen1",
                 Salt = "upYKQSsrlub5JAID61/6pA==",
-                Discriminator = "Worker"
+                Discriminator = "QualityAssurance"
             };
 
             var result = controller.Update(Id, update);
             var resultAsObject = controller.Get(Id) as ObjectResult;
-            var resultObject = resultAsObject.Value as Worker;
+            var resultObject = resultAsObject.Value as QualityAssurance;
 
-            Assert.Equal(updatedWorker.Username, resultObject.Username);
+            Assert.Equal(updatedQualityAssurance.Username, resultObject.Username);
             Assert.NotEqual(update.Password, resultObject.Password);
-            Assert.Equal(updatedWorker.FirstName, resultObject.FirstName);
+            Assert.Equal(updatedQualityAssurance.FirstName, resultObject.FirstName);
             Assert.NotNull(resultObject.LastName);
             Assert.NotNull(resultObject.Salt);
-        }
-
-        [Fact]
-        public void WorkerController_GetSkillsForWorker_ReturnsObjectResult_WhenGivenIdForWorkerWithSkills()
-        {
-            int Id = 4;
-            var result = controller.GetSkillsForWorker(Id);
-            var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as IEnumerable<Skill>;
-
-            Assert.IsType<ObjectResult>(result);
-            Assert.Equal(2, resultObject.Count());
-        }
-
-        [Fact]
-        public void WorkerController_GetSkillsForWorker_ReturnsObjectResult_WhenGivenIdForWorkerWithNoSkills()
-        {
-            int Id = 6;
-            var result = controller.GetSkillsForWorker(Id);
-            var resultObjectResult = result as ObjectResult;
-            var resultObject = resultObjectResult.Value as IEnumerable<Skill>;
-
-            Assert.IsType<ObjectResult>(result);
-            Assert.Equal(0, resultObject.Count());
         }
     }
 }

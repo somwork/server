@@ -85,7 +85,7 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<string>("Base");
 
-                    b.Property<DateTimeOffset>("Date");
+                    b.Property<DateTime>("Date");
 
                     b.Property<int?>("RatesId");
 
@@ -131,8 +131,6 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Complexity");
 
                     b.Property<decimal>("HourlyWage");
-
-                    b.Property<decimal>("PriceEstimate");
 
                     b.Property<int>("TaskId");
 
@@ -350,6 +348,16 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Employer");
 
                     b.HasDiscriminator().HasValue("Employer");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.QualityAssurance", b =>
+                {
+                    b.HasBaseType("TaskHouseApi.Model.User");
+
+
+                    b.ToTable("QualityAssurance");
+
+                    b.HasDiscriminator().HasValue("QualityAssurance");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.Worker", b =>

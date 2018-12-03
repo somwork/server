@@ -12,6 +12,7 @@ namespace TaskHouseUnitTests.FakeRepositories
         private IUserRepository<User> userRepository;
         private IWorkerRepository workerRepository;
         private IEmployerRepository employerRepository;
+        private IQualityAssuranceRepository qualityAssuranceRepository;
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
@@ -59,6 +60,17 @@ namespace TaskHouseUnitTests.FakeRepositories
                     this.employerRepository = new FakeEmployerRepository();
                 }
                 return employerRepository;
+            }
+        }
+        public IQualityAssuranceRepository QualityAssurances
+        {
+            get
+            {
+                if (this.qualityAssuranceRepository == null)
+                {
+                    this.qualityAssuranceRepository = new FakeQualityAssuranceRepository();
+                }
+                return qualityAssuranceRepository;
             }
         }
         public ILocationRepository Locations
@@ -129,7 +141,7 @@ namespace TaskHouseUnitTests.FakeRepositories
                 return educationRepository;
             }
         }
-        public ICategoryRepository Categorys
+        public ICategoryRepository Categories
         {
             get
             {
@@ -188,6 +200,28 @@ namespace TaskHouseUnitTests.FakeRepositories
         {
             // NOT NEEDED IN TEST
             return 0;
+        }
+
+        public IRepository<T> Repository<T>() where T : BaseModel
+        {
+            var basemodelType = typeof(T);
+
+            if (basemodelType == typeof(User)) { return ((IRepository<T>)Users); }
+            if (basemodelType == typeof(Worker)) { return ((IRepository<T>)Workers); }
+            if (basemodelType == typeof(Employer)) { return ((IRepository<T>)Employers); }
+            if (basemodelType == typeof(QualityAssurance)) { return ((IRepository<T>)QualityAssurances); }
+            if (basemodelType == typeof(Location)) { return ((IRepository<T>)Locations); }
+            if (basemodelType == typeof(Skill)) { return ((IRepository<T>)Skills); }
+            if (basemodelType == typeof(Task)) { return ((IRepository<T>)Tasks); }
+            if (basemodelType == typeof(Estimate)) { return ((IRepository<T>)Estimates); }
+            if (basemodelType == typeof(Reference)) { return ((IRepository<T>)References); }
+            if (basemodelType == typeof(Education)) { return ((IRepository<T>)Educations); }
+            if (basemodelType == typeof(Category)) { return ((IRepository<T>)Categories); }
+            if (basemodelType == typeof(Currency)) { return ((IRepository<T>)Currencies); }
+            if (basemodelType == typeof(Message)) { return ((IRepository<T>)Messages); }
+            if (basemodelType == typeof(Budget)) { return ((IRepository<T>)Budgets); }
+
+            return null;
         }
     }
 }

@@ -15,5 +15,10 @@ namespace TaskHouseApi.Persistence.Repositories
         protected internal PostgresContext postgresContext { get { return context as PostgresContext; } }
 
         public SkillRepository(PostgresContext db) : base(db) { }
+
+        public IEnumerable<Skill> GetSkillsForWorker(int Id)
+        {
+            return dbSet.Where(w => w.WorkerId == Id).ToList();
+        }
     }
 }

@@ -2,6 +2,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
 using TaskHouseApi.Persistence.Repositories;
 using TaskHouseApi.Model;
+using System;
 
 namespace TaskHouseApi.Persistence.UnitOfWork
 {
@@ -17,6 +18,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private IUserRepository<User> userRepository;
         private IWorkerRepository workerRepository;
         private IEmployerRepository employerRepository;
+        private IQualityAssuranceRepository qualityAssuranceRepository;
         private ILocationRepository locationRepository;
         private ISkillRepository skillRepository;
         private ITaskRepository taskRepository;
@@ -27,6 +29,28 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         private ICurrencyRepository currencyRepository;
         private IMessageRepository messageRepository;
         private IBudgetRepository budgetRepository;
+
+        public IRepository<T> Repository<T>() where T : BaseModel
+        {
+            var basemodelType = typeof(T);
+
+            if (basemodelType == typeof(User)) { return ((IRepository<T>)Users); }
+            if (basemodelType == typeof(Worker)) { return ((IRepository<T>)Workers); }
+            if (basemodelType == typeof(Employer)) { return ((IRepository<T>)Employers); }
+            if (basemodelType == typeof(QualityAssurance)) { return ((IRepository<T>)QualityAssurances); }
+            if (basemodelType == typeof(Location)) { return ((IRepository<T>)Locations); }
+            if (basemodelType == typeof(Skill)) { return ((IRepository<T>)Skills); }
+            if (basemodelType == typeof(Task)) { return ((IRepository<T>)Tasks); }
+            if (basemodelType == typeof(Estimate)) { return ((IRepository<T>)Estimates); }
+            if (basemodelType == typeof(Reference)) { return ((IRepository<T>)References); }
+            if (basemodelType == typeof(Education)) { return ((IRepository<T>)Educations); }
+            if (basemodelType == typeof(Category)) { return ((IRepository<T>)Categories); }
+            if (basemodelType == typeof(Currency)) { return ((IRepository<T>)Currencies); }
+            if (basemodelType == typeof(Message)) { return ((IRepository<T>)Messages); }
+            if (basemodelType == typeof(Budget)) { return ((IRepository<T>)Budgets); }
+
+            return null;
+        }
 
         public IUserRepository<User> Users
         {
@@ -59,6 +83,17 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                     this.employerRepository = new EmployerRepository(context);
                 }
                 return employerRepository;
+            }
+        }
+        public IQualityAssuranceRepository QualityAssurances
+        {
+            get
+            {
+                if (this.qualityAssuranceRepository == null)
+                {
+                    this.qualityAssuranceRepository = new QualityAssuranceRepository(context);
+                }
+                return qualityAssuranceRepository;
             }
         }
         public ILocationRepository Locations
@@ -129,7 +164,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
                 return educationRepository;
             }
         }
-        public ICategoryRepository Categorys
+        public ICategoryRepository Categories
         {
             get
             {
@@ -170,7 +205,6 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         {
             get
             {
-
                 if (this.budgetRepository == null)
                 {
                     this.budgetRepository = new BudgetRepository(context);
@@ -182,6 +216,7 @@ namespace TaskHouseApi.Persistence.UnitOfWork
         public int Save()
         {
             return context.SaveChanges();
+
         }
 
         public void Dispose()

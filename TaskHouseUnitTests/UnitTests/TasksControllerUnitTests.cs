@@ -37,8 +37,8 @@ namespace TaskHouseUnitTests.UnitTests
             //Creates a new HttpContext
             con.ControllerContext.HttpContext = new DefaultHttpContext();
 
-                //Adds a User with claim to the current context
-                con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
+            //Adds a User with claim to the current context
+            con.ControllerContext.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>() {
                 //Adds a claim for nameIdentifier, user Id
                 new Claim(ClaimTypes.NameIdentifier, "1"),
                 //Adds a claim for role, user role/tupe
@@ -261,7 +261,7 @@ namespace TaskHouseUnitTests.UnitTests
             int taskId = 1;
 
             //Act
-            var result = controller.Create(taskId, e);
+            var result = controller.CreateEstimate(taskId, e);
             var objectResult = result as ObjectResult;
             var createdEstimate = objectResult.Value as Estimate;
 
@@ -290,7 +290,7 @@ namespace TaskHouseUnitTests.UnitTests
             int taskId = 500;
 
             //Act
-            var result = controller.Create(taskId, e);
+            var result = controller.CreateEstimate(taskId, e);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -308,7 +308,7 @@ namespace TaskHouseUnitTests.UnitTests
             int taskId = 1;
 
             //Act
-            var result = controller.Create(taskId, e);
+            var result = controller.CreateEstimate(taskId, e);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -328,7 +328,7 @@ namespace TaskHouseUnitTests.UnitTests
             var resultObject = resultAsObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
-            Assert.Equal(resultObject.AverageEstimate, 0);
+            Assert.Equal(0, resultObject.AverageEstimate);
         }
     }
 }

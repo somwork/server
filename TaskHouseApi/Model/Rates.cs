@@ -10,5 +10,7 @@ namespace TaskHouseApi.Model
 
         [JsonProperty("DKK")]
         public double Dkk { get; set; }
+
+        public Rates() { }
     }
 }

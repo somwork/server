@@ -79,7 +79,7 @@ namespace TaskHouseApi.Migrations
                     Success = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<long>(nullable: false),
                     Base = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTimeOffset>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     RatesId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -264,8 +264,7 @@ namespace TaskHouseApi.Migrations
                     Accepted = table.Column<bool>(nullable: false),
                     Urgency = table.Column<decimal>(nullable: false),
                     WorkerId = table.Column<int>(nullable: false),
-                    TaskId = table.Column<int>(nullable: false),
-                    PriceEstimate = table.Column<decimal>(nullable: false)
+                    TaskId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

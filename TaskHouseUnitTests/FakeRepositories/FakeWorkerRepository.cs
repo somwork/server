@@ -51,9 +51,5 @@ namespace TaskHouseUnitTests.FakeRepositories
        }
        )
         { }
-        // public override IEnumerable<User> RetrieveAll()
-        // {
-        //     return list.Where(w => w.Discriminator == nameof(Worker));
-        // }
     }
 }
