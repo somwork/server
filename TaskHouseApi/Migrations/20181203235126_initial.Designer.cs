@@ -10,7 +10,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181203150548_initial")]
+    [Migration("20181203235126_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,15 +130,15 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<bool>("Accepted");
 
-                    b.Property<int>("Complexity");
+                    b.Property<double>("Complexity");
 
-                    b.Property<decimal>("HourlyWage");
+                    b.Property<double>("HourlyWage");
 
                     b.Property<int>("TaskId");
 
                     b.Property<int>("TotalHours");
 
-                    b.Property<decimal>("Urgency");
+                    b.Property<double>("Urgency");
 
                     b.Property<int>("WorkerId");
 
@@ -287,7 +287,7 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("AverageEstimate");
+                    b.Property<double>("AverageEstimate");
 
                     b.Property<DateTime>("Deadline");
 
@@ -301,7 +301,9 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<string>("Urgency")
+                    b.Property<double>("Urgency");
+
+                    b.Property<string>("UrgencyString")
                         .IsRequired();
 
                     b.HasKey("Id");
