@@ -126,7 +126,7 @@ namespace TaskHouseApi.Controllers
 
         [Authorize]
         [HttpPost("{id}/messages")]
-        public IActionResult CreateMeassage(int Id, [FromBody] Message message)
+        public IActionResult CreateMessage(int Id, [FromBody] Message message)
         {
             //Get the given task from the id parameter
             Task task = unitOfWork.Tasks.Retrieve(Id);
@@ -156,8 +156,6 @@ namespace TaskHouseApi.Controllers
 
             message.UserId = currentUserId;
             message.TaskId = task.Id;
-
-
 
             task.Messages.Add(message);
 
