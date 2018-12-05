@@ -1,9 +1,10 @@
 using TaskHouseApi.Model;
+using System.Collections.Generic;
 
 namespace TaskHouseApi.Persistence.Repositories.Interfaces
 {
     public interface IMessageRepository : IRepository<Message>
     {
-        //Custom functionality to be added
+        IEnumerable<Message> RetrieveAllMessagesForSpecificTaskId(int Id);
     }
 }

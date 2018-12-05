@@ -51,7 +51,7 @@ namespace TaskHouseApi.Controllers
 
             // Add the estimates for the specific task id to the collection of estimates
             task.Estimates = unitOfWork.Estimates.RetrieveAllEstimatesForSpecificTaskId(Id).ToList();
-
+            
             //if the collection consists of 0 estimates then the average estimate should be set to 0
             if (task.Estimates.Count == 0)
             {
@@ -94,5 +94,56 @@ namespace TaskHouseApi.Controllers
 
             return new ObjectResult(estimate); //200 ok
         }
+
+
+        [Authorize(Roles = "TaskHouseApi.Model.Worker")]
+        [HttpPost("{id}/estimate")]
+        public IActionResult CreateMeassage(int Id, [FromBody] Message message)
+        {
+            //Get the given task from the id parameter
+            Task task = unitOfWork.Tasks.Retrieve(Id);
+
+            //if the task doesn't exist return badrequest
+            if (task == null)
+            {
+                return BadRequest(new { error = "Task doesn't exist" }); //400 bad request
+            }
+            task.Messages = unitOfWork.Messages.RetrieveAllMessagesForSpecificTaskId(Id).ToList();
+
+            //if the message from the body is null return bad request
+            if (message == null)
+            {
+                return BadRequest(new { error = "CreateEstimate: message is null" }); //400 bad request
+            }
+
+            if (!TryValidateModel(message))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
+            int currentUserId = Int32.Parse(HttpContext.User.Claims.SingleOrDefault
+            (
+                c => c.Type == ClaimTypes.NameIdentifier).Value
+            );
+
+            message.UserId = currentUserId;
+            message.TaskId = task.Id;
+
+
+
+            task.Messages.Add(message);
+
+            unitOfWork.Tasks.Update(task);
+
+            unitOfWork.Messages.Create(message);
+
+            unitOfWork.Save();
+
+            return new ObjectResult(message); //200 ok
+
+        }
+
+
     }
 }
+
