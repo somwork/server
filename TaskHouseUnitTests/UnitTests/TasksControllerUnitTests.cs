@@ -325,11 +325,61 @@ namespace TaskHouseUnitTests.UnitTests
 
             //Act
             var result = controller.Get(taskId);
-            var resultAsObject = controller.Get(taskId) as ObjectResult;
+            var resultAsObject = result as ObjectResult;
             var resultObject = resultAsObject.Value as TaskHouseApi.Model.Task;
 
             //Assert
             Assert.Equal(0, resultObject.AverageEstimate);
+        }
+
+        ///Test CompleteTask with existing, uncompleted, task
+        [Fact]
+        public void TasksController_Update_CompleteTask_SetsCompletedToTrue_WithValidTask()
+        {
+            //Arrange
+            int taskId = 1;
+            controller = createContext(controller, "Employer");
+
+            //Act
+            var result = controller.CompleteTask(taskId);
+            var resultAsObject = result as ObjectResult;
+            var resultObject = resultAsObject.Value as TaskHouseApi.Model.Task;
+
+            //Assert
+            Assert.Equal(resultObject.Completed, true);
+        }
+
+        ///Test CompleteTask when task doesn't exist
+        [Fact]
+        public void TasksController_Update_CompleteTask_RetunsBadRequest_WithInvalidTask()
+        {
+            //Arrange
+            int taskId = 100;
+            controller = createContext(controller, "Employer");
+
+            //Act
+            var result = controller.CompleteTask(taskId);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        ///Test completing test, when task is already completed
+        [Fact]
+        public void TasksController_Update_CompleteTask_RetunsBadRequest_WhenTaskIsAlreadyCompleted()
+        {
+            //Arrange
+            int taskId = 1;
+            controller = createContext(controller, "Employer");
+            var retrieveTask = controller.Get(taskId) as ObjectResult;
+            var task = retrieveTask.Value as Task;
+            task.Completed = true;
+
+            //Act
+            var result = controller.CompleteTask(taskId);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(result);
         }
     }
 }

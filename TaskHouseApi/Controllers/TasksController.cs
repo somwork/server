@@ -37,6 +37,33 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(task); //200 ok
         }
 
+        [Authorize(Roles = "TaskHouseApi.Model.Employer")]
+        [HttpPut("{id}/complete")]
+        public IActionResult CompleteTask(int Id)
+        {
+             //Get the given task from the id parameter
+            Task task = unitOfWork.Tasks.Retrieve(Id);
+
+            //if the task doesn't exist return badrequest
+            if (task == null)
+            {
+                return BadRequest(new { error = "Task doesn't exist" }); //400 bad request
+            }
+
+            //Bad request if task is already completed
+            if(task.Completed == true)
+            {
+                return BadRequest(new { error = "Task already completed"});
+            }
+
+            task.Completed = true;
+
+            unitOfWork.Tasks.Update(task);
+            unitOfWork.Save();
+
+            return new ObjectResult(task);
+        }
+
         // POST: api/tasks/[id]
         [Authorize(Roles = "TaskHouseApi.Model.Worker")]
         [HttpPost("{id}/estimate")]
