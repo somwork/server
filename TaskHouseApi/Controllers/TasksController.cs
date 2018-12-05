@@ -124,6 +124,58 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(estimate); //200 ok
         }
 
+        [Authorize]
+        [HttpPost("{id}/messages")]
+        public IActionResult CreateMessage(int Id, [FromBody] Message message)
+        {
+            //Get the given task from the id parameter
+            Task task = unitOfWork.Tasks.Retrieve(Id);
+
+            //if the task doesn't exist return badrequest
+            if (task == null)
+            {
+                return BadRequest(new { error = "Task doesn't exist" }); //400 bad request
+            }
+            task.Messages = unitOfWork.Messages.RetrieveAllMessagesForSpecificTaskId(Id).ToList();
+
+            //if the message from the body is null return bad request
+            if (message == null)
+            {
+                return BadRequest(new { error = "CreateMessage: message is null" }); //400 bad request
+            }
+
+            if (!TryValidateModel(message))
+            {
+                return BadRequest(new { error = "Model not valid" });
+            }
+
+            int currentUserId = Int32.Parse(HttpContext.User.Claims.SingleOrDefault
+            (
+                c => c.Type == ClaimTypes.NameIdentifier).Value
+            );
+
+            message.UserId = currentUserId;
+            message.TaskId = task.Id;
+
+            task.Messages.Add(message);
+
+            unitOfWork.Tasks.Update(task);
+
+            unitOfWork.Messages.Create(message);
+
+            unitOfWork.Save();
+
+            return new ObjectResult(message); //200 ok
+
+        }
+
+        [HttpGet("{id}/messages")]
+        public IActionResult GetMessages(int Id)
+        {
+            return new ObjectResult(unitOfWork.Messages.RetrieveAllMessagesForSpecificTaskId(Id));
+        }
+
+
         [Authorize(Roles = "TaskHouseApi.Model.Employer")]
         [HttpGet("{Id}/estimates")]
         public IActionResult GetEstimates(int Id)
@@ -134,3 +186,4 @@ namespace TaskHouseApi.Controllers
         }
     }
 }
+

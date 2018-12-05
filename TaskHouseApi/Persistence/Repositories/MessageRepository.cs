@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.DatabaseContext;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
@@ -10,5 +12,11 @@ namespace TaskHouseApi.Persistence.Repositories
         protected internal PostgresContext postgresContext { get { return context as PostgresContext; } }
 
         public MessageRepository(PostgresContext db) : base(db) { }
+
+        
+        public IEnumerable<Message> RetrieveAllMessagesForSpecificTaskId(int Id)
+        {
+            return dbSet.Where(e => e.TaskId == Id).ToList();
+        }
     }
 }
