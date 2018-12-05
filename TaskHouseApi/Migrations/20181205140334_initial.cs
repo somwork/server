@@ -193,7 +193,8 @@ namespace TaskHouseApi.Migrations
                     Urgency = table.Column<double>(nullable: false),
                     EmployerId = table.Column<int>(nullable: false),
                     AverageEstimate = table.Column<double>(nullable: false),
-                    UrgencyString = table.Column<string>(nullable: false)
+                    UrgencyString = table.Column<string>(nullable: false),
+                    Completed = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
