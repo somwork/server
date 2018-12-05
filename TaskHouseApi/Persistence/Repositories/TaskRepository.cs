@@ -53,8 +53,5 @@ namespace TaskHouseApi.Persistence.Repositories
                 .Where(task => task.AverageEstimate == temp || task.Estimates.Any(e => e.Accepted == false))
                 .ToList();
         }
-
-
-
     }
 }
