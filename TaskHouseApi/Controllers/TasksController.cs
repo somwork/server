@@ -51,7 +51,7 @@ namespace TaskHouseApi.Controllers
 
             // Add the estimates for the specific task id to the collection of estimates
             task.Estimates = unitOfWork.Estimates.RetrieveAllEstimatesForSpecificTaskId(Id).ToList();
-            
+
             //if the collection consists of 0 estimates then the average estimate should be set to 0
             if (task.Estimates.Count == 0)
             {
@@ -96,7 +96,7 @@ namespace TaskHouseApi.Controllers
         }
 
 
-        [Authorize(Roles = "TaskHouseApi.Model.Worker")]
+        [Authorize]
         [HttpPost("{id}/messages")]
         public IActionResult CreateMeassage(int Id, [FromBody] Message message)
         {
