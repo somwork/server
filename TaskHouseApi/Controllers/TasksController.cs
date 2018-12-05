@@ -123,5 +123,14 @@ namespace TaskHouseApi.Controllers
 
             return new ObjectResult(estimate); //200 ok
         }
+
+        [Authorize(Roles = "TaskHouseApi.Model.Employer")]
+        [HttpGet("{Id}/estimates")]
+        public IActionResult GetEstimates(int Id)
+        {
+            return new ObjectResult(
+                unitOfWork.Estimates.RetrieveAllEstimatesForSpecificTaskId(Id)
+            );
+        }
     }
 }
