@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using TaskHouseApi.Model;
 using TaskHouseApi.Persistence.Repositories.Interfaces;
+using System.Linq;
 
 namespace TaskHouseUnitTests.FakeRepositories
 {
     public class FakeMessageRepository : FakeRepository<Message>, IMessageRepository
+
     {
         public FakeMessageRepository()
             : base(new List<Message>()
@@ -37,5 +39,11 @@ namespace TaskHouseUnitTests.FakeRepositories
                 }
             )
         { }
+
+        public IEnumerable<Message> RetrieveAllMessagesForSpecificTaskId(int Id)
+        {
+            return list.Where(e => e.TaskId == Id).ToList();
+        }
     }
+
 }
