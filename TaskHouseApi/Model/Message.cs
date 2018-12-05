@@ -12,12 +12,12 @@ namespace TaskHouseApi.Model
         public DateTime SendAt { get; set; }
         [JsonIgnore]
         public int UserId { get; set; }
-        [JsonIgnore]
-        public User User { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
         [JsonIgnore]
         public int TaskId { get; set; }
-        [JsonIgnore]
-        public Task Task { get; set; }
 
         public Message()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace TaskHouseApi.Model
@@ -16,9 +17,9 @@ namespace TaskHouseApi.Model
         [Required]
         public string Description { get; set; }
         [Required]
-        public string Urgency { get; set; }
-        [Required]
         public int BudgetId { get; set; }
+        [Required]
+        public double Urgency { get; set; }
         [JsonIgnore]
         public virtual ICollection<Estimate> Estimates { get; set; }
         [JsonIgnore]
@@ -30,21 +31,26 @@ namespace TaskHouseApi.Model
         public Employer Employer { get; set; }
         [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
-        public decimal AverageEstimate
-        {
-            get; set;
-        }
+        public double AverageEstimate { get; set; }
+        [NotMapped]
+        public IDictionary<string, double> UrgencyFactorMap { get; set; }
+        [Required]
+        public string UrgencyString { get; set; }
 
         public Task()
         {
             CategoryTask = new List<CategoryTask>();
             Messages = new List<Message>();
             Estimates = new List<Estimate>();
+            UrgencyFactorMap = new Dictionary<string, double>();
+            UrgencyFactorMap.Add("norush", 1.2);
+            UrgencyFactorMap.Add("urgent", 1.4);
+            UrgencyFactorMap.Add("asap", 1.5);
         }
 
-        public decimal CalculateAverageEstimate()
+        public double CalculateAverageEstimate()
         {
-            decimal SummedEstimate = 0.0M;
+            double SummedEstimate = 0.0;
 
             if (Estimates.Count <= 0)
             {
@@ -53,10 +59,15 @@ namespace TaskHouseApi.Model
 
             foreach (Estimate e in Estimates)
             {
-                SummedEstimate += e.CalculateAverageEstimate();
+                SummedEstimate += e.CalculateEstimate();
             }
 
             return SummedEstimate / Estimates.Count;
+        }
+
+        public void MapUrgencyFactor()
+        {
+            this.Urgency = UrgencyFactorMap[this.UrgencyString];
         }
     }
 }
