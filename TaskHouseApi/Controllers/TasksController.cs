@@ -124,7 +124,6 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(estimate); //200 ok
         }
 
-
         [Authorize]
         [HttpPost("{id}/messages")]
         public IActionResult CreateMeassage(int Id, [FromBody] Message message)
@@ -179,6 +178,14 @@ namespace TaskHouseApi.Controllers
         }
 
 
+        [Authorize(Roles = "TaskHouseApi.Model.Employer")]
+        [HttpGet("{Id}/estimates")]
+        public IActionResult GetEstimates(int Id)
+        {
+            return new ObjectResult(
+                unitOfWork.Estimates.RetrieveAllEstimatesForSpecificTaskId(Id)
+            );
+        }
     }
 }
 
