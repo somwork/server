@@ -289,6 +289,8 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<int>("BudgetId");
 
+                    b.Property<bool>("Completed");
+
                     b.Property<DateTime>("Deadline");
 
                     b.Property<string>("Description")
