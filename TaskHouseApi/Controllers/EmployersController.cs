@@ -21,5 +21,12 @@ namespace TaskHouseApi.Controllers
         {
             return new ObjectResult(unitOfWork.Tasks.GetTasksForEmployer(Id));
         }
+
+        [Authorize(Roles = "TaskHouseApi.Model.Employer")]
+        [HttpGet("{id}/tasks/accepted")]
+        public IActionResult GetAcceptedTasksForEmployer(int id)
+        {
+            return new ObjectResult(unitOfWork.Tasks.GetAcceptedTasksForEmployer(id));
+        }
     }
 }

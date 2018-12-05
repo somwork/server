@@ -25,5 +25,26 @@ namespace TaskHouseApi.Controllers
         {
             return new ObjectResult(unitOfWork.Skills.GetSkillsForWorker(Id));
         }
+
+        [Authorize(Roles = "TaskHouseApi.Model.Worker")]
+        [HttpGet("{id}/tasks/accepted")]
+        public IActionResult GetAcceptedTasksForWorker(int id)
+        {
+            return new ObjectResult(unitOfWork.Tasks.GetAcceptedTasksForWorker(id));
+        }
+
+        [Authorize(Roles = "TaskHouseApi.Model.Worker")]
+        [HttpGet("{id}/tasks/estimated")]
+        public IActionResult GetEstimatedTasksForWorker(int id)
+        {
+            return new ObjectResult(unitOfWork.Tasks.GetEstimatedTasksForWorker(id));
+        }
+
+        [Authorize(Roles = "TaskHouseApi.Model.Worker")]
+        [HttpGet("tasks")]
+        public IActionResult GetAvailableTasksForWorker()
+        {
+            return new ObjectResult(unitOfWork.Tasks.GetAvailableTasksForWorker());
+        }
     }
 }
