@@ -10,7 +10,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181205083716_initial")]
+    [Migration("20181205140334_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -290,6 +290,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<double>("AverageEstimate");
 
                     b.Property<int>("BudgetId");
+
+                    b.Property<bool>("Completed");
 
                     b.Property<DateTime>("Deadline");
 
