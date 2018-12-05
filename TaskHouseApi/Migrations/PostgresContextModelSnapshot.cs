@@ -287,6 +287,8 @@ namespace TaskHouseApi.Migrations
 
                     b.Property<double>("AverageEstimate");
 
+                    b.Property<int>("BudgetId");
+
                     b.Property<DateTime>("Deadline");
 
                     b.Property<string>("Description")

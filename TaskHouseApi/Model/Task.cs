@@ -16,6 +16,9 @@ namespace TaskHouseApi.Model
         public DateTime Deadline { get; set; }
         [Required]
         public string Description { get; set; }
+        [Required]
+        public int BudgetId { get; set; }
+        [Required]
         public double Urgency { get; set; }
         [JsonIgnore]
         public virtual ICollection<Estimate> Estimates { get; set; }
