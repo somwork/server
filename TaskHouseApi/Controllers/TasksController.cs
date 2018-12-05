@@ -97,7 +97,7 @@ namespace TaskHouseApi.Controllers
 
 
         [Authorize(Roles = "TaskHouseApi.Model.Worker")]
-        [HttpPost("{id}/estimate")]
+        [HttpPost("{id}/messages")]
         public IActionResult CreateMeassage(int Id, [FromBody] Message message)
         {
             //Get the given task from the id parameter
@@ -113,7 +113,7 @@ namespace TaskHouseApi.Controllers
             //if the message from the body is null return bad request
             if (message == null)
             {
-                return BadRequest(new { error = "CreateEstimate: message is null" }); //400 bad request
+                return BadRequest(new { error = "CreateMessage: message is null" }); //400 bad request
             }
 
             if (!TryValidateModel(message))
@@ -141,6 +141,12 @@ namespace TaskHouseApi.Controllers
 
             return new ObjectResult(message); //200 ok
 
+        }
+
+        [HttpGet("{id}/messages")]
+        public IActionResult GetMessages(int Id)
+        {
+            return new ObjectResult(unitOfWork.Messages.RetrieveAllMessagesForSpecificTaskId(Id));
         }
 
 
