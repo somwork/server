@@ -93,8 +93,13 @@ namespace TaskHouseUnitTests.UnitTests
                 LastName = "Bobsen6",
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
+            CreateUserModel<QualityAssurance> cm = new CreateUserModel<QualityAssurance>()
+            {
+                User = TestQualityAssurance,
+                Password = TestQualityAssurance.Password
+            };
 
-            var result = controller.Create(TestQualityAssurance.Password, TestQualityAssurance);
+            var result = controller.Create(cm);
             var resultObjectResult = result as ObjectResult;
             var resultObject = resultObjectResult.Value as QualityAssurance;
 
@@ -106,8 +111,13 @@ namespace TaskHouseUnitTests.UnitTests
         public void QualityAssurancesController_Create_ReturnsBadRequest_WhenGivenNullQualityAssurance()
         {
             QualityAssurance QualityAssurance = null;
+            CreateUserModel<QualityAssurance> cm = new CreateUserModel<QualityAssurance>()
+            {
+                User = QualityAssurance,
+                Password = null
+            };
 
-            var result = controller.Create(null, QualityAssurance);
+            var result = controller.Create(cm);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }
