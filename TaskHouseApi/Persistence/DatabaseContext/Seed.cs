@@ -13,7 +13,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
             using (var context = new PostgresContext(
                 serviceProvider.GetRequiredService<DbContextOptions<PostgresContext>>()))
             {
-                // Look for any movies.
+                // Look for any Users
                 if (context.Users.Any())
                 {
                     return;   // DB has been seeded
