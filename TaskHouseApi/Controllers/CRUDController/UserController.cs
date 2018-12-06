@@ -23,17 +23,21 @@ namespace TaskHouseApi.Controllers.CRUDController
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Create(string password, [FromBody]U user)
+        public IActionResult Create([FromBody]CreateUserModel<U> inputUserModel)
         {
-            if (user == null)
+
+            if (
+                inputUserModel == null ||
+                inputUserModel.User == null)
             {
-                return BadRequest(new { error = "Createuser: user is null" }); // 400 Bad request
+                return BadRequest(new { error = "Input: is null" }); // 400 Bad request
             }
 
-            user.Password = password;
+            U user = inputUserModel.User;
+            user.Password = inputUserModel.Password;
             ModelState.Clear();
 
-            if (!TryValidateModel(user))
+            if (!TryValidateModel(inputUserModel))
             {
                 return BadRequest(new { error = "Model not valid" });
             }
@@ -50,7 +54,7 @@ namespace TaskHouseApi.Controllers.CRUDController
             user.Salt = hashResult.saltText;
             user.Password = hashResult.saltechashedPassword;
 
-            unitOfWork.Repository<U>().Create(user);
+            unitOfWork.Repository<U>().Create((U)user);
             unitOfWork.Save();
 
             return new ObjectResult(user);

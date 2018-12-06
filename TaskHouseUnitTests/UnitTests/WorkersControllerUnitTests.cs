@@ -93,8 +93,13 @@ namespace TaskHouseUnitTests.UnitTests
                 LastName = "Bobsen6",
                 Salt = "upYKQSsrlub5JAID61/6pA=="
             };
+            CreateUserModel<Worker> cm = new CreateUserModel<Worker>()
+            {
+                User = TestWorker,
+                Password = TestWorker.Password
+            };
 
-            var result = controller.Create(TestWorker.Password, TestWorker);
+            var result = controller.Create(cm);
             var resultObjectResult = result as ObjectResult;
             var resultObject = resultObjectResult.Value as TaskHouseApi.Model.Worker;
 
@@ -106,8 +111,13 @@ namespace TaskHouseUnitTests.UnitTests
         public void WorkerController_Create_ReturnsBadRequest_WhenGivenNullWorker()
         {
             Worker worker = null;
+            CreateUserModel<Worker> cm = new CreateUserModel<Worker>()
+            {
+                User = worker,
+                Password = null
+            };
 
-            var result = controller.Create(null, worker);
+            var result = controller.Create(cm);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }
