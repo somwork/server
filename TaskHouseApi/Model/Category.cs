@@ -11,13 +11,13 @@ namespace TaskHouseApi.Model
         [Required]
         public string Description { get; set; }
         [JsonIgnore]
-        public virtual ICollection<CategorySkill> CategorySkill { get; set; }
+        public virtual ICollection<Skill> Skills { get; set; }
         [JsonIgnore]
         public virtual ICollection<CategoryTask> CategoryTask { get; set; }
 
         public Category()
         {
-            CategorySkill = new List<CategorySkill>();
+            Skills = new List<Skill>();
             CategoryTask = new List<CategoryTask>();
         }
     }

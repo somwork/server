@@ -12,5 +12,6 @@ namespace TaskHouseApi.Persistence.Repositories.Interfaces
         IEnumerable<Task> GetAcceptedTasksForWorker(int Id);
         IEnumerable<Task> GetEstimatedTasksForWorker(int Id);
         IEnumerable<Task> GetAvailableTasksForWorker();
+        bool AddCategory(int taskId, int categoryId);
     }
 }

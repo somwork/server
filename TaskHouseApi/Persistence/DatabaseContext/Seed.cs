@@ -224,32 +224,38 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                     new Skill()
                     {
                         Title = "Skill1",
-                        WorkerId = 1
+                        WorkerId = 1,
+                        CategoryId = 1
                     },
                     new Skill()
                     {
                         Title = "Skill2",
-                        WorkerId = 1
+                        WorkerId = 1,
+                        CategoryId = 1
                     },
                     new Skill()
                     {
                         Title = "Skill3",
-                        WorkerId = 2
+                        WorkerId = 2,
+                        CategoryId = 2
                     },
                     new Skill()
                     {
                         Title = "Skill4",
-                        WorkerId = 2
+                        WorkerId = 2,
+                        CategoryId = 1
                     },
                     new Skill()
                     {
                         Title = "Skill5",
-                        WorkerId = 2
+                        WorkerId = 2,
+                        CategoryId = 4
                     },
                     new Skill()
                     {
                         Title = "Skill6",
-                        WorkerId = 3
+                        WorkerId = 3,
+                        CategoryId = 1
                     }
                 );
                 context.SaveChanges();
@@ -398,40 +404,6 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         Urgency = 1.4,
                         WorkerId = 4,
                         TaskId = 2
-                    }
-                );
-                context.SaveChanges();
-
-                context.CategorySkill.AddRange(
-                    new CategorySkill()
-                    {
-                        CategoryId = 1,
-                        SkillId = 1
-                    },
-                    new CategorySkill()
-                    {
-                        CategoryId = 1,
-                        SkillId = 2
-                    },
-                    new CategorySkill()
-                    {
-                        CategoryId = 2,
-                        SkillId = 3
-                    },
-                    new CategorySkill()
-                    {
-                        CategoryId = 4,
-                        SkillId = 4
-                    },
-                    new CategorySkill()
-                    {
-                        CategoryId = 5,
-                        SkillId = 5
-                    },
-                    new CategorySkill()
-                    {
-                        CategoryId = 6,
-                        SkillId = 6
                     }
                 );
                 context.SaveChanges();
