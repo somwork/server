@@ -66,7 +66,7 @@ namespace TaskHouseApi.Controllers.CRUDController
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] T baseModel)
+        public virtual IActionResult Update(int id, [FromBody] T baseModel)
         {
             if (baseModel == null)
             {

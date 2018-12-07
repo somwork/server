@@ -37,6 +37,27 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(task); //200 ok
         }
 
+        [HttpPut("{id}")]
+        public override IActionResult Update(int id, [FromBody] Task task)
+        {
+            if (task == null)
+            {
+                return BadRequest(); // 400 Bad request
+            }
+
+            if (!unitOfWork.Tasks.isInDatabase(id))
+            {
+                return NotFound(); // 404 resource not found
+            }
+
+            task.Id = id;
+            task.MapUrgencyFactor();
+            unitOfWork.Tasks.UpdatePart(task);
+            unitOfWork.Save();
+
+            return new NoContentResult(); // 204 No content
+        }
+
         [Authorize(Roles = "TaskHouseApi.Model.Employer")]
         [HttpPut("{id}/complete")]
         public IActionResult CompleteTask(int Id)
