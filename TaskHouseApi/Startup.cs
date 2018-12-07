@@ -27,10 +27,12 @@ namespace TaskHouseApi
     public class Startup
     {
         public static bool DEV_MODE_ON { get; private set; } = true;
+        private IHostingEnvironment currentEnvironment { get; set; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             this.Configuration = configuration;
+            this.currentEnvironment = env;
 
         }
         public IConfiguration Configuration { get; }
@@ -53,10 +55,12 @@ namespace TaskHouseApi
                 });
             }
 
-            services.AddDbContext<PostgresContext>(options =>
-                options.UseNpgsql(
-                    "Server=localhost;Port=5432;Database=root;Username=root;Password=root;")
-                );
+            string connectionString = "Server=localhost;Port=5432;Database=root;Username=root;Password=root;";
+            if (currentEnvironment.IsProduction())
+            {
+                connectionString = Configuration["Pro_Database:ConnectionString"];
+            }
+            services.AddDbContext<PostgresContext>(options => options.UseNpgsql(connectionString));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -111,16 +115,12 @@ namespace TaskHouseApi
         {
             if (env.IsDevelopment())
             {
+                app.UseCors("AllowAll");
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseHsts();
-            }
-
-            if (DEV_MODE_ON)
-            {
-                app.UseCors("AllowAll");
             }
 
             app.UseAuthentication();
