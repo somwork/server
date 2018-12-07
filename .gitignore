@@ -4,6 +4,7 @@
 .vscode
 .vs
 *.csproj.user
+appsettings.Production.json
 
 # Prerequisites
 *.d
