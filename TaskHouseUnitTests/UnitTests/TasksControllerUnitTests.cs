@@ -149,7 +149,8 @@ namespace TaskHouseUnitTests.UnitTests
             TaskHouseApi.Model.Task task = new TaskHouseApi.Model.Task()
             {
                 Id = 1,
-                Description = "UpdatedTask"
+                Description = "UpdatedTask",
+                UrgencyString = "asap"
             };
             int id = 1;
 
