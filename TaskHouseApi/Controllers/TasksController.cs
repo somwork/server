@@ -41,7 +41,7 @@ namespace TaskHouseApi.Controllers
         [HttpPut("{id}/complete")]
         public IActionResult CompleteTask(int Id)
         {
-             //Get the given task from the id parameter
+            //Get the given task from the id parameter
             Task task = unitOfWork.Tasks.Retrieve(Id);
 
             //if the task doesn't exist return badrequest
@@ -51,9 +51,9 @@ namespace TaskHouseApi.Controllers
             }
 
             //Bad request if task is already completed
-            if(task.Completed == true)
+            if (task.Completed == true)
             {
-                return BadRequest(new { error = "Task already completed"});
+                return BadRequest(new { error = "Task already completed" });
             }
 
             task.Completed = true;
@@ -183,6 +183,35 @@ namespace TaskHouseApi.Controllers
             return new ObjectResult(
                 unitOfWork.Estimates.RetrieveAllEstimatesForSpecificTaskId(Id)
             );
+        }
+
+        [Authorize(Roles = "TaskHouseApi.Model.Employer")]
+        [HttpPut("{Id}/categories")]
+        public IActionResult AddCategory(int Id, int categoryId)
+        {
+            if (
+                !unitOfWork.Tasks.isInDatabase(Id) ||
+                !unitOfWork.Categories.isInDatabase(categoryId) ||
+                !unitOfWork.Tasks.AddCategory(Id, categoryId))
+            {
+                return BadRequest();
+            }
+
+            unitOfWork.Save();
+            return new OkResult();
+        }
+
+        [HttpGet("{Id}/categories")]
+        public IActionResult GetCategories(int Id)
+        {
+            if (
+                !unitOfWork.Tasks.isInDatabase(Id))
+            {
+                return BadRequest();
+            }
+
+            var categories = unitOfWork.Categories.GetCategoriesForTask(Id);
+            return new OkObjectResult(categories);
         }
     }
 }

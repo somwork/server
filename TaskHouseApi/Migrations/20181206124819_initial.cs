@@ -166,11 +166,18 @@ namespace TaskHouseApi.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Title = table.Column<string>(nullable: false),
-                    WorkerId = table.Column<int>(nullable: false)
+                    WorkerId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Skills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Skills_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Skills_Users_WorkerId",
                         column: x => x.WorkerId,
@@ -203,30 +210,6 @@ namespace TaskHouseApi.Migrations
                         name: "FK_Tasks_Users_EmployerId",
                         column: x => x.EmployerId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategorySkill",
-                columns: table => new
-                {
-                    CategoryId = table.Column<int>(nullable: false),
-                    SkillId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategorySkill", x => new { x.CategoryId, x.SkillId });
-                    table.ForeignKey(
-                        name: "FK_CategorySkill_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CategorySkill_Skills_SkillId",
-                        column: x => x.SkillId,
-                        principalTable: "Skills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -345,11 +328,6 @@ namespace TaskHouseApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategorySkill_SkillId",
-                table: "CategorySkill",
-                column: "SkillId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CategoryTask_TaskId",
                 table: "CategoryTask",
                 column: "TaskId");
@@ -407,6 +385,11 @@ namespace TaskHouseApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Skills_CategoryId",
+                table: "Skills",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Skills_WorkerId",
                 table: "Skills",
                 column: "WorkerId");
@@ -421,9 +404,6 @@ namespace TaskHouseApi.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Budgets");
-
-            migrationBuilder.DropTable(
-                name: "CategorySkill");
 
             migrationBuilder.DropTable(
                 name: "CategoryTask");
@@ -453,13 +433,13 @@ namespace TaskHouseApi.Migrations
                 name: "Skills");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
                 name: "Rates");
 
             migrationBuilder.DropTable(
                 name: "Tasks");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Users");
