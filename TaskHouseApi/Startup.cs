@@ -115,7 +115,6 @@ namespace TaskHouseApi
         {
             if (env.IsDevelopment())
             {
-                app.UseCors("AllowAll");
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -123,6 +122,7 @@ namespace TaskHouseApi
                 app.UseHsts();
             }
 
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
