@@ -31,6 +31,7 @@ namespace TaskHouseApi.Model
         public string Discriminator { get; set; }
         [JsonIgnore]
         public Location Location { get; set; }
+        public int LocationId { get; set; }
         [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
 

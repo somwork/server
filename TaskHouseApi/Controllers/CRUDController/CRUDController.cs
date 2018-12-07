@@ -23,7 +23,7 @@ namespace TaskHouseApi.Controllers.CRUDController
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int Id)
+        public virtual IActionResult Get(int Id)
         {
             T t = unitOfWork.Repository<T>().Retrieve(Id);
             if (t == null)
@@ -66,7 +66,7 @@ namespace TaskHouseApi.Controllers.CRUDController
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] T baseModel)
+        public virtual IActionResult Update(int id, [FromBody] T baseModel)
         {
             if (baseModel == null)
             {

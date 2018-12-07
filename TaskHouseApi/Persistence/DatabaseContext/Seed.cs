@@ -19,6 +19,91 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                     return;   // DB has been seeded
                 }
 
+                context.Locations.AddRange
+               (
+                   new Location()
+                   {
+                       Country = "Country1",
+                       City = "City1",
+                       ZipCode = "ZipCode1",
+                       PrimaryLine = "PrimaryLine1",
+                       SecondaryLine = "SecondaryLine1"
+                   },
+                   new Location()
+                   {
+                       Country = "Country2",
+                       City = "City2",
+                       ZipCode = "ZipCode2",
+                       PrimaryLine = "PrimaryLine2",
+                       SecondaryLine = "SecondaryLine2"
+                   },
+                   new Location()
+                   {
+                       Country = "Country3",
+                       City = "City3",
+                       ZipCode = "ZipCode3",
+                       PrimaryLine = "PrimaryLine3",
+                       SecondaryLine = "SecondaryLine3"
+                   },
+                    new Location()
+                    {
+                        Country = "Country1",
+                        City = "City1",
+                        ZipCode = "ZipCode1",
+                        PrimaryLine = "PrimaryLine1",
+                        SecondaryLine = "SecondaryLine1"
+                    },
+                   new Location()
+                   {
+                       Country = "Country2",
+                       City = "City2",
+                       ZipCode = "ZipCode2",
+                       PrimaryLine = "PrimaryLine2",
+                       SecondaryLine = "SecondaryLine2"
+                   },
+                   new Location()
+                   {
+                       Country = "Country3",
+                       City = "City3",
+                       ZipCode = "ZipCode3",
+                       PrimaryLine = "PrimaryLine3",
+                       SecondaryLine = "SecondaryLine3"
+                   },
+                          new Location()
+                          {
+                              Country = "Country1",
+                              City = "City1",
+                              ZipCode = "ZipCode1",
+                              PrimaryLine = "PrimaryLine1",
+                              SecondaryLine = "SecondaryLine1"
+                          },
+                   new Location()
+                   {
+                       Country = "Country2",
+                       City = "City2",
+                       ZipCode = "ZipCode2",
+                       PrimaryLine = "PrimaryLine2",
+                       SecondaryLine = "SecondaryLine2"
+                   },
+                   new Location()
+                   {
+                       Country = "Country3",
+                       City = "City3",
+                       ZipCode = "ZipCode3",
+                       PrimaryLine = "PrimaryLine3",
+                       SecondaryLine = "SecondaryLine3"
+                   },
+                    new Location()
+                    {
+                        Country = "Country1",
+                        City = "City1",
+                        ZipCode = "ZipCode1",
+                        PrimaryLine = "PrimaryLine1",
+                        SecondaryLine = "SecondaryLine1"
+                    }
+               );
+
+                context.SaveChanges();
                 context.Workers.AddRange(
                     new Worker
                     {
@@ -27,7 +112,8 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         Email = "root@root.com",
                         FirstName = "Bob",
                         LastName = "Bobsen",
-                        Salt = "pFxZH4br1PTUImBtIUGljQ=="
+                        Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 1
                     },
                     new Worker()
                     {
@@ -36,7 +122,8 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         Email = "test@test.com",
                         FirstName = "Bob1",
                         LastName = "Bobsen1",
-                        Salt = "pFxZH4br1PTUImBtIUGljQ=="
+                        Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 2
                     },
                     new Worker()
                     {
@@ -45,7 +132,8 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         Email = "test@test.com",
                         FirstName = "Bob3",
                         LastName = "Bobsen3",
-                        Salt = "pFxZH4br1PTUImBtIUGljQ=="
+                        Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 3
                     },
                     new Worker
                     {
@@ -54,7 +142,8 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         Email = "root@root.com",
                         FirstName = "Bob",
                         LastName = "Bobsen",
-                        Salt = "pFxZH4br1PTUImBtIUGljQ=="
+                        Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 4
                     }
                 );
                 context.SaveChanges();
@@ -67,7 +156,8 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         Email = "root@root.com",
                         FirstName = "em1",
                         LastName = "emsen1",
-                        Salt = "pFxZH4br1PTUImBtIUGljQ=="
+                        Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 5
                     },
                     new Employer()
                     {
@@ -77,6 +167,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         FirstName = "em2",
                         LastName = "emsen2",
                         Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 6
                     },
                     new Employer()
                     {
@@ -86,6 +177,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         FirstName = "em3",
                         LastName = "emsen3",
                         Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 7
                     }
                 );
                 context.SaveChanges();
@@ -98,7 +190,8 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         Email = "root@root.com",
                         FirstName = "qa1",
                         LastName = "emsen1",
-                        Salt = "pFxZH4br1PTUImBtIUGljQ=="
+                        Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 8
                     },
                     new QualityAssurance()
                     {
@@ -108,6 +201,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         FirstName = "qa2",
                         LastName = "emsen2",
                         Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 9
                     },
                     new QualityAssurance()
                     {
@@ -117,6 +211,7 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                         FirstName = "qa3",
                         LastName = "emsen3",
                         Salt = "pFxZH4br1PTUImBtIUGljQ==",
+                        LocationId = 10
                     }
                 );
                 context.SaveChanges();
@@ -184,38 +279,6 @@ namespace TaskHouseApi.Persistence.DatabaseContext
                     {
                         Title = "Cat7",
                         Description = "des"
-                    }
-                );
-                context.SaveChanges();
-
-                context.Locations.AddRange
-                (
-                    new Location()
-                    {
-                        Country = "Country1",
-                        City = "City1",
-                        ZipCode = "ZipCode1",
-                        PrimaryLine = "PrimaryLine1",
-                        SecondaryLine = "SecondaryLine1",
-                        UserId = 1
-                    },
-                    new Location()
-                    {
-                        Country = "Country2",
-                        City = "City2",
-                        ZipCode = "ZipCode2",
-                        PrimaryLine = "PrimaryLine2",
-                        SecondaryLine = "SecondaryLine2",
-                        UserId = 2
-                    },
-                    new Location()
-                    {
-                        Country = "Country3",
-                        City = "City3",
-                        ZipCode = "ZipCode3",
-                        PrimaryLine = "PrimaryLine3",
-                        SecondaryLine = "SecondaryLine3",
-                        UserId = 3
                     }
                 );
                 context.SaveChanges();
