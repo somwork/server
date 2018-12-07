@@ -52,19 +52,6 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("TaskHouseApi.Model.CategorySkill", b =>
-                {
-                    b.Property<int>("CategoryId");
-
-                    b.Property<int>("SkillId");
-
-                    b.HasKey("CategoryId", "SkillId");
-
-                    b.HasIndex("SkillId");
-
-                    b.ToTable("CategorySkill");
-                });
-
             modelBuilder.Entity("TaskHouseApi.Model.CategoryTask", b =>
                 {
                     b.Property<int>("CategoryId");
@@ -262,12 +249,16 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("CategoryId");
+
                     b.Property<string>("Title")
                         .IsRequired();
 
                     b.Property<int>("WorkerId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("WorkerId");
 
@@ -376,19 +367,6 @@ namespace TaskHouseApi.Migrations
                     b.HasDiscriminator().HasValue("Worker");
                 });
 
-            modelBuilder.Entity("TaskHouseApi.Model.CategorySkill", b =>
-                {
-                    b.HasOne("TaskHouseApi.Model.Category", "Category")
-                        .WithMany("CategorySkill")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TaskHouseApi.Model.Skill", "Skill")
-                        .WithMany("CategorySkill")
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("TaskHouseApi.Model.CategoryTask", b =>
                 {
                     b.HasOne("TaskHouseApi.Model.Category", "Category")
@@ -466,6 +444,11 @@ namespace TaskHouseApi.Migrations
 
             modelBuilder.Entity("TaskHouseApi.Model.Skill", b =>
                 {
+                    b.HasOne("TaskHouseApi.Model.Category")
+                        .WithMany("Skills")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("TaskHouseApi.Model.Worker")
                         .WithMany("Skills")
                         .HasForeignKey("WorkerId")

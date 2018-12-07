@@ -19,7 +19,6 @@ namespace TaskHouseApi.Persistence.DatabaseContext
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Estimate> Estimates { get; set; }
         public DbSet<Reference> References { get; set; }
-        public DbSet<CategorySkill> CategorySkill { get; set; }
         public DbSet<CategoryTask> CategoryTask { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<QualityAssurance> QualityAssurance { get; set; }
@@ -29,7 +28,6 @@ namespace TaskHouseApi.Persistence.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CategorySkill>().HasKey(sc => new { sc.CategoryId, sc.SkillId });
             modelBuilder.Entity<CategoryTask>().HasKey(sc => new { sc.CategoryId, sc.TaskId });
 
             modelBuilder.Entity<User>().ToTable("Users");

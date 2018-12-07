@@ -53,5 +53,22 @@ namespace TaskHouseApi.Persistence.Repositories
                 .Where(task => task.AverageEstimate == temp || task.Estimates.Any(e => e.Accepted == false))
                 .ToList();
         }
+
+        public bool AddCategory(int taskId, int categoryId)
+        {
+            CategoryTask ct = new CategoryTask()
+            {
+                TaskId = taskId,
+                CategoryId = categoryId
+            };
+
+            if (postgresContext.CategoryTask.Contains(ct))
+            {
+                return false;
+            }
+
+            postgresContext.CategoryTask.Add(ct);
+            return true;
+        }
     }
 }
