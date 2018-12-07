@@ -10,12 +10,9 @@ namespace TaskHouseApi.Model
         public string Title { get; set; }
         [Required]
         public int WorkerId { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<CategorySkill> CategorySkill { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
 
-        public Skill()
-        {
-            CategorySkill = new List<CategorySkill>();
-        }
+        public Skill() { }
     }
 }
