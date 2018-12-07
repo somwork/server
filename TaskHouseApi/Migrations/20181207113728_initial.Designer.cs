@@ -10,7 +10,7 @@ using TaskHouseApi.Persistence.DatabaseContext;
 namespace TaskHouseApi.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20181206124819_initial")]
+    [Migration("20181207113728_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,19 @@ namespace TaskHouseApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.CategorySkill", b =>
+                {
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("SkillId");
+
+                    b.HasKey("CategoryId", "SkillId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("CategorySkill");
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.CategoryTask", b =>
@@ -152,18 +165,12 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("PrimaryLine")
                         .IsRequired();
 
-                    b.Property<string>("SecondaryLine")
-                        .IsRequired();
-
-                    b.Property<int>("UserId");
+                    b.Property<string>("SecondaryLine");
 
                     b.Property<string>("ZipCode")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Locations");
                 });
@@ -257,16 +264,12 @@ namespace TaskHouseApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CategoryId");
-
                     b.Property<string>("Title")
                         .IsRequired();
 
                     b.Property<int>("WorkerId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("WorkerId");
 
@@ -325,6 +328,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("LastName")
                         .IsRequired();
 
+                    b.Property<int>("LocationId");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(60);
@@ -335,6 +340,8 @@ namespace TaskHouseApi.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("Users");
 
@@ -369,6 +376,19 @@ namespace TaskHouseApi.Migrations
                     b.ToTable("Worker");
 
                     b.HasDiscriminator().HasValue("Worker");
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.CategorySkill", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Category", "Category")
+                        .WithMany("CategorySkill")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TaskHouseApi.Model.Skill", "Skill")
+                        .WithMany("CategorySkill")
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TaskHouseApi.Model.CategoryTask", b =>
@@ -412,14 +432,6 @@ namespace TaskHouseApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TaskHouseApi.Model.Location", b =>
-                {
-                    b.HasOne("TaskHouseApi.Model.User")
-                        .WithOne("Location")
-                        .HasForeignKey("TaskHouseApi.Model.Location", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("TaskHouseApi.Model.Message", b =>
                 {
                     b.HasOne("TaskHouseApi.Model.Task")
@@ -456,11 +468,6 @@ namespace TaskHouseApi.Migrations
 
             modelBuilder.Entity("TaskHouseApi.Model.Skill", b =>
                 {
-                    b.HasOne("TaskHouseApi.Model.Category")
-                        .WithMany("Skills")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("TaskHouseApi.Model.Worker")
                         .WithMany("Skills")
                         .HasForeignKey("WorkerId")
@@ -472,6 +479,14 @@ namespace TaskHouseApi.Migrations
                     b.HasOne("TaskHouseApi.Model.Employer", "Employer")
                         .WithMany("Tasks")
                         .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.User", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

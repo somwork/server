@@ -23,7 +23,7 @@ namespace TaskHouseApi.Controllers.CRUDController
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int Id)
+        public virtual IActionResult Get(int Id)
         {
             T t = unitOfWork.Repository<T>().Retrieve(Id);
             if (t == null)

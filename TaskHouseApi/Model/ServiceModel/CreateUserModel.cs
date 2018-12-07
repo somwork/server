@@ -8,6 +8,9 @@ namespace TaskHouseApi.Model
         public U User { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        public Location Location { get; set; }
+
         public CreateUserModel() { }
     }
 }

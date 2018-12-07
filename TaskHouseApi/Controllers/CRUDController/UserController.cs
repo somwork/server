@@ -53,6 +53,7 @@ namespace TaskHouseApi.Controllers.CRUDController
 
             user.Salt = hashResult.saltText;
             user.Password = hashResult.saltechashedPassword;
+            user.Location = inputUserModel.Location;
 
             unitOfWork.Repository<U>().Create((U)user);
             unitOfWork.Save();

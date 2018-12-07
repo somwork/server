@@ -150,18 +150,12 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("PrimaryLine")
                         .IsRequired();
 
-                    b.Property<string>("SecondaryLine")
-                        .IsRequired();
-
-                    b.Property<int>("UserId");
+                    b.Property<string>("SecondaryLine");
 
                     b.Property<string>("ZipCode")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Locations");
                 });
@@ -323,6 +317,8 @@ namespace TaskHouseApi.Migrations
                     b.Property<string>("LastName")
                         .IsRequired();
 
+                    b.Property<int>("LocationId");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(60);
@@ -333,6 +329,8 @@ namespace TaskHouseApi.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("Users");
 
@@ -410,14 +408,6 @@ namespace TaskHouseApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TaskHouseApi.Model.Location", b =>
-                {
-                    b.HasOne("TaskHouseApi.Model.User")
-                        .WithOne("Location")
-                        .HasForeignKey("TaskHouseApi.Model.Location", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("TaskHouseApi.Model.Message", b =>
                 {
                     b.HasOne("TaskHouseApi.Model.Task")
@@ -470,6 +460,14 @@ namespace TaskHouseApi.Migrations
                     b.HasOne("TaskHouseApi.Model.Employer", "Employer")
                         .WithMany("Tasks")
                         .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TaskHouseApi.Model.User", b =>
+                {
+                    b.HasOne("TaskHouseApi.Model.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
