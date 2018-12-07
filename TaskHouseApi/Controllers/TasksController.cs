@@ -192,7 +192,7 @@ namespace TaskHouseApi.Controllers
             if (
                 !unitOfWork.Tasks.isInDatabase(Id) ||
                 !unitOfWork.Categories.isInDatabase(categoryId) ||
-                unitOfWork.Tasks.AddCategory(Id, categoryId))
+                !unitOfWork.Tasks.AddCategory(Id, categoryId))
             {
                 return BadRequest();
             }
