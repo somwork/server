@@ -31,5 +31,11 @@ namespace TaskHouseUnitTests.FakeRepositories
                 }
             )
         { }
+
+        public IEnumerable<Category> GetCategoriesForTask(int taskId)
+        {
+            //NOT TESTABLE
+            return null;
+        }
     }
 }

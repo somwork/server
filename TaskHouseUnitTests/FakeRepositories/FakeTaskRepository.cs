@@ -77,6 +77,12 @@ namespace TaskHouseUnitTests.FakeRepositories
                 .Where(task => task.AverageEstimate == temp || task.Estimates.Any(e => e.Accepted == false))
                 .ToList();
         }
+
+        public bool AddCategory(int taskId, int categoryId)
+        {
+            //NOT TESTABLE
+            return false;
+        }
     }
 }
 
