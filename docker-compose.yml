@@ -8,3 +8,13 @@ services:
       POSTGRES_DB: root
     ports:
       - 5432:5432
+
+  mq:
+    image: upsub/dispatcher:0.2.1
+    environment:
+      AUTH_APP_ID: taskhouse.io
+      AUTH_SECRET: very-secret-key
+      AUTH_PUBLIC: very-public-key
+      AUTH_ORIGINS: http://localhost:3000,http://10.0.1.25:3000
+    ports:
+      - 4400:4400

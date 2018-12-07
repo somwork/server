@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace TaskHouseApi.Model
 {
-    public abstract class User : BaseModel
+    public class User : BaseModel
     {
         [Required]
         public string Username { get; set; }

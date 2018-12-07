@@ -5,6 +5,6 @@ namespace TaskHouseApi.Controllers.CRUDController
 {
     public interface IUserController<U> : ICRUDController<U> where U : User
     {
-        IActionResult Create(string password, [FromBody]U user);
+        IActionResult Create([FromBody]CreateUserModel<U> inputUserModel);
     }
 }
