@@ -100,9 +100,14 @@ namespace TaskHouseUnitTests.UnitTests
         {
             //Arrange
             Employer employer = null;
+            CreateUserModel<Employer> cm = new CreateUserModel<Employer>()
+            {
+                User = employer,
+                Password = null
+            };
 
             //Act
-            var result = controller.Create(null, employer);
+            var result = controller.Create(cm);
 
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -125,9 +130,14 @@ namespace TaskHouseUnitTests.UnitTests
                 Salt = "upYKQSsrlub5JAID61/6pA==",
                 Discriminator = "Employer"
             };
+            CreateUserModel<Employer> cm = new CreateUserModel<Employer>()
+            {
+                User = employer,
+                Password = employer.Password
+            };
 
             //Act
-            var result = controller.Create(employer.Password, employer);
+            var result = controller.Create(cm);
             var createdResultObject = result as ObjectResult;
             var createdEmployer = createdResultObject.Value as Employer;
 
